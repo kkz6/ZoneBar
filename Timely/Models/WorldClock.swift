@@ -71,4 +71,15 @@ struct WorldClock: Identifiable, Codable, Hashable {
         guard let tz = timeZone else { return 12 }
         return Calendar.current.dateComponents(in: tz, from: Date().addingTimeInterval(offset)).hour ?? 12
     }
+
+    var gmtOffsetString: String {
+        guard let tz = timeZone else { return "" }
+        let seconds = tz.secondsFromGMT()
+        let hours = seconds / 3600
+        let minutes = abs(seconds % 3600) / 60
+        if minutes == 0 {
+            return "GMT\(hours >= 0 ? "+" : "")\(hours)"
+        }
+        return "GMT\(hours >= 0 ? "+" : "")\(hours):\(String(format: "%02d", minutes))"
+    }
 }

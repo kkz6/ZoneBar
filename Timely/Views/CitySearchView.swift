@@ -12,7 +12,7 @@ struct CitySearchView: View {
             // Search field
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.tertiary)
                     .font(.system(size: 12))
 
                 TextField("Add city...", text: $searchText)
@@ -29,29 +29,28 @@ struct CitySearchView: View {
                         results = []
                     }) {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.tertiary)
                             .font(.system(size: 12))
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 8))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 7)
 
             // Search results
             if !results.isEmpty {
                 Divider()
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, 16)
 
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(results, id: \.timezone) { city in
+                        ForEach(results) { city in
                             Button(action: {
                                 addCity(city)
                             }) {
                                 HStack {
-                                    VStack(alignment: .leading, spacing: 1) {
+                                    VStack(alignment: .leading, spacing: 2) {
                                         Text(city.name)
                                             .font(.system(size: 13, weight: .medium))
                                         if !city.country.isEmpty {
@@ -65,8 +64,8 @@ struct CitySearchView: View {
                                         .font(.system(size: 12, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                 }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
                                 .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
@@ -88,7 +87,6 @@ struct CitySearchView: View {
     }
 
     private func addCity(_ city: CityEntry) {
-        // Don't add duplicates
         guard !clockManager.clocks.contains(where: { $0.timezone == city.timezone }) else {
             searchText = ""
             results = []

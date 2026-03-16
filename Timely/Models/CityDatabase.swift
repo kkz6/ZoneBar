@@ -1,6 +1,7 @@
 import Foundation
 
-struct CityEntry: Codable {
+struct CityEntry: Codable, Identifiable {
+    var id: String { "\(name)-\(timezone)" }
     let name: String
     let country: String
     let timezone: String
@@ -60,7 +61,9 @@ final class CityDatabase {
             }
         }
 
-        return Array(results.prefix(10))
+        var seen = Set<String>()
+        let unique = results.filter { seen.insert($0.timezone).inserted }
+        return Array(unique.prefix(10))
     }
 
     func detectLocalCity() -> CityEntry? {

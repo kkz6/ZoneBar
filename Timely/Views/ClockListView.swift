@@ -8,10 +8,13 @@ struct ClockListView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header
-            HStack {
-                Text("Timely")
-                    .font(.system(size: 14, weight: .semibold))
+            HStack(alignment: .center) {
+                Text(currentDateString())
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.secondary)
+
                 Spacer()
+
                 if let timeUntil = calendarService.timeUntilNextEvent() {
                     NextMeetingBadge(
                         timeUntil: timeUntil,
@@ -19,24 +22,9 @@ struct ClockListView: View {
                     )
                 }
             }
-            .padding(.horizontal, 12)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
-
-            // Date display
-            if clockManager.showDate {
-                HStack {
-                    Text(currentDateString())
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
-                .padding(.horizontal, 12)
-                .padding(.bottom, 4)
-            }
-
-            Divider()
-                .padding(.horizontal, 12)
+            .padding(.horizontal, 16)
+            .padding(.top, 10)
+            .padding(.bottom, 6)
 
             // Clock list
             if clockManager.clocks.isEmpty {
@@ -55,7 +43,7 @@ struct ClockListView: View {
                 .padding(.vertical, 24)
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 0) {
+                    VStack(spacing: 0) {
                         ForEach(clockManager.clocks) { clock in
                             ClockRowView(
                                 clock: clock,
@@ -69,11 +57,15 @@ struct ClockListView: View {
                                     clockManager.renameClock(id: clock.id, name: newName)
                                 },
                                 onDelete: {
-                                    withAnimation(.easeOut(duration: 0.2)) {
+                                    withAnimation(.easeOut(duration: 0.25)) {
                                         clockManager.removeClock(id: clock.id)
                                     }
                                 }
                             )
+                            .transition(.asymmetric(
+                                insertion: .opacity,
+                                removal: .opacity.combined(with: .move(edge: .leading))
+                            ))
                         }
                         .onMove { source, destination in
                             clockManager.moveClock(from: source, to: destination)
@@ -85,8 +77,6 @@ struct ClockListView: View {
 
             // Next meeting details
             if calendarService.hasAccess, let event = calendarService.nextEvent {
-                Divider()
-                    .padding(.horizontal, 12)
                 MeetingDetailView(
                     event: event,
                     clocks: clockManager.clocks,
@@ -95,33 +85,21 @@ struct ClockListView: View {
                 )
             }
 
-            Divider()
-                .padding(.horizontal, 12)
-
             // Time slider
             TimeSliderView(clockManager: clockManager)
-                .padding(.vertical, 8)
-
-            Divider()
-                .padding(.horizontal, 12)
 
             // Search
             CitySearchView(clockManager: clockManager)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-
-            Divider()
-                .padding(.horizontal, 12)
 
             // Footer
             FooterView(calendarService: calendarService)
         }
-        .frame(width: 340)
+        .frame(width: 350)
     }
 
     private func currentDateString() -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, dd MMMM yyyy"
+        formatter.dateFormat = "EEEE, dd MMMM"
         return formatter.string(from: Date())
     }
 }
@@ -137,9 +115,9 @@ struct NextMeetingBadge: View {
             Text("in \(timeUntil)")
                 .font(.system(size: 11, weight: .medium))
         }
-        .padding(.horizontal, 6)
+        .padding(.horizontal, 8)
         .padding(.vertical, 3)
-        .background(.blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 4))
+        .background(.blue.opacity(0.1), in: Capsule())
         .foregroundStyle(.blue)
         .help(eventTitle)
     }
@@ -162,7 +140,6 @@ struct MeetingDetailView: View {
                     .lineLimit(1)
             }
 
-            // Show meeting time in each clock's timezone
             ForEach(clocks.prefix(5)) { clock in
                 if let tz = clock.timeZone {
                     HStack(spacing: 6) {
@@ -176,7 +153,7 @@ struct MeetingDetailView: View {
                 }
             }
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 16)
         .padding(.vertical, 8)
     }
 }
@@ -185,7 +162,7 @@ struct FooterView: View {
     @ObservedObject var calendarService: CalendarService
 
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             if !calendarService.hasAccess {
                 Button(action: {
                     calendarService.requestAccess()
@@ -201,8 +178,10 @@ struct FooterView: View {
 
             SettingsLink {
                 Image(systemName: "gear")
-                    .font(.system(size: 12))
+                    .font(.system(size: 13))
                     .foregroundStyle(.secondary)
+                    .frame(width: 28, height: 28)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .help("Settings")
@@ -211,13 +190,15 @@ struct FooterView: View {
                 NSApplication.shared.terminate(nil)
             }) {
                 Image(systemName: "power")
-                    .font(.system(size: 12))
+                    .font(.system(size: 13))
                     .foregroundStyle(.secondary)
+                    .frame(width: 28, height: 28)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .help("Quit Timely")
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 6)
     }
 }
