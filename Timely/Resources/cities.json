@@ -1,0 +1,1692 @@
+[
+  {
+    "name": "Tokyo",
+    "country": "JP",
+    "timezone": "Asia/Tokyo",
+    "population": 37400068,
+    "aliases": [
+      "TYO",
+      "Tokio"
+    ]
+  },
+  {
+    "name": "Delhi",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 32941000,
+    "aliases": [
+      "New Delhi",
+      "DEL"
+    ]
+  },
+  {
+    "name": "Shanghai",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 28516904,
+    "aliases": [
+      "SHA"
+    ]
+  },
+  {
+    "name": "São Paulo",
+    "country": "BR",
+    "timezone": "America/Sao_Paulo",
+    "population": 22430000,
+    "aliases": [
+      "Sao Paulo",
+      "SAO",
+      "SP"
+    ]
+  },
+  {
+    "name": "Mexico City",
+    "country": "MX",
+    "timezone": "America/Mexico_City",
+    "population": 21919000,
+    "aliases": [
+      "CDMX",
+      "Ciudad de México",
+      "MEX"
+    ]
+  },
+  {
+    "name": "Cairo",
+    "country": "EG",
+    "timezone": "Africa/Cairo",
+    "population": 21750000,
+    "aliases": [
+      "Al-Qahira",
+      "CAI"
+    ]
+  },
+  {
+    "name": "Dhaka",
+    "country": "BD",
+    "timezone": "Asia/Dhaka",
+    "population": 21006000,
+    "aliases": [
+      "DAC",
+      "Dacca"
+    ]
+  },
+  {
+    "name": "Mumbai",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 20667000,
+    "aliases": [
+      "Bombay",
+      "BOM"
+    ]
+  },
+  {
+    "name": "Beijing",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 20463000,
+    "aliases": [
+      "Peking",
+      "PEK",
+      "BJS"
+    ]
+  },
+  {
+    "name": "Osaka",
+    "country": "JP",
+    "timezone": "Asia/Tokyo",
+    "population": 19165000,
+    "aliases": [
+      "KIX"
+    ]
+  },
+  {
+    "name": "New York",
+    "country": "US",
+    "timezone": "America/New_York",
+    "population": 18819000,
+    "aliases": [
+      "NYC",
+      "Manhattan",
+      "New York City",
+      "JFK"
+    ]
+  },
+  {
+    "name": "Karachi",
+    "country": "PK",
+    "timezone": "Asia/Karachi",
+    "population": 16840000,
+    "aliases": [
+      "KHI"
+    ]
+  },
+  {
+    "name": "Chongqing",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 16382000,
+    "aliases": [
+      "CKG"
+    ]
+  },
+  {
+    "name": "Istanbul",
+    "country": "TR",
+    "timezone": "Europe/Istanbul",
+    "population": 15636000,
+    "aliases": [
+      "Constantinople",
+      "IST"
+    ]
+  },
+  {
+    "name": "Buenos Aires",
+    "country": "AR",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "population": 15369000,
+    "aliases": [
+      "BUE",
+      "BA"
+    ]
+  },
+  {
+    "name": "Kolkata",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 15134000,
+    "aliases": [
+      "Calcutta",
+      "CCU"
+    ]
+  },
+  {
+    "name": "Kinshasa",
+    "country": "CD",
+    "timezone": "Africa/Kinshasa",
+    "population": 14970000,
+    "aliases": [
+      "FIH"
+    ]
+  },
+  {
+    "name": "Lagos",
+    "country": "NG",
+    "timezone": "Africa/Lagos",
+    "population": 14862000,
+    "aliases": [
+      "LOS"
+    ]
+  },
+  {
+    "name": "Manila",
+    "country": "PH",
+    "timezone": "Asia/Manila",
+    "population": 14406000,
+    "aliases": [
+      "MNL",
+      "Metro Manila"
+    ]
+  },
+  {
+    "name": "Guangzhou",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 13964000,
+    "aliases": [
+      "Canton",
+      "CAN"
+    ]
+  },
+  {
+    "name": "Tianjin",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 13866000,
+    "aliases": [
+      "TSN",
+      "Tientsin"
+    ]
+  },
+  {
+    "name": "Rio de Janeiro",
+    "country": "BR",
+    "timezone": "America/Sao_Paulo",
+    "population": 13544000,
+    "aliases": [
+      "Rio",
+      "GIG"
+    ]
+  },
+  {
+    "name": "Lahore",
+    "country": "PK",
+    "timezone": "Asia/Karachi",
+    "population": 13542000,
+    "aliases": [
+      "LHE"
+    ]
+  },
+  {
+    "name": "Bangalore",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 13193000,
+    "aliases": [
+      "Bengaluru",
+      "BLR"
+    ]
+  },
+  {
+    "name": "Moscow",
+    "country": "RU",
+    "timezone": "Europe/Moscow",
+    "population": 12680000,
+    "aliases": [
+      "Moskva",
+      "MOW",
+      "SVO"
+    ]
+  },
+  {
+    "name": "Shenzhen",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 12592000,
+    "aliases": [
+      "SZX"
+    ]
+  },
+  {
+    "name": "Los Angeles",
+    "country": "US",
+    "timezone": "America/Los_Angeles",
+    "population": 12488000,
+    "aliases": [
+      "LA",
+      "LAX",
+      "City of Angels"
+    ]
+  },
+  {
+    "name": "Chennai",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 11503000,
+    "aliases": [
+      "Madras",
+      "MAA"
+    ]
+  },
+  {
+    "name": "Bogotá",
+    "country": "CO",
+    "timezone": "America/Bogota",
+    "population": 11344000,
+    "aliases": [
+      "Bogota",
+      "BOG"
+    ]
+  },
+  {
+    "name": "Jakarta",
+    "country": "ID",
+    "timezone": "Asia/Jakarta",
+    "population": 11075000,
+    "aliases": [
+      "JKT",
+      "CGK"
+    ]
+  },
+  {
+    "name": "Paris",
+    "country": "FR",
+    "timezone": "Europe/Paris",
+    "population": 11020000,
+    "aliases": [
+      "CDG",
+      "PAR",
+      "City of Light"
+    ]
+  },
+  {
+    "name": "Lima",
+    "country": "PE",
+    "timezone": "America/Lima",
+    "population": 10883000,
+    "aliases": [
+      "LIM"
+    ]
+  },
+  {
+    "name": "Bangkok",
+    "country": "TH",
+    "timezone": "Asia/Bangkok",
+    "population": 10722000,
+    "aliases": [
+      "Krung Thep",
+      "BKK"
+    ]
+  },
+  {
+    "name": "Hyderabad",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 10534000,
+    "aliases": [
+      "HYD"
+    ]
+  },
+  {
+    "name": "Seoul",
+    "country": "KR",
+    "timezone": "Asia/Seoul",
+    "population": 9975000,
+    "aliases": [
+      "ICN",
+      "SEL"
+    ]
+  },
+  {
+    "name": "Nagoya",
+    "country": "JP",
+    "timezone": "Asia/Tokyo",
+    "population": 9552000,
+    "aliases": [
+      "NGO"
+    ]
+  },
+  {
+    "name": "London",
+    "country": "GB",
+    "timezone": "Europe/London",
+    "population": 9541000,
+    "aliases": [
+      "LHR",
+      "LON",
+      "City of London"
+    ]
+  },
+  {
+    "name": "Chengdu",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 9135000,
+    "aliases": [
+      "CTU"
+    ]
+  },
+  {
+    "name": "Tehran",
+    "country": "IR",
+    "timezone": "Asia/Tehran",
+    "population": 9135000,
+    "aliases": [
+      "THR",
+      "Teheran"
+    ]
+  },
+  {
+    "name": "Chicago",
+    "country": "US",
+    "timezone": "America/Chicago",
+    "population": 8901000,
+    "aliases": [
+      "ORD",
+      "CHI",
+      "Windy City"
+    ]
+  },
+  {
+    "name": "Nanjing",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 8847000,
+    "aliases": [
+      "NKG",
+      "Nanking"
+    ]
+  },
+  {
+    "name": "Ho Chi Minh City",
+    "country": "VN",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "population": 8837000,
+    "aliases": [
+      "Saigon",
+      "SGN",
+      "HCMC"
+    ]
+  },
+  {
+    "name": "Luanda",
+    "country": "AO",
+    "timezone": "Africa/Luanda",
+    "population": 8417000,
+    "aliases": [
+      "LAD"
+    ]
+  },
+  {
+    "name": "Ahmedabad",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 8253000,
+    "aliases": [
+      "AMD"
+    ]
+  },
+  {
+    "name": "Wuhan",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 8176000,
+    "aliases": [
+      "WUH"
+    ]
+  },
+  {
+    "name": "Kuala Lumpur",
+    "country": "MY",
+    "timezone": "Asia/Kuala_Lumpur",
+    "population": 8100000,
+    "aliases": [
+      "KL",
+      "KUL"
+    ]
+  },
+  {
+    "name": "Hangzhou",
+    "country": "CN",
+    "timezone": "Asia/Shanghai",
+    "population": 7642000,
+    "aliases": [
+      "HGH"
+    ]
+  },
+  {
+    "name": "Hong Kong",
+    "country": "HK",
+    "timezone": "Asia/Hong_Kong",
+    "population": 7588000,
+    "aliases": [
+      "HKG",
+      "HK"
+    ]
+  },
+  {
+    "name": "Riyadh",
+    "country": "SA",
+    "timezone": "Asia/Riyadh",
+    "population": 7538000,
+    "aliases": [
+      "RUH"
+    ]
+  },
+  {
+    "name": "Surat",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 7491000,
+    "aliases": [
+      "STV"
+    ]
+  },
+  {
+    "name": "Baghdad",
+    "country": "IQ",
+    "timezone": "Asia/Baghdad",
+    "population": 7323000,
+    "aliases": [
+      "BGW"
+    ]
+  },
+  {
+    "name": "Dallas",
+    "country": "US",
+    "timezone": "America/Chicago",
+    "population": 7102000,
+    "aliases": [
+      "DFW",
+      "Dallas-Fort Worth"
+    ]
+  },
+  {
+    "name": "Houston",
+    "country": "US",
+    "timezone": "America/Chicago",
+    "population": 7066000,
+    "aliases": [
+      "IAH",
+      "HOU"
+    ]
+  },
+  {
+    "name": "Santiago",
+    "country": "CL",
+    "timezone": "America/Santiago",
+    "population": 6856000,
+    "aliases": [
+      "SCL"
+    ]
+  },
+  {
+    "name": "Pune",
+    "country": "IN",
+    "timezone": "Asia/Kolkata",
+    "population": 6807000,
+    "aliases": [
+      "PNQ",
+      "Poona"
+    ]
+  },
+  {
+    "name": "Madrid",
+    "country": "ES",
+    "timezone": "Europe/Madrid",
+    "population": 6642000,
+    "aliases": [
+      "MAD"
+    ]
+  },
+  {
+    "name": "Toronto",
+    "country": "CA",
+    "timezone": "America/Toronto",
+    "population": 6313000,
+    "aliases": [
+      "YYZ",
+      "TO",
+      "The Six"
+    ]
+  },
+  {
+    "name": "Miami",
+    "country": "US",
+    "timezone": "America/New_York",
+    "population": 6138000,
+    "aliases": [
+      "MIA"
+    ]
+  },
+  {
+    "name": "Atlanta",
+    "country": "US",
+    "timezone": "America/New_York",
+    "population": 5949000,
+    "aliases": [
+      "ATL"
+    ]
+  },
+  {
+    "name": "Singapore",
+    "country": "SG",
+    "timezone": "Asia/Singapore",
+    "population": 5917000,
+    "aliases": [
+      "SIN",
+      "SG"
+    ]
+  },
+  {
+    "name": "Dar es Salaam",
+    "country": "TZ",
+    "timezone": "Africa/Dar_es_Salaam",
+    "population": 5869000,
+    "aliases": [
+      "DAR",
+      "Dar"
+    ]
+  },
+  {
+    "name": "Khartoum",
+    "country": "SD",
+    "timezone": "Africa/Khartoum",
+    "population": 5829000,
+    "aliases": [
+      "KRT"
+    ]
+  },
+  {
+    "name": "Johannesburg",
+    "country": "ZA",
+    "timezone": "Africa/Johannesburg",
+    "population": 5783000,
+    "aliases": [
+      "JNB",
+      "Joburg",
+      "Jozi"
+    ]
+  },
+  {
+    "name": "Philadelphia",
+    "country": "US",
+    "timezone": "America/New_York",
+    "population": 5696000,
+    "aliases": [
+      "PHL",
+      "Philly"
+    ]
+  },
+  {
+    "name": "Barcelona",
+    "country": "ES",
+    "timezone": "Europe/Madrid",
+    "population": 5620000,
+    "aliases": [
+      "BCN",
+      "Barca"
+    ]
+  },
+  {
+    "name": "Saint Petersburg",
+    "country": "RU",
+    "timezone": "Europe/Moscow",
+    "population": 5535000,
+    "aliases": [
+      "St Petersburg",
+      "LED",
+      "Petersburg"
+    ]
+  },
+  {
+    "name": "Washington D.C.",
+    "country": "US",
+    "timezone": "America/New_York",
+    "population": 5379000,
+    "aliases": [
+      "DC",
+      "Washington",
+      "IAD",
+      "DCA"
+    ]
+  },
+  {
+    "name": "Abidjan",
+    "country": "CI",
+    "timezone": "Africa/Abidjan",
+    "population": 5356000,
+    "aliases": [
+      "ABJ"
+    ]
+  },
+  {
+    "name": "Yangon",
+    "country": "MM",
+    "timezone": "Asia/Yangon",
+    "population": 5332000,
+    "aliases": [
+      "Rangoon",
+      "RGN"
+    ]
+  },
+  {
+    "name": "Sydney",
+    "country": "AU",
+    "timezone": "Australia/Sydney",
+    "population": 5312000,
+    "aliases": [
+      "SYD"
+    ]
+  },
+  {
+    "name": "Alexandria",
+    "country": "EG",
+    "timezone": "Africa/Cairo",
+    "population": 5281000,
+    "aliases": [
+      "ALY"
+    ]
+  },
+  {
+    "name": "Ankara",
+    "country": "TR",
+    "timezone": "Europe/Istanbul",
+    "population": 5271000,
+    "aliases": [
+      "ESB",
+      "Angora"
+    ]
+  },
+  {
+    "name": "Guadalajara",
+    "country": "MX",
+    "timezone": "America/Mexico_City",
+    "population": 5260000,
+    "aliases": [
+      "GDL"
+    ]
+  },
+  {
+    "name": "Melbourne",
+    "country": "AU",
+    "timezone": "Australia/Melbourne",
+    "population": 5150000,
+    "aliases": [
+      "MEL"
+    ]
+  },
+  {
+    "name": "Nairobi",
+    "country": "KE",
+    "timezone": "Africa/Nairobi",
+    "population": 5119000,
+    "aliases": [
+      "NBO"
+    ]
+  },
+  {
+    "name": "Monterrey",
+    "country": "MX",
+    "timezone": "America/Monterrey",
+    "population": 5036000,
+    "aliases": [
+      "MTY"
+    ]
+  },
+  {
+    "name": "Addis Ababa",
+    "country": "ET",
+    "timezone": "Africa/Addis_Ababa",
+    "population": 5006000,
+    "aliases": [
+      "ADD"
+    ]
+  },
+  {
+    "name": "Phoenix",
+    "country": "US",
+    "timezone": "America/Phoenix",
+    "population": 4946000,
+    "aliases": [
+      "PHX"
+    ]
+  },
+  {
+    "name": "Boston",
+    "country": "US",
+    "timezone": "America/New_York",
+    "population": 4875000,
+    "aliases": [
+      "BOS"
+    ]
+  },
+  {
+    "name": "Brasília",
+    "country": "BR",
+    "timezone": "America/Sao_Paulo",
+    "population": 4728000,
+    "aliases": [
+      "Brasilia",
+      "BSB"
+    ]
+  },
+  {
+    "name": "Hanoi",
+    "country": "VN",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "population": 4678000,
+    "aliases": [
+      "HAN"
+    ]
+  },
+  {
+    "name": "Cape Town",
+    "country": "ZA",
+    "timezone": "Africa/Johannesburg",
+    "population": 4618000,
+    "aliases": [
+      "CPT"
+    ]
+  },
+  {
+    "name": "Jeddah",
+    "country": "SA",
+    "timezone": "Asia/Riyadh",
+    "population": 4610000,
+    "aliases": [
+      "JED",
+      "Jiddah"
+    ]
+  },
+  {
+    "name": "Kabul",
+    "country": "AF",
+    "timezone": "Asia/Kabul",
+    "population": 4434550,
+    "aliases": [
+      "KBL"
+    ]
+  },
+  {
+    "name": "Taipei",
+    "country": "TW",
+    "timezone": "Asia/Taipei",
+    "population": 4400000,
+    "aliases": [
+      "TPE"
+    ]
+  },
+  {
+    "name": "Tel Aviv",
+    "country": "IL",
+    "timezone": "Asia/Jerusalem",
+    "population": 4343000,
+    "aliases": [
+      "TLV"
+    ]
+  },
+  {
+    "name": "Milan",
+    "country": "IT",
+    "timezone": "Europe/Rome",
+    "population": 4336000,
+    "aliases": [
+      "Milano",
+      "MXP",
+      "LIN"
+    ]
+  },
+  {
+    "name": "Rome",
+    "country": "IT",
+    "timezone": "Europe/Rome",
+    "population": 4278000,
+    "aliases": [
+      "Roma",
+      "FCO"
+    ]
+  },
+  {
+    "name": "Montreal",
+    "country": "CA",
+    "timezone": "America/Toronto",
+    "population": 4247000,
+    "aliases": [
+      "YUL",
+      "Montréal"
+    ]
+  },
+  {
+    "name": "Accra",
+    "country": "GH",
+    "timezone": "Africa/Accra",
+    "population": 4010000,
+    "aliases": [
+      "ACC"
+    ]
+  },
+  {
+    "name": "Seattle",
+    "country": "US",
+    "timezone": "America/Los_Angeles",
+    "population": 3979000,
+    "aliases": [
+      "SEA"
+    ]
+  },
+  {
+    "name": "Casablanca",
+    "country": "MA",
+    "timezone": "Africa/Casablanca",
+    "population": 3752000,
+    "aliases": [
+      "CMN",
+      "Casa"
+    ]
+  },
+  {
+    "name": "Berlin",
+    "country": "DE",
+    "timezone": "Europe/Berlin",
+    "population": 3677000,
+    "aliases": [
+      "BER",
+      "TXL"
+    ]
+  },
+  {
+    "name": "Kampala",
+    "country": "UG",
+    "timezone": "Africa/Kampala",
+    "population": 3652000,
+    "aliases": [
+      "EBB"
+    ]
+  },
+  {
+    "name": "Dubai",
+    "country": "AE",
+    "timezone": "Asia/Dubai",
+    "population": 3478300,
+    "aliases": [
+      "DXB",
+      "DBI"
+    ]
+  },
+  {
+    "name": "San Francisco",
+    "country": "US",
+    "timezone": "America/Los_Angeles",
+    "population": 3318000,
+    "aliases": [
+      "SF",
+      "SFO",
+      "Frisco"
+    ]
+  },
+  {
+    "name": "Asunción",
+    "country": "PY",
+    "timezone": "America/Asuncion",
+    "population": 3279000,
+    "aliases": [
+      "ASU",
+      "Asuncion"
+    ]
+  },
+  {
+    "name": "Athens",
+    "country": "GR",
+    "timezone": "Europe/Athens",
+    "population": 3154000,
+    "aliases": [
+      "ATH",
+      "Athina"
+    ]
+  },
+  {
+    "name": "Dakar",
+    "country": "SN",
+    "timezone": "Africa/Dakar",
+    "population": 3137000,
+    "aliases": [
+      "DSS",
+      "DKR"
+    ]
+  },
+  {
+    "name": "Kuwait City",
+    "country": "KW",
+    "timezone": "Asia/Kuwait",
+    "population": 3115000,
+    "aliases": [
+      "KWI",
+      "Kuwait"
+    ]
+  },
+  {
+    "name": "Lisbon",
+    "country": "PT",
+    "timezone": "Europe/Lisbon",
+    "population": 2972000,
+    "aliases": [
+      "Lisboa",
+      "LIS"
+    ]
+  },
+  {
+    "name": "Denver",
+    "country": "US",
+    "timezone": "America/Denver",
+    "population": 2963000,
+    "aliases": [
+      "DEN",
+      "Mile High City"
+    ]
+  },
+  {
+    "name": "Kiev",
+    "country": "UA",
+    "timezone": "Europe/Kiev",
+    "population": 2962000,
+    "aliases": [
+      "Kyiv",
+      "IEV",
+      "KBP"
+    ]
+  },
+  {
+    "name": "Caracas",
+    "country": "VE",
+    "timezone": "America/Caracas",
+    "population": 2945000,
+    "aliases": [
+      "CCS"
+    ]
+  },
+  {
+    "name": "Lusaka",
+    "country": "ZM",
+    "timezone": "Africa/Lusaka",
+    "population": 2906000,
+    "aliases": [
+      "LUN"
+    ]
+  },
+  {
+    "name": "Tashkent",
+    "country": "UZ",
+    "timezone": "Asia/Tashkent",
+    "population": 2860000,
+    "aliases": [
+      "TAS"
+    ]
+  },
+  {
+    "name": "Algiers",
+    "country": "DZ",
+    "timezone": "Africa/Algiers",
+    "population": 2854000,
+    "aliases": [
+      "ALG"
+    ]
+  },
+  {
+    "name": "Manchester",
+    "country": "GB",
+    "timezone": "Europe/London",
+    "population": 2730000,
+    "aliases": [
+      "MAN"
+    ]
+  },
+  {
+    "name": "Vancouver",
+    "country": "CA",
+    "timezone": "America/Vancouver",
+    "population": 2632000,
+    "aliases": [
+      "YVR"
+    ]
+  },
+  {
+    "name": "Brisbane",
+    "country": "AU",
+    "timezone": "Australia/Brisbane",
+    "population": 2560000,
+    "aliases": [
+      "BNE"
+    ]
+  },
+  {
+    "name": "Beirut",
+    "country": "LB",
+    "timezone": "Asia/Beirut",
+    "population": 2424000,
+    "aliases": [
+      "BEY"
+    ]
+  },
+  {
+    "name": "Doha",
+    "country": "QA",
+    "timezone": "Asia/Qatar",
+    "population": 2382000,
+    "aliases": [
+      "DOH"
+    ]
+  },
+  {
+    "name": "Tunis",
+    "country": "TN",
+    "timezone": "Africa/Tunis",
+    "population": 2365000,
+    "aliases": [
+      "TUN"
+    ]
+  },
+  {
+    "name": "Baku",
+    "country": "AZ",
+    "timezone": "Asia/Baku",
+    "population": 2341000,
+    "aliases": [
+      "GYD"
+    ]
+  },
+  {
+    "name": "Amman",
+    "country": "JO",
+    "timezone": "Asia/Amman",
+    "population": 2148000,
+    "aliases": [
+      "AMM"
+    ]
+  },
+  {
+    "name": "Havana",
+    "country": "CU",
+    "timezone": "America/Havana",
+    "population": 2132000,
+    "aliases": [
+      "HAV",
+      "La Habana"
+    ]
+  },
+  {
+    "name": "Phnom Penh",
+    "country": "KH",
+    "timezone": "Asia/Phnom_Penh",
+    "population": 2129000,
+    "aliases": [
+      "PNH"
+    ]
+  },
+  {
+    "name": "Perth",
+    "country": "AU",
+    "timezone": "Australia/Perth",
+    "population": 2085000,
+    "aliases": [
+      "PER"
+    ]
+  },
+  {
+    "name": "Almaty",
+    "country": "KZ",
+    "timezone": "Asia/Almaty",
+    "population": 2000000,
+    "aliases": [
+      "ALA",
+      "Alma-Ata"
+    ]
+  },
+  {
+    "name": "Vienna",
+    "country": "AT",
+    "timezone": "Europe/Vienna",
+    "population": 1960000,
+    "aliases": [
+      "Wien",
+      "VIE"
+    ]
+  },
+  {
+    "name": "La Paz",
+    "country": "BO",
+    "timezone": "America/La_Paz",
+    "population": 1882000,
+    "aliases": [
+      "LPB"
+    ]
+  },
+  {
+    "name": "Quito",
+    "country": "EC",
+    "timezone": "America/Guayaquil",
+    "population": 1873000,
+    "aliases": [
+      "UIO"
+    ]
+  },
+  {
+    "name": "Panama City",
+    "country": "PA",
+    "timezone": "America/Panama",
+    "population": 1860000,
+    "aliases": [
+      "PTY"
+    ]
+  },
+  {
+    "name": "Brussels",
+    "country": "BE",
+    "timezone": "Europe/Brussels",
+    "population": 1835000,
+    "aliases": [
+      "BRU",
+      "Bruxelles",
+      "Brussel"
+    ]
+  },
+  {
+    "name": "Bucharest",
+    "country": "RO",
+    "timezone": "Europe/Bucharest",
+    "population": 1794000,
+    "aliases": [
+      "OTP",
+      "București"
+    ]
+  },
+  {
+    "name": "Warsaw",
+    "country": "PL",
+    "timezone": "Europe/Warsaw",
+    "population": 1793000,
+    "aliases": [
+      "WAW",
+      "Warszawa"
+    ]
+  },
+  {
+    "name": "Budapest",
+    "country": "HU",
+    "timezone": "Europe/Budapest",
+    "population": 1764000,
+    "aliases": [
+      "BUD"
+    ]
+  },
+  {
+    "name": "Montevideo",
+    "country": "UY",
+    "timezone": "America/Montevideo",
+    "population": 1752000,
+    "aliases": [
+      "MVD"
+    ]
+  },
+  {
+    "name": "Auckland",
+    "country": "NZ",
+    "timezone": "Pacific/Auckland",
+    "population": 1657000,
+    "aliases": [
+      "AKL"
+    ]
+  },
+  {
+    "name": "Novosibirsk",
+    "country": "RU",
+    "timezone": "Asia/Novosibirsk",
+    "population": 1633000,
+    "aliases": [
+      "OVB"
+    ]
+  },
+  {
+    "name": "Stockholm",
+    "country": "SE",
+    "timezone": "Europe/Stockholm",
+    "population": 1632000,
+    "aliases": [
+      "ARN",
+      "STO"
+    ]
+  },
+  {
+    "name": "Munich",
+    "country": "DE",
+    "timezone": "Europe/Berlin",
+    "population": 1558000,
+    "aliases": [
+      "München",
+      "MUC"
+    ]
+  },
+  {
+    "name": "Muscat",
+    "country": "OM",
+    "timezone": "Asia/Muscat",
+    "population": 1550000,
+    "aliases": [
+      "MCT"
+    ]
+  },
+  {
+    "name": "Ulaanbaatar",
+    "country": "MN",
+    "timezone": "Asia/Ulaanbaatar",
+    "population": 1540000,
+    "aliases": [
+      "ULN",
+      "Ulan Bator"
+    ]
+  },
+  {
+    "name": "Harare",
+    "country": "ZW",
+    "timezone": "Africa/Harare",
+    "population": 1530000,
+    "aliases": [
+      "HRE"
+    ]
+  },
+  {
+    "name": "Yekaterinburg",
+    "country": "RU",
+    "timezone": "Asia/Yekaterinburg",
+    "population": 1495000,
+    "aliases": [
+      "SVX"
+    ]
+  },
+  {
+    "name": "Abu Dhabi",
+    "country": "AE",
+    "timezone": "Asia/Dubai",
+    "population": 1483000,
+    "aliases": [
+      "AUH"
+    ]
+  },
+  {
+    "name": "Kathmandu",
+    "country": "NP",
+    "timezone": "Asia/Kathmandu",
+    "population": 1442000,
+    "aliases": [
+      "KTM",
+      "Katmandu"
+    ]
+  },
+  {
+    "name": "San José",
+    "country": "CR",
+    "timezone": "America/Costa_Rica",
+    "population": 1420000,
+    "aliases": [
+      "SJO",
+      "San Jose"
+    ]
+  },
+  {
+    "name": "Ottawa",
+    "country": "CA",
+    "timezone": "America/Toronto",
+    "population": 1408000,
+    "aliases": [
+      "YOW"
+    ]
+  },
+  {
+    "name": "Zurich",
+    "country": "CH",
+    "timezone": "Europe/Zurich",
+    "population": 1395000,
+    "aliases": [
+      "ZRH",
+      "Zürich"
+    ]
+  },
+  {
+    "name": "Adelaide",
+    "country": "AU",
+    "timezone": "Australia/Adelaide",
+    "population": 1376000,
+    "aliases": [
+      "ADL"
+    ]
+  },
+  {
+    "name": "Copenhagen",
+    "country": "DK",
+    "timezone": "Europe/Copenhagen",
+    "population": 1366000,
+    "aliases": [
+      "CPH",
+      "København"
+    ]
+  },
+  {
+    "name": "Prague",
+    "country": "CZ",
+    "timezone": "Europe/Prague",
+    "population": 1318000,
+    "aliases": [
+      "PRG",
+      "Praha"
+    ]
+  },
+  {
+    "name": "Helsinki",
+    "country": "FI",
+    "timezone": "Europe/Helsinki",
+    "population": 1292000,
+    "aliases": [
+      "HEL"
+    ]
+  },
+  {
+    "name": "Dublin",
+    "country": "IE",
+    "timezone": "Europe/Dublin",
+    "population": 1228000,
+    "aliases": [
+      "DUB"
+    ]
+  },
+  {
+    "name": "Tripoli",
+    "country": "LY",
+    "timezone": "Africa/Tripoli",
+    "population": 1170000,
+    "aliases": [
+      "TIP"
+    ]
+  },
+  {
+    "name": "Amsterdam",
+    "country": "NL",
+    "timezone": "Europe/Amsterdam",
+    "population": 1149000,
+    "aliases": [
+      "AMS"
+    ]
+  },
+  {
+    "name": "Islamabad",
+    "country": "PK",
+    "timezone": "Asia/Karachi",
+    "population": 1149000,
+    "aliases": [
+      "ISB"
+    ]
+  },
+  {
+    "name": "Maputo",
+    "country": "MZ",
+    "timezone": "Africa/Maputo",
+    "population": 1124000,
+    "aliases": [
+      "MPM"
+    ]
+  },
+  {
+    "name": "Yerevan",
+    "country": "AM",
+    "timezone": "Asia/Yerevan",
+    "population": 1093000,
+    "aliases": [
+      "EVN"
+    ]
+  },
+  {
+    "name": "Tbilisi",
+    "country": "GE",
+    "timezone": "Asia/Tbilisi",
+    "population": 1082000,
+    "aliases": [
+      "TBS"
+    ]
+  },
+  {
+    "name": "Oslo",
+    "country": "NO",
+    "timezone": "Europe/Oslo",
+    "population": 1064000,
+    "aliases": [
+      "OSL"
+    ]
+  },
+  {
+    "name": "Honolulu",
+    "country": "US",
+    "timezone": "Pacific/Honolulu",
+    "population": 953207,
+    "aliases": [
+      "HNL",
+      "Hawaii"
+    ]
+  },
+  {
+    "name": "Jerusalem",
+    "country": "IL",
+    "timezone": "Asia/Jerusalem",
+    "population": 936000,
+    "aliases": [
+      "JRS"
+    ]
+  },
+  {
+    "name": "Frankfurt",
+    "country": "DE",
+    "timezone": "Europe/Berlin",
+    "population": 753056,
+    "aliases": [
+      "FRA",
+      "Frankfurt am Main"
+    ]
+  },
+  {
+    "name": "Colombo",
+    "country": "LK",
+    "timezone": "Asia/Colombo",
+    "population": 752000,
+    "aliases": [
+      "CMB"
+    ]
+  },
+  {
+    "name": "Geneva",
+    "country": "CH",
+    "timezone": "Europe/Zurich",
+    "population": 621000,
+    "aliases": [
+      "GVA",
+      "Genève"
+    ]
+  },
+  {
+    "name": "Vladivostok",
+    "country": "RU",
+    "timezone": "Asia/Vladivostok",
+    "population": 606589,
+    "aliases": [
+      "VVO"
+    ]
+  },
+  {
+    "name": "Edinburgh",
+    "country": "GB",
+    "timezone": "Europe/London",
+    "population": 527620,
+    "aliases": [
+      "EDI"
+    ]
+  },
+  {
+    "name": "Canberra",
+    "country": "AU",
+    "timezone": "Australia/Sydney",
+    "population": 462213,
+    "aliases": [
+      "CBR"
+    ]
+  },
+  {
+    "name": "Wellington",
+    "country": "NZ",
+    "timezone": "Pacific/Auckland",
+    "population": 418500,
+    "aliases": [
+      "WLG"
+    ]
+  },
+  {
+    "name": "Port Moresby",
+    "country": "PG",
+    "timezone": "Pacific/Port_Moresby",
+    "population": 383000,
+    "aliases": [
+      "POM"
+    ]
+  },
+  {
+    "name": "Yakutsk",
+    "country": "RU",
+    "timezone": "Asia/Yakutsk",
+    "population": 322987,
+    "aliases": [
+      "YKS"
+    ]
+  },
+  {
+    "name": "Anchorage",
+    "country": "US",
+    "timezone": "America/Anchorage",
+    "population": 291247,
+    "aliases": [
+      "ANC"
+    ]
+  },
+  {
+    "name": "Georgetown",
+    "country": "GY",
+    "timezone": "America/Guyana",
+    "population": 235017,
+    "aliases": [
+      "GEO"
+    ]
+  },
+  {
+    "name": "Fiji",
+    "country": "FJ",
+    "timezone": "Pacific/Fiji",
+    "population": 185913,
+    "aliases": [
+      "SUV",
+      "Suva"
+    ]
+  },
+  {
+    "name": "Noumea",
+    "country": "NC",
+    "timezone": "Pacific/Noumea",
+    "population": 182000,
+    "aliases": [
+      "NOU",
+      "Nouméa"
+    ]
+  },
+  {
+    "name": "Petropavlovsk-Kamchatsky",
+    "country": "RU",
+    "timezone": "Asia/Kamchatka",
+    "population": 181015,
+    "aliases": [
+      "PKC",
+      "Kamchatka"
+    ]
+  },
+  {
+    "name": "Guam",
+    "country": "GU",
+    "timezone": "Pacific/Guam",
+    "population": 170534,
+    "aliases": [
+      "GUM",
+      "Hagatna"
+    ]
+  },
+  {
+    "name": "Darwin",
+    "country": "AU",
+    "timezone": "Australia/Darwin",
+    "population": 147255,
+    "aliases": [
+      "DRW"
+    ]
+  },
+  {
+    "name": "Reykjavik",
+    "country": "IS",
+    "timezone": "Atlantic/Reykjavik",
+    "population": 133262,
+    "aliases": [
+      "KEF",
+      "Reykjavík"
+    ]
+  },
+  {
+    "name": "Magadan",
+    "country": "RU",
+    "timezone": "Asia/Magadan",
+    "population": 92081,
+    "aliases": [
+      "GDX"
+    ]
+  },
+  {
+    "name": "Samoa",
+    "country": "WS",
+    "timezone": "Pacific/Apia",
+    "population": 37391,
+    "aliases": [
+      "APW",
+      "Apia"
+    ]
+  },
+  {
+    "name": "Pago Pago",
+    "country": "AS",
+    "timezone": "Pacific/Pago_Pago",
+    "population": 3656,
+    "aliases": [
+      "PPG",
+      "American Samoa"
+    ]
+  },
+  {
+    "name": "UTC",
+    "country": "",
+    "timezone": "UTC",
+    "population": 0,
+    "aliases": [
+      "GMT",
+      "Coordinated Universal Time"
+    ]
+  }
+]
