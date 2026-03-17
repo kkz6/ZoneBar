@@ -43,7 +43,7 @@ struct CitySearchView: View {
                 Divider()
                     .padding(.horizontal, 16)
 
-                ScrollView {
+                ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 0) {
                         ForEach(results) { city in
                             Button(action: {

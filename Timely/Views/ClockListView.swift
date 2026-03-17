@@ -42,7 +42,7 @@ struct ClockListView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 24)
             } else {
-                ScrollView {
+                ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 0) {
                         ForEach(clockManager.clocks) { clock in
                             ClockRowView(
@@ -94,7 +94,7 @@ struct ClockListView: View {
             // Footer
             FooterView(calendarService: calendarService)
         }
-        .frame(width: 350)
+        .frame(width: 320)
     }
 
     private func currentDateString() -> String {
