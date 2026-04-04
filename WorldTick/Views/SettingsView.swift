@@ -100,14 +100,14 @@ struct AboutView: View {
                 .font(.system(size: 36))
                 .foregroundStyle(.blue)
 
-            Text("Timely")
+            Text("WorldTick")
                 .font(.system(size: 16, weight: .bold))
 
             Text("Version \(version) (\(build))")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
 
-            Text("World clocks with meeting awareness")
+            Text("World clocks for your menu bar")
                 .font(.system(size: 11))
                 .foregroundStyle(.secondary)
         }

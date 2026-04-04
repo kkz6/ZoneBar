@@ -18,7 +18,7 @@ final class ClockManager: ObservableObject {
 
     private init() {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let appDir = appSupport.appendingPathComponent("Timely", isDirectory: true)
+        let appDir = appSupport.appendingPathComponent("WorldTick", isDirectory: true)
         try? FileManager.default.createDirectory(at: appDir, withIntermediateDirectories: true)
         saveURL = appDir.appendingPathComponent("clocks.json")
 

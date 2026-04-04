@@ -1,12 +1,12 @@
 # Design Spec
 
-Original design spec for the Timely rewrite from Hovrly (Electron) to native Swift.
+Original design spec for the WorldTick rewrite from Hovrly (Electron) to native Swift.
 
 ## Background
 
-Timely is the successor to [Hovrly](https://hovrly.com), an Electron-based menubar world clock app (v2.4.5). The rewrite was motivated by:
+WorldTick is the successor to [Hovrly](https://hovrly.com), an Electron-based menubar world clock app (v2.4.5). The rewrite was motivated by:
 
-1. **Performance** -- Electron apps are ~200MB and memory-heavy. Timely targets <20MB.
+1. **Performance** -- Electron apps are ~200MB and memory-heavy. WorldTick targets <20MB.
 2. **Native integration** -- Deep macOS features: Widgets, Shortcuts, calendar, notifications.
 3. **App Store distribution** -- Sandboxed, signed, notarized for the Mac App Store.
 
@@ -31,7 +31,7 @@ The original Hovrly used a remote MySQL database for city search. This had probl
 - Added latency to every search
 - Single point of failure (db.hovrly.com)
 
-Timely bundles a `cities.json` with 176 major cities and falls back to Apple's `TimeZone.knownTimeZoneIdentifiers` for cities not in the database. This gives:
+WorldTick bundles a `cities.json` with 176 major cities and falls back to Apple's `TimeZone.knownTimeZoneIdentifiers` for cities not in the database. This gives:
 - Instant, offline search
 - Zero external dependencies
 - Reasonable coverage (176 cities cover all major timezones)
@@ -47,7 +47,7 @@ Meeting awareness was identified as the key differentiator over the original Hov
 ### Why No Data Migration from Hovrly?
 
 Hovrly stores settings via `electron-settings` in `~/Library/Application Support/Hovrly/Settings`. We chose not to build a migration tool for v1 because:
-- Timely is a fresh brand with a new target audience
+- WorldTick is a fresh brand with a new target audience
 - City search makes re-adding 3-5 clocks trivial (<30 seconds)
 - The settings format is different enough that mapping is non-trivial
 - Users installing from the App Store likely haven't used Hovrly

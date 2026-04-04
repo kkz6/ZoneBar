@@ -1,14 +1,13 @@
 import SwiftUI
 
 @main
-struct TimelyApp: App {
+struct WorldTickApp: App {
     @StateObject private var clockManager = ClockManager.shared
-    @StateObject private var calendarService = CalendarService.shared
     @AppStorage("appearanceMode") private var appearanceMode = "system"
 
     var body: some Scene {
         MenuBarExtra {
-            ClockListView(clockManager: clockManager, calendarService: calendarService)
+            ClockListView(clockManager: clockManager)
                 .preferredColorScheme(colorScheme)
         } label: {
             MenuBarLabel(clockManager: clockManager)

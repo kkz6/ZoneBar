@@ -1,18 +1,18 @@
-# Contributing to Timely
+# Contributing to WorldTick
 
-Thanks for your interest in contributing to Timely.
+Thanks for your interest in contributing to WorldTick.
 
 ## Development Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/kkz6/Timely.git
-   cd Timely
+   git clone https://github.com/kkz6/WorldTick.git
+   cd WorldTick
    ```
 
 2. Open in Xcode:
    ```bash
-   open Timely.xcodeproj
+   open WorldTick.xcodeproj
    ```
 
 3. Build and run with **Cmd+R**.
@@ -45,7 +45,7 @@ Thanks for your interest in contributing to Timely.
 
 ### Reporting Bugs
 - Open an issue with steps to reproduce
-- Include macOS version and Timely version
+- Include macOS version and WorldTick version
 - Attach screenshots if relevant
 
 ### Suggesting Features

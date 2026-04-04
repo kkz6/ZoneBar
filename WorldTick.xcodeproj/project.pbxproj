@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A100000001 /* TimelyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000001 /* TimelyApp.swift */; };
+		A100000001 /* WorldTickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000001 /* WorldTickApp.swift */; };
 		A100000002 /* WorldClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000002 /* WorldClock.swift */; };
 		A100000003 /* CityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000003 /* CityDatabase.swift */; };
 		A100000004 /* ClockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000004 /* ClockManager.swift */; };
-		A100000005 /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000005 /* CalendarService.swift */; };
 		A100000006 /* ClockListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000006 /* ClockListView.swift */; };
 		A100000007 /* ClockRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000007 /* ClockRowView.swift */; };
 		A100000008 /* TimeSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000008 /* TimeSliderView.swift */; };
@@ -23,11 +22,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B100000001 /* TimelyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelyApp.swift; sourceTree = "<group>"; };
+		B100000001 /* WorldTickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTickApp.swift; sourceTree = "<group>"; };
 		B100000002 /* WorldClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldClock.swift; sourceTree = "<group>"; };
 		B100000003 /* CityDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDatabase.swift; sourceTree = "<group>"; };
 		B100000004 /* ClockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockManager.swift; sourceTree = "<group>"; };
-		B100000005 /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarService.swift; sourceTree = "<group>"; };
 		B100000006 /* ClockListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockListView.swift; sourceTree = "<group>"; };
 		B100000007 /* ClockRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockRowView.swift; sourceTree = "<group>"; };
 		B100000008 /* TimeSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSliderView.swift; sourceTree = "<group>"; };
@@ -37,8 +35,8 @@
 		B100000012 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B100000013 /* cities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cities.json; sourceTree = "<group>"; };
 		B100000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B100000015 /* Timely.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Timely.entitlements; sourceTree = "<group>"; };
-		B100000099 /* Timely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timely.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B100000015 /* WorldTick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WorldTick.entitlements; sourceTree = "<group>"; };
+		B100000099 /* WorldTick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorldTick.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,24 +53,24 @@
 		D100000001 = {
 			isa = PBXGroup;
 			children = (
-				D100000002 /* Timely */,
+				D100000002 /* WorldTick */,
 				D100000099 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D100000002 /* Timely */ = {
+		D100000002 /* WorldTick */ = {
 			isa = PBXGroup;
 			children = (
-				B100000001 /* TimelyApp.swift */,
+				B100000001 /* WorldTickApp.swift */,
 				B100000014 /* Info.plist */,
-				B100000015 /* Timely.entitlements */,
+				B100000015 /* WorldTick.entitlements */,
 				B100000012 /* Assets.xcassets */,
 				D100000003 /* Models */,
 				D100000004 /* Views */,
 				D100000005 /* Services */,
 				D100000006 /* Resources */,
 			);
-			path = Timely;
+			path = WorldTick;
 			sourceTree = "<group>";
 		};
 		D100000003 /* Models */ = {
@@ -101,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				B100000004 /* ClockManager.swift */,
-				B100000005 /* CalendarService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -117,7 +114,7 @@
 		D100000099 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B100000099 /* Timely.app */,
+				B100000099 /* WorldTick.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,9 +122,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E100000001 /* Timely */ = {
+		E100000001 /* WorldTick */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F100000003 /* Build configuration list for PBXNativeTarget "Timely" */;
+			buildConfigurationList = F100000003 /* Build configuration list for PBXNativeTarget "WorldTick" */;
 			buildPhases = (
 				C100000002 /* Sources */,
 				C100000001 /* Frameworks */,
@@ -137,9 +134,9 @@
 			);
 			dependencies = (
 			);
-			name = Timely;
-			productName = Timely;
-			productReference = B100000099 /* Timely.app */;
+			name = WorldTick;
+			productName = WorldTick;
+			productReference = B100000099 /* WorldTick.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -157,7 +154,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F100000001 /* Build configuration list for PBXProject "Timely" */;
+			buildConfigurationList = F100000001 /* Build configuration list for PBXProject "WorldTick" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -170,7 +167,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E100000001 /* Timely */,
+				E100000001 /* WorldTick */,
 			);
 		};
 /* End PBXProject section */
@@ -192,11 +189,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A100000001 /* TimelyApp.swift in Sources */,
+				A100000001 /* WorldTickApp.swift in Sources */,
 				A100000002 /* WorldClock.swift in Sources */,
 				A100000003 /* CityDatabase.swift in Sources */,
 				A100000004 /* ClockManager.swift in Sources */,
-				A100000005 /* CalendarService.swift in Sources */,
 				A100000006 /* ClockListView.swift in Sources */,
 				A100000007 /* ClockRowView.swift in Sources */,
 				A100000008 /* TimeSliderView.swift in Sources */,
@@ -336,25 +332,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Timely/Timely.entitlements;
+				CODE_SIGN_ENTITLEMENTS = WorldTick/WorldTick.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Timely/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Timely;
+				INFOPLIST_FILE = WorldTick/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WorldTick;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Timely uses your calendar to show upcoming meetings across time zones.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1ov;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.timely;
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.worldtick;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -366,25 +360,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Timely/Timely.entitlements;
+				CODE_SIGN_ENTITLEMENTS = WorldTick/WorldTick.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Timely/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Timely;
+				INFOPLIST_FILE = WorldTick/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WorldTick;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSCalendarsUsageDescription = "Timely uses your calendar to show upcoming meetings across time zones.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1ov;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.timely;
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.worldtick;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -394,7 +386,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F100000001 /* Build configuration list for PBXProject "Timely" */ = {
+		F100000001 /* Build configuration list for PBXProject "WorldTick" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F100000010 /* Debug */,
@@ -403,7 +395,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F100000003 /* Build configuration list for PBXNativeTarget "Timely" */ = {
+		F100000003 /* Build configuration list for PBXNativeTarget "WorldTick" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F100000020 /* Debug */,
