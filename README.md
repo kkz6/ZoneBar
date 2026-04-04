@@ -1,8 +1,8 @@
-# Timely
+# WorldTick
 
-A lightweight native macOS menu bar app for tracking world clocks with meeting awareness. Built with pure SwiftUI, targeting macOS 14+ (Sonoma).
+A lightweight native macOS menu bar app for tracking world clocks. Built with pure SwiftUI, targeting macOS 14+ (Sonoma).
 
-Timely replaces heavy Electron-based world clock apps with a fast, native experience that integrates deeply with macOS -- calendar events, system appearance, launch at login, and more.
+WorldTick replaces heavy Electron-based world clock apps with a fast, native experience that integrates deeply with macOS -- system appearance, launch at login, and more.
 
 ## Features
 
@@ -27,12 +27,6 @@ Timely replaces heavy Electron-based world clock apps with a fast, native experi
 - Working hours overlap indicator (green when all zones are within 9–5)
 - Snap back to "Now" with one click
 
-### Meeting Awareness
-- Calendar integration via EventKit
-- Next meeting countdown badge in the popover
-- Upcoming meeting time shown in every clock's timezone
-- Permission request with graceful fallback when calendar access is denied
-
 ### Settings
 - **General:** 12/24hr format, date display, compact mode, launch at login
 - **Appearance:** System, Light, or Dark theme
@@ -42,7 +36,7 @@ Timely replaces heavy Electron-based world clock apps with a fast, native experi
 - Pure menu bar app (no dock icon)
 - Launch at login via SMAppService
 - Respects system dark/light mode
-- App sandbox with calendar entitlement
+- App sandbox
 - Ready for Mac App Store distribution
 
 ## Requirements
@@ -55,22 +49,22 @@ Timely replaces heavy Electron-based world clock apps with a fast, native experi
 ### Build from Source
 
 ```bash
-git clone https://github.com/kkz6/Timely.git
-cd Timely
-open Timely.xcodeproj
+git clone https://github.com/kkz6/WorldTick.git
+cd WorldTick
+open WorldTick.xcodeproj
 ```
 
 Then press **Cmd+R** in Xcode to build and run.
 
 ### First Launch
 
-On first launch, Timely detects your local timezone and adds it along with UTC as default clocks. Use the search field in the popover to add more cities.
+On first launch, WorldTick detects your local timezone and adds it along with UTC as default clocks. Use the search field in the popover to add more cities.
 
 ## Project Structure
 
 ```
-Timely/
-├── TimelyApp.swift              # App entry point, MenuBarExtra + Settings
+WorldTick/
+├── WorldTickApp.swift              # App entry point, MenuBarExtra + Settings
 ├── Models/
 │   ├── WorldClock.swift          # Clock model, time formatting, day/night logic
 │   └── CityDatabase.swift        # Hybrid city search (bundled JSON + Apple API)
@@ -82,8 +76,7 @@ Timely/
 │   ├── SettingsView.swift        # Settings window (3 tabs)
 │   └── MenuBarLabel.swift        # Dynamic menu bar label
 ├── Services/
-│   ├── ClockManager.swift        # Central state manager, persistence, timer
-│   └── CalendarService.swift     # EventKit calendar integration
+│   └── ClockManager.swift        # Central state manager, persistence, timer
 └── Resources/
     └── cities.json               # 176 cities, 124 timezones, all continents
 ```

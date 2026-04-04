@@ -1,12 +1,12 @@
 # Architecture
 
-Timely is a pure SwiftUI macOS menu bar app. This document covers key architectural decisions and patterns.
+WorldTick is a pure SwiftUI macOS menu bar app. This document covers key architectural decisions and patterns.
 
 ## Overview
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                  TimelyApp                       │
+│                  WorldTickApp                       │
 │  ┌──────────────────┐  ┌─────────────────────┐  │
 │  │   MenuBarExtra    │  │   Settings Scene     │  │
 │  │   (.window)       │  │   (SwiftUI Window)   │  │
@@ -35,7 +35,7 @@ Timely is a pure SwiftUI macOS menu bar app. This document covers key architectu
 
 ## App Lifecycle
 
-Timely is an **accessory app** (`LSUIElement = true`), meaning it has no dock icon and lives entirely in the menu bar. The app uses two SwiftUI scenes:
+WorldTick is an **accessory app** (`LSUIElement = true`), meaning it has no dock icon and lives entirely in the menu bar. The app uses two SwiftUI scenes:
 
 1. **MenuBarExtra** (`.window` style) -- The main popover shown when clicking the menu bar item
 2. **Settings** -- A standard macOS settings window opened from the popover footer
@@ -55,39 +55,22 @@ ClockManager (ObservableObject, singleton)
 └── Timer (aligned to minute boundary)    ← triggers objectWillChange
 ```
 
-**Persistence:** Clocks are encoded as JSON and written to `~/Library/Application Support/Timely/clocks.json`. Settings use `@AppStorage` (backed by `UserDefaults`).
+**Persistence:** Clocks are encoded as JSON and written to `~/Library/Application Support/WorldTick/clocks.json`. Settings use `@AppStorage` (backed by `UserDefaults`).
 
 **Timer:** Rather than a fixed 60-second interval (which drifts), the timer calculates seconds until the next minute boundary for its first fire, then repeats every 60 seconds. This keeps the displayed time accurate to the second.
 
-### CalendarService
-
-Handles EventKit integration. Separate from ClockManager to isolate calendar permission logic.
-
-```
-CalendarService (ObservableObject, singleton)
-├── @Published nextEvent: EKEvent?
-├── @Published todayEvents: [EKEvent]
-├── @Published hasAccess: Bool
-└── Observes EKEventStoreChanged notifications
-```
-
-**Permission flow:** The popover footer shows an "Enable Calendar" button when access hasn't been granted. Tapping it triggers the system permission dialog. Meeting-related UI is hidden until access is granted.
-
 ## Data Flow
-
 Views observe the shared state objects:
 
 ```
-TimelyApp
+WorldTickApp
 ├── @StateObject clockManager = ClockManager.shared
-├── @StateObject calendarService = CalendarService.shared
 │
 ├── MenuBarExtra label ← reads clockManager.menuBarText()
-├── ClockListView ← observes both managers
+├── ClockListView ← observes ClockManager
 │   ├── ClockRowView ← reads clock + offset from ClockManager
 │   ├── TimeSliderView ← reads/writes sliderOffset on ClockManager
-│   ├── CitySearchView ← calls clockManager.addClock()
-│   └── MeetingDetailView ← reads calendarService.nextEvent
+│   └── CitySearchView ← calls clockManager.addClock()
 │
 └── SettingsView ← reads/writes @AppStorage directly
 ```
@@ -128,10 +111,9 @@ Time formatting, day/night detection, compact names, and relative day labels are
 
 ### Sandbox Constraints
 
-The app runs in App Sandbox with only the calendar entitlement. This means:
+The app runs in App Sandbox. This means:
 - No access to arbitrary files
 - No network access (city data is fully bundled)
-- Calendar access requires explicit user permission
 
 ## Key Design Decisions
 

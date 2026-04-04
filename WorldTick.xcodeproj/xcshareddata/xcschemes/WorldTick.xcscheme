@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E100000001"
-               BuildableName = "Timely.app"
-               BlueprintName = "Timely"
-               ReferencedContainer = "container:Timely.xcodeproj">
+               BuildableName = "WorldTick.app"
+               BlueprintName = "WorldTick"
+               ReferencedContainer = "container:WorldTick.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,9 +44,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E100000001"
-            BuildableName = "Timely.app"
-            BlueprintName = "Timely"
-            ReferencedContainer = "container:Timely.xcodeproj">
+            BuildableName = "WorldTick.app"
+            BlueprintName = "WorldTick"
+            ReferencedContainer = "container:WorldTick.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,9 +61,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E100000001"
-            BuildableName = "Timely.app"
-            BlueprintName = "Timely"
-            ReferencedContainer = "container:Timely.xcodeproj">
+            BuildableName = "WorldTick.app"
+            BlueprintName = "WorldTick"
+            ReferencedContainer = "container:WorldTick.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
