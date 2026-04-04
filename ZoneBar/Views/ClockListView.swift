@@ -110,7 +110,7 @@ struct FooterView: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .help("Quit WorldTick")
+            .help("Quit ZoneBar")
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 6)

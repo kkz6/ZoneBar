@@ -1,8 +1,8 @@
-# WorldTick
+# ZoneBar
 
 A lightweight native macOS menu bar app for tracking world clocks. Built with pure SwiftUI, targeting macOS 14+ (Sonoma).
 
-WorldTick replaces heavy Electron-based world clock apps with a fast, native experience that integrates deeply with macOS -- system appearance, launch at login, and more.
+ZoneBar replaces heavy Electron-based world clock apps with a fast, native experience that integrates deeply with macOS -- system appearance, launch at login, and more.
 
 ## Features
 
@@ -49,22 +49,22 @@ WorldTick replaces heavy Electron-based world clock apps with a fast, native exp
 ### Build from Source
 
 ```bash
-git clone https://github.com/kkz6/WorldTick.git
-cd WorldTick
-open WorldTick.xcodeproj
+git clone https://github.com/kkz6/ZoneBar.git
+cd ZoneBar
+open ZoneBar.xcodeproj
 ```
 
 Then press **Cmd+R** in Xcode to build and run.
 
 ### First Launch
 
-On first launch, WorldTick detects your local timezone and adds it along with UTC as default clocks. Use the search field in the popover to add more cities.
+On first launch, ZoneBar detects your local timezone and adds it along with UTC as default clocks. Use the search field in the popover to add more cities.
 
 ## Project Structure
 
 ```
-WorldTick/
-├── WorldTickApp.swift              # App entry point, MenuBarExtra + Settings
+ZoneBar/
+├── ZoneBarApp.swift              # App entry point, MenuBarExtra + Settings
 ├── Models/
 │   ├── WorldClock.swift          # Clock model, time formatting, day/night logic
 │   └── CityDatabase.swift        # Hybrid city search (bundled JSON + Apple API)

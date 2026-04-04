@@ -1,12 +1,12 @@
 # Architecture
 
-WorldTick is a pure SwiftUI macOS menu bar app. This document covers key architectural decisions and patterns.
+ZoneBar is a pure SwiftUI macOS menu bar app. This document covers key architectural decisions and patterns.
 
 ## Overview
 
 ```
 ┌─────────────────────────────────────────────────┐
-│                  WorldTickApp                       │
+│                  ZoneBarApp                       │
 │  ┌──────────────────┐  ┌─────────────────────┐  │
 │  │   MenuBarExtra    │  │   Settings Scene     │  │
 │  │   (.window)       │  │   (SwiftUI Window)   │  │
@@ -35,7 +35,7 @@ WorldTick is a pure SwiftUI macOS menu bar app. This document covers key archite
 
 ## App Lifecycle
 
-WorldTick is an **accessory app** (`LSUIElement = true`), meaning it has no dock icon and lives entirely in the menu bar. The app uses two SwiftUI scenes:
+ZoneBar is an **accessory app** (`LSUIElement = true`), meaning it has no dock icon and lives entirely in the menu bar. The app uses two SwiftUI scenes:
 
 1. **MenuBarExtra** (`.window` style) -- The main popover shown when clicking the menu bar item
 2. **Settings** -- A standard macOS settings window opened from the popover footer
@@ -55,7 +55,7 @@ ClockManager (ObservableObject, singleton)
 └── Timer (aligned to minute boundary)    ← triggers objectWillChange
 ```
 
-**Persistence:** Clocks are encoded as JSON and written to `~/Library/Application Support/WorldTick/clocks.json`. Settings use `@AppStorage` (backed by `UserDefaults`).
+**Persistence:** Clocks are encoded as JSON and written to `~/Library/Application Support/ZoneBar/clocks.json`. Settings use `@AppStorage` (backed by `UserDefaults`).
 
 **Timer:** Rather than a fixed 60-second interval (which drifts), the timer calculates seconds until the next minute boundary for its first fire, then repeats every 60 seconds. This keeps the displayed time accurate to the second.
 
@@ -63,7 +63,7 @@ ClockManager (ObservableObject, singleton)
 Views observe the shared state objects:
 
 ```
-WorldTickApp
+ZoneBarApp
 ├── @StateObject clockManager = ClockManager.shared
 │
 ├── MenuBarExtra label ← reads clockManager.menuBarText()

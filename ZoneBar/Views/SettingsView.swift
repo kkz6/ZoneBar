@@ -100,7 +100,7 @@ struct AboutView: View {
                 .font(.system(size: 36))
                 .foregroundStyle(.blue)
 
-            Text("WorldTick")
+            Text("ZoneBar")
                 .font(.system(size: 16, weight: .bold))
 
             Text("Version \(version) (\(build))")
