@@ -1,6 +1,6 @@
 # Roadmap
 
-Feature roadmap for WorldTick, organized by phase. Each phase builds on the previous one.
+Feature roadmap for ZoneBar, organized by phase. Each phase builds on the previous one.
 
 ## Phase 1 -- Core (v1.0) :white_check_mark:
 
@@ -32,12 +32,12 @@ Refining the experience and adding power-user features.
 
 ## Phase 3 -- Calendar Deep Integration
 
-Making WorldTick the go-to tool for scheduling across timezones.
+Making ZoneBar the go-to tool for scheduling across timezones.
 
 - [ ] **Inline calendar events** -- Show today's events beneath each clock, converted to that clock's timezone.
 - [ ] **Best meeting time finder** -- Algorithm to find optimal meeting times where all selected timezones overlap within working hours. Visual display of overlap windows.
 - [ ] **Meeting countdown in menu bar** -- Option to show "Meeting in 12m" in the menu bar label alongside clock times.
-- [ ] **Calendar event creation** -- Create events directly from WorldTick with automatic timezone conversion for attendees in different zones.
+- [ ] **Calendar event creation** -- Create events directly from ZoneBar with automatic timezone conversion for attendees in different zones.
 
 ## Phase 4 -- Personal Productivity
 
@@ -51,7 +51,7 @@ Tools for individuals working across timezones daily.
 
 ## Phase 5 -- Platform Expansion
 
-Taking WorldTick beyond a single Mac.
+Taking ZoneBar beyond a single Mac.
 
 - [ ] **iCloud sync** -- Sync clock configurations and settings across multiple Macs via CloudKit. Shared App Group container.
 - [ ] **iOS companion app** -- iPhone app with the same clock list, synced via iCloud.

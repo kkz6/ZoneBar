@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct WorldTickApp: App {
+struct ZoneBarApp: App {
     @StateObject private var clockManager = ClockManager.shared
     @AppStorage("appearanceMode") private var appearanceMode = "system"
 

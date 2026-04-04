@@ -1,18 +1,18 @@
-# Contributing to WorldTick
+# Contributing to ZoneBar
 
-Thanks for your interest in contributing to WorldTick.
+Thanks for your interest in contributing to ZoneBar.
 
 ## Development Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/kkz6/WorldTick.git
-   cd WorldTick
+   git clone https://github.com/kkz6/ZoneBar.git
+   cd ZoneBar
    ```
 
 2. Open in Xcode:
    ```bash
-   open WorldTick.xcodeproj
+   open ZoneBar.xcodeproj
    ```
 
 3. Build and run with **Cmd+R**.
@@ -45,7 +45,7 @@ Thanks for your interest in contributing to WorldTick.
 
 ### Reporting Bugs
 - Open an issue with steps to reproduce
-- Include macOS version and WorldTick version
+- Include macOS version and ZoneBar version
 - Attach screenshots if relevant
 
 ### Suggesting Features

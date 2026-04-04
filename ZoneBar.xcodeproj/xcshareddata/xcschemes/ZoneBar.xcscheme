@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E100000001"
-               BuildableName = "WorldTick.app"
-               BlueprintName = "WorldTick"
-               ReferencedContainer = "container:WorldTick.xcodeproj">
+               BuildableName = "ZoneBar.app"
+               BlueprintName = "ZoneBar"
+               ReferencedContainer = "container:ZoneBar.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,9 +44,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E100000001"
-            BuildableName = "WorldTick.app"
-            BlueprintName = "WorldTick"
-            ReferencedContainer = "container:WorldTick.xcodeproj">
+            BuildableName = "ZoneBar.app"
+            BlueprintName = "ZoneBar"
+            ReferencedContainer = "container:ZoneBar.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,9 +61,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E100000001"
-            BuildableName = "WorldTick.app"
-            BlueprintName = "WorldTick"
-            ReferencedContainer = "container:WorldTick.xcodeproj">
+            BuildableName = "ZoneBar.app"
+            BlueprintName = "ZoneBar"
+            ReferencedContainer = "container:ZoneBar.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

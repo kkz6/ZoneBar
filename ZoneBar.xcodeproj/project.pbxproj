@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A100000001 /* WorldTickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000001 /* WorldTickApp.swift */; };
+		A100000001 /* ZoneBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000001 /* ZoneBarApp.swift */; };
 		A100000002 /* WorldClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000002 /* WorldClock.swift */; };
 		A100000003 /* CityDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000003 /* CityDatabase.swift */; };
 		A100000004 /* ClockManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000004 /* ClockManager.swift */; };
@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B100000001 /* WorldTickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldTickApp.swift; sourceTree = "<group>"; };
+		B100000001 /* ZoneBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoneBarApp.swift; sourceTree = "<group>"; };
 		B100000002 /* WorldClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldClock.swift; sourceTree = "<group>"; };
 		B100000003 /* CityDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityDatabase.swift; sourceTree = "<group>"; };
 		B100000004 /* ClockManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockManager.swift; sourceTree = "<group>"; };
@@ -35,8 +35,8 @@
 		B100000012 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B100000013 /* cities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cities.json; sourceTree = "<group>"; };
 		B100000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B100000015 /* WorldTick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WorldTick.entitlements; sourceTree = "<group>"; };
-		B100000099 /* WorldTick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorldTick.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B100000015 /* ZoneBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ZoneBar.entitlements; sourceTree = "<group>"; };
+		B100000099 /* ZoneBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZoneBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,24 +53,24 @@
 		D100000001 = {
 			isa = PBXGroup;
 			children = (
-				D100000002 /* WorldTick */,
+				D100000002 /* ZoneBar */,
 				D100000099 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D100000002 /* WorldTick */ = {
+		D100000002 /* ZoneBar */ = {
 			isa = PBXGroup;
 			children = (
-				B100000001 /* WorldTickApp.swift */,
+				B100000001 /* ZoneBarApp.swift */,
 				B100000014 /* Info.plist */,
-				B100000015 /* WorldTick.entitlements */,
+				B100000015 /* ZoneBar.entitlements */,
 				B100000012 /* Assets.xcassets */,
 				D100000003 /* Models */,
 				D100000004 /* Views */,
 				D100000005 /* Services */,
 				D100000006 /* Resources */,
 			);
-			path = WorldTick;
+			path = ZoneBar;
 			sourceTree = "<group>";
 		};
 		D100000003 /* Models */ = {
@@ -114,7 +114,7 @@
 		D100000099 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B100000099 /* WorldTick.app */,
+				B100000099 /* ZoneBar.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -122,9 +122,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E100000001 /* WorldTick */ = {
+		E100000001 /* ZoneBar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F100000003 /* Build configuration list for PBXNativeTarget "WorldTick" */;
+			buildConfigurationList = F100000003 /* Build configuration list for PBXNativeTarget "ZoneBar" */;
 			buildPhases = (
 				C100000002 /* Sources */,
 				C100000001 /* Frameworks */,
@@ -134,9 +134,9 @@
 			);
 			dependencies = (
 			);
-			name = WorldTick;
-			productName = WorldTick;
-			productReference = B100000099 /* WorldTick.app */;
+			name = ZoneBar;
+			productName = ZoneBar;
+			productReference = B100000099 /* ZoneBar.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -154,7 +154,7 @@
 					};
 				};
 			};
-			buildConfigurationList = F100000001 /* Build configuration list for PBXProject "WorldTick" */;
+			buildConfigurationList = F100000001 /* Build configuration list for PBXProject "ZoneBar" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -167,7 +167,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E100000001 /* WorldTick */,
+				E100000001 /* ZoneBar */,
 			);
 		};
 /* End PBXProject section */
@@ -189,7 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A100000001 /* WorldTickApp.swift in Sources */,
+				A100000001 /* ZoneBarApp.swift in Sources */,
 				A100000002 /* WorldClock.swift in Sources */,
 				A100000003 /* CityDatabase.swift in Sources */,
 				A100000004 /* ClockManager.swift in Sources */,
@@ -332,7 +332,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = WorldTick/WorldTick.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ZoneBar/ZoneBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -340,15 +340,15 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = WorldTick/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WorldTick;
+				INFOPLIST_FILE = ZoneBar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ZoneBar;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.worldtick;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.zonebar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -360,7 +360,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = WorldTick/WorldTick.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ZoneBar/ZoneBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -368,15 +368,15 @@
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = WorldTick/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WorldTick;
+				INFOPLIST_FILE = ZoneBar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ZoneBar;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.worldtick;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.zonebar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -386,7 +386,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F100000001 /* Build configuration list for PBXProject "WorldTick" */ = {
+		F100000001 /* Build configuration list for PBXProject "ZoneBar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F100000010 /* Debug */,
@@ -395,7 +395,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F100000003 /* Build configuration list for PBXNativeTarget "WorldTick" */ = {
+		F100000003 /* Build configuration list for PBXNativeTarget "ZoneBar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F100000020 /* Debug */,
