@@ -21,12 +21,6 @@ struct WorldClock: Identifiable, Codable, Hashable {
         TimeZone(identifier: timezone)
     }
 
-    var isDaytime: Bool {
-        guard let tz = timeZone else { return true }
-        let hour = Calendar.current.dateComponents(in: tz, from: Date()).hour ?? 12
-        return hour >= 4 && hour <= 21
-    }
-
     var compactName: String {
         let words = name.split(separator: " ")
         if words.count > 1 {
@@ -35,30 +29,40 @@ struct WorldClock: Identifiable, Codable, Hashable {
         return String(name.prefix(3)).uppercased()
     }
 
-    func formattedTime(offset: TimeInterval = 0, is24Hour: Bool = true) -> String {
+    func isDaytime(at now: Date) -> Bool {
+        guard let tz = timeZone else { return true }
+        let hour = Calendar.current.dateComponents(in: tz, from: now).hour ?? 12
+        return hour >= 6 && hour < 20
+    }
+
+    func formattedTime(at now: Date, is24Hour: Bool, includeSeconds: Bool = false) -> String {
         guard let tz = timeZone else { return "--:--" }
         let formatter = DateFormatter()
         formatter.timeZone = tz
-        formatter.dateFormat = is24Hour ? "HH:mm" : "h:mm a"
-        return formatter.string(from: Date().addingTimeInterval(offset))
+        if is24Hour {
+            formatter.dateFormat = includeSeconds ? "HH:mm:ss" : "HH:mm"
+        } else {
+            formatter.dateFormat = includeSeconds ? "h:mm:ss a" : "h:mm a"
+        }
+        return formatter.string(from: now)
     }
 
-    func formattedDate(offset: TimeInterval = 0) -> String {
+    func formattedDate(at now: Date) -> String {
         guard let tz = timeZone else { return "" }
         let formatter = DateFormatter()
         formatter.timeZone = tz
         formatter.dateFormat = "EEE, dd MMM"
-        return formatter.string(from: Date().addingTimeInterval(offset))
+        return formatter.string(from: now)
     }
 
-    func relativeDayLabel(offset: TimeInterval = 0) -> String? {
+    func relativeDayLabel(at now: Date) -> String? {
         guard let tz = timeZone else { return nil }
-        let now = Date().addingTimeInterval(offset)
-        let localCalendar = Calendar.current
-        let targetComponents = localCalendar.dateComponents(in: tz, from: now)
-        let localComponents = localCalendar.dateComponents(in: localCalendar.timeZone, from: now)
+        let calendar = Calendar.current
 
-        guard let targetDay = targetComponents.day, let localDay = localComponents.day else { return nil }
+        let targetDay = calendar.dateComponents(in: tz, from: now).day
+        let localDay = calendar.dateComponents(in: calendar.timeZone, from: now).day
+
+        guard let targetDay, let localDay else { return nil }
 
         let diff = targetDay - localDay
         if diff == 0 { return nil }
@@ -67,9 +71,14 @@ struct WorldClock: Identifiable, Codable, Hashable {
         return nil
     }
 
-    func currentHour(offset: TimeInterval = 0) -> Int {
+    func hour(at now: Date) -> Int {
         guard let tz = timeZone else { return 12 }
-        return Calendar.current.dateComponents(in: tz, from: Date().addingTimeInterval(offset)).hour ?? 12
+        return Calendar.current.dateComponents(in: tz, from: now).hour ?? 12
+    }
+
+    func isInWorkingHours(at now: Date) -> Bool {
+        let h = hour(at: now)
+        return h >= 9 && h < 17
     }
 
     var gmtOffsetString: String {

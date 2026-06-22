@@ -1,14 +1,28 @@
 import SwiftUI
 
 struct MenuBarLabel: View {
-    @ObservedObject var clockManager: ClockManager
+    let store: ClockStore
+    let settings: AppSettings
+    let ticker: TimeTicker
 
     var body: some View {
-        let text = clockManager.menuBarText()
-        if text.isEmpty {
-            Image(systemName: "clock")
-        } else {
-            Text(text)
+        let text = MenuBarRenderer.text(
+            for: store.clocks,
+            at: ticker.now,
+            is24Hour: settings.is24Hour,
+            compact: settings.compactMode,
+            showDate: settings.showDate,
+            showDayNightIcon: settings.showDayNightIcon,
+            separator: settings.separatorStyle
+        )
+
+        Group {
+            if text.isEmpty {
+                Image(systemName: "clock")
+            } else {
+                Text(text)
+            }
         }
+        .background(StatusItemConfigurator().frame(width: 0, height: 0))
     }
 }
