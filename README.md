@@ -9,28 +9,33 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 ### World Clocks
 - Add clocks by searching 176+ cities across 124 timezones
 - Day/night indicators with sun and moon icons
-- Relative day labels (Today, Tomorrow, Yesterday)
-- Inline rename by double-clicking the city name
-- Drag-and-drop reordering
-- Swipe or hover to delete
+- Relative day labels (Tomorrow, Yesterday)
+- Per-clock GMT offset display
+- Drag-and-drop reordering, inline rename, and delete from the Clocks settings
 - Toggle which clocks appear in the menu bar
+
+### Streamlined Popover
+- Clean, glanceable clock rows with day/night icon, GMT offset, and large time
+- Whole-row scrolling list (no clipped rows) that scrolls past six clocks
+- **Time scrubber** — drag the bar to compare what time it is across every clock,
+  with a green "match" dot when all zones are in working hours, and a Now reset
+- Quick-add a city inline with the **+** button
+- Settings and quit in the footer
 
 ### Menu Bar
 - Displays selected clock times directly in the macOS menu bar
 - Compact mode abbreviates city names (New York → NY)
-- Optional date display
+- Optional date and day/night (☀/☾) prefixes
+- Configurable separator between clocks
 - 12-hour or 24-hour time format
 - Falls back to a clock icon when no clocks are selected for display
 
-### Time Slider
-- Preview what time it will be across all zones at any point in the day
-- Working hours overlap indicator (green when all zones are within 9–5)
-- Snap back to "Now" with one click
-
-### Settings
-- **General:** 12/24hr format, date display, compact mode, launch at login
-- **Appearance:** System, Light, or Dark theme
-- **About:** Version info
+### Settings (sidebar window)
+- **General:** time format, date display, launch at login
+- **Menu Bar:** compact names, day/night icon, separator, live preview
+- **Clocks:** add, reorder, rename, delete, and choose menu-bar visibility
+- **Appearance:** System, Light, or Dark theme (accent follows macOS)
+- **About:** version and links
 
 ### System Integration
 - Pure menu bar app (no dock icon)
@@ -42,7 +47,7 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
-- Xcode 15.0 or later (for building)
+- Xcode 16.0 or later (for building; the project uses file-system-synchronized groups)
 
 ## Getting Started
 
