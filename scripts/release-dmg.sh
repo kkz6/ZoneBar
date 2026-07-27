@@ -91,6 +91,29 @@ if [[ ! -d "$APP_PATH" ]]; then
     exit 1
 fi
 
+# A direct archive copy does not perform Xcode's export step, which normally
+# re-signs Sparkle's nested helpers with our Developer ID identity. Apple
+# rejects the DMG if those helpers retain Sparkle's upstream signatures.
+SPARKLE_FRAMEWORK="$APP_PATH/Contents/Frameworks/Sparkle.framework"
+if [[ -d "$SPARKLE_FRAMEWORK" ]]; then
+    SPARKLE_VERSION_DIR="$SPARKLE_FRAMEWORK/Versions/Current"
+
+    codesign --force --sign "$SIGNING_IDENTITY" --timestamp --options runtime \
+        "$SPARKLE_VERSION_DIR/XPCServices/Installer.xpc"
+    codesign --force --sign "$SIGNING_IDENTITY" --timestamp --options runtime \
+        --preserve-metadata=entitlements \
+        "$SPARKLE_VERSION_DIR/XPCServices/Downloader.xpc"
+    codesign --force --sign "$SIGNING_IDENTITY" --timestamp --options runtime \
+        "$SPARKLE_VERSION_DIR/Autoupdate"
+    codesign --force --sign "$SIGNING_IDENTITY" --timestamp --options runtime \
+        "$SPARKLE_VERSION_DIR/Updater.app"
+    codesign --force --sign "$SIGNING_IDENTITY" --timestamp --options runtime \
+        "$SPARKLE_FRAMEWORK"
+    codesign --force --sign "$SIGNING_IDENTITY" --timestamp --options runtime \
+        --preserve-metadata=entitlements,requirements,flags \
+        "$APP_PATH"
+fi
+
 codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 
 ditto "$APP_PATH" "$STAGING_DIR/ZoneBar.app"
