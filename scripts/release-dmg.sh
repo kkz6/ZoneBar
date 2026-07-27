@@ -8,6 +8,10 @@ SCHEME="${SCHEME:-ZoneBar}"
 BUILD_DIR="${BUILD_DIR:-$ROOT_DIR/build/release}"
 ARCHIVE_PATH="$BUILD_DIR/ZoneBar.xcarchive"
 STAGING_DIR="$BUILD_DIR/dmg"
+BACKGROUND_DIR="$STAGING_DIR/.background"
+BACKGROUND_PATH="$BACKGROUND_DIR/background.png"
+BACKGROUND_SCRIPT="$ROOT_DIR/scripts/create-dmg-background.swift"
+APP_ICON="$ROOT_DIR/ZoneBar/Assets.xcassets/AppIcon.appiconset/icon_512x512.png"
 TEAM_ID="${TEAM_ID:-}"
 SIGNING_IDENTITY="${SIGNING_IDENTITY:-}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-}"
@@ -25,6 +29,7 @@ VERSION="$(
         awk '/MARKETING_VERSION/ { print $3; exit }'
 )"
 DMG_PATH="$BUILD_DIR/ZoneBar-${VERSION}.dmg"
+RW_DMG_PATH="$BUILD_DIR/ZoneBar-${VERSION}-rw.dmg"
 
 if [[ -z "$VERSION" || -z "$TEAM_ID" ]]; then
     echo "Set TEAM_ID to the Apple Developer team used for this release."
@@ -52,7 +57,7 @@ if [[ "$SKIP_NOTARIZATION" != "1" &&
 fi
 
 rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR" "$STAGING_DIR"
+mkdir -p "$BUILD_DIR" "$STAGING_DIR" "$BACKGROUND_DIR"
 
 echo "Archiving ZoneBar ${VERSION}…"
 xcodebuild \
@@ -77,14 +82,72 @@ codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 
 ditto "$APP_PATH" "$STAGING_DIR/ZoneBar.app"
 ln -s /Applications "$STAGING_DIR/Applications"
+xcrun swift "$BACKGROUND_SCRIPT" "$APP_ICON" "$BACKGROUND_PATH"
 
 echo "Creating disk image…"
 hdiutil create \
     -volname "ZoneBar" \
     -srcfolder "$STAGING_DIR" \
     -ov \
+    -format UDRW \
+    "$RW_DMG_PATH"
+
+MOUNT_DIR="$(mktemp -d "$BUILD_DIR/mount.XXXXXX")"
+DEVICE=""
+
+cleanup_mount() {
+    if [[ -n "$DEVICE" ]]; then
+        hdiutil detach "$DEVICE" -force >/dev/null 2>&1 || true
+    fi
+}
+trap cleanup_mount EXIT
+
+DEVICE="$(
+    hdiutil attach \
+        -readwrite \
+        -noverify \
+        -noautoopen \
+        -mountpoint "$MOUNT_DIR" \
+        "$RW_DMG_PATH" |
+        awk '/Apple_APFS|Apple_HFS/ { print $1; exit }'
+)"
+
+if [[ -z "$DEVICE" ]]; then
+    echo "Unable to mount the writable disk image."
+    exit 1
+fi
+
+osascript <<APPLESCRIPT
+tell application "Finder"
+    tell disk "ZoneBar"
+        open
+        set current view of container window to icon view
+        set toolbar visible of container window to false
+        set statusbar visible of container window to false
+        set pathbar visible of container window to false
+        set bounds of container window to {120, 120, 800, 550}
+        set theViewOptions to the icon view options of container window
+        set arrangement of theViewOptions to not arranged
+        set icon size of theViewOptions to 112
+        set text size of theViewOptions to 13
+        set background picture of theViewOptions to file ".background:background.png"
+        set position of item "ZoneBar.app" to {190, 218}
+        set position of item "Applications" to {490, 218}
+        update without registering applications
+        delay 2
+        close
+    end tell
+end tell
+APPLESCRIPT
+
+sync
+hdiutil detach "$DEVICE"
+DEVICE=""
+hdiutil convert \
+    "$RW_DMG_PATH" \
     -format UDZO \
-    "$DMG_PATH"
+    -imagekey zlib-level=9 \
+    -o "$DMG_PATH"
 
 codesign --force --sign "$SIGNING_IDENTITY" --timestamp "$DMG_PATH"
 
