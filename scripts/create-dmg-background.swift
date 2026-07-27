@@ -11,12 +11,13 @@ guard CommandLine.arguments.count == 3 else {
 let iconURL = URL(fileURLWithPath: CommandLine.arguments[1])
 let outputURL = URL(fileURLWithPath: CommandLine.arguments[2])
 let canvasSize = NSSize(width: 680, height: 430)
+let scale: CGFloat = 2
 
 guard
     let bitmap = NSBitmapImageRep(
         bitmapDataPlanes: nil,
-        pixelsWide: Int(canvasSize.width),
-        pixelsHigh: Int(canvasSize.height),
+        pixelsWide: Int(canvasSize.width * scale),
+        pixelsHigh: Int(canvasSize.height * scale),
         bitsPerSample: 8,
         samplesPerPixel: 4,
         hasAlpha: true,
@@ -31,27 +32,17 @@ else {
     exit(1)
 }
 
+// Preserve a 680 × 430 point canvas while encoding twice as many pixels for
+// sharp Finder text and artwork on Retina displays.
+bitmap.size = canvasSize
+
 NSGraphicsContext.saveGraphicsState()
 NSGraphicsContext.current = context
+context.cgContext.scaleBy(x: scale, y: scale)
 
 let bounds = NSRect(origin: .zero, size: canvasSize)
-let background = NSGradient(
-    starting: NSColor(red: 0.965, green: 0.979, blue: 0.997, alpha: 1),
-    ending: NSColor(red: 0.925, green: 0.954, blue: 0.992, alpha: 1)
-)!
-background.draw(in: bounds, angle: -90)
-
-let glow = NSGradient(colors: [
-    NSColor(red: 0.20, green: 0.53, blue: 0.96, alpha: 0.15),
-    NSColor(red: 0.20, green: 0.53, blue: 0.96, alpha: 0),
-])!
-glow.draw(
-    fromCenter: NSPoint(x: 340, y: 250),
-    radius: 0,
-    toCenter: NSPoint(x: 340, y: 250),
-    radius: 270,
-    options: [.drawsAfterEndingLocation]
-)
+NSColor(red: 0.955, green: 0.970, blue: 0.988, alpha: 1).setFill()
+bounds.fill()
 
 let titleStyle = NSMutableParagraphStyle()
 titleStyle.alignment = .center
