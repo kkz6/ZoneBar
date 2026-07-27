@@ -104,31 +104,3 @@ struct WindowConfigurator: NSViewRepresentable {
         ))
     }
 }
-
-/// Applies a continuous corner mask to system-hosted windows such as
-/// `MenuBarExtra`, whose outer chrome is otherwise outside the SwiftUI tree.
-struct WindowCornerConfigurator: NSViewRepresentable {
-    let cornerRadius: CGFloat
-
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView(frame: .zero)
-        DispatchQueue.main.async { apply(from: view) }
-        return view
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {
-        DispatchQueue.main.async { apply(from: nsView) }
-    }
-
-    private func apply(from view: NSView) {
-        guard let window = view.window, let contentView = window.contentView else {
-            return
-        }
-        window.isOpaque = false
-        window.backgroundColor = .clear
-        contentView.wantsLayer = true
-        contentView.layer?.cornerRadius = cornerRadius
-        contentView.layer?.cornerCurve = .continuous
-        contentView.layer?.masksToBounds = true
-    }
-}

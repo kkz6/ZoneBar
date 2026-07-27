@@ -36,7 +36,6 @@ struct ClockPopover: View {
             footer
         }
         .frame(width: DS.Size.popoverWidth)
-        .background(WindowCornerConfigurator(cornerRadius: DS.Radius.popover))
         .onDisappear { offset = 0; addExpanded = false }
     }
 
