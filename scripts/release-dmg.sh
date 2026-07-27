@@ -109,5 +109,9 @@ else
     spctl --assess --type open --context context:primary-signature --verbose=2 "$DMG_PATH"
 fi
 
-shasum -a 256 "$DMG_PATH" > "$DMG_PATH.sha256"
+(
+    cd "$BUILD_DIR"
+    dmg_name="$(basename "$DMG_PATH")"
+    shasum -a 256 "$dmg_name" > "$dmg_name.sha256"
+)
 echo "Release ready: $DMG_PATH"
