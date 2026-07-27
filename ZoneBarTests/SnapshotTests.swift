@@ -80,13 +80,6 @@ struct SnapshotTests {
     }
 
     @Test func renderAllScreens() throws {
-        // AppKit rendering varies between macOS/Xcode runner images. Keep these
-        // pixel hashes as a local visual-review tool; CI still runs the
-        // deterministic SettingsLayoutTests layout invariants.
-        if ProcessInfo.processInfo.environment["CI"] == "true" {
-            return
-        }
-
         let store = ClockStore(
             saveURL: Self.failureDirectory.appendingPathComponent("test-clocks.json"),
             seedDefaults: false

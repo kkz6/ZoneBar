@@ -94,6 +94,7 @@ jobs:
             -project ZoneBar.xcodeproj \
             -scheme ZoneBar \
             -destination "platform=macOS" \
+            -skip-testing:ZoneBarTests/SnapshotTests \
             CODE_SIGNING_ALLOWED=NO \
             test
 
