@@ -1,10 +1,14 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+
 const downloadUrl = "https://github.com/kkz6/ZoneBar/releases/latest";
 
-const clocks = [
-  { city: "San Francisco", code: "SFO", offset: "GMT−7", time: "09:41", active: true },
-  { city: "London", code: "LON", offset: "GMT+1", time: "17:41", active: true },
-  { city: "Bengaluru", code: "BLR", offset: "GMT+5:30", time: "22:11", active: false },
-  { city: "Tokyo", code: "TKY", offset: "GMT+9", time: "01:41", active: false, day: "+1" },
+const clockDefinitions = [
+  { city: "San Francisco", code: "SFO", timeZone: "America/Los_Angeles", fallbackTime: "09:41", fallbackOffset: "GMT−7" },
+  { city: "London", code: "LON", timeZone: "Europe/London", fallbackTime: "17:41", fallbackOffset: "GMT+1" },
+  { city: "Bengaluru", code: "BLR", timeZone: "Asia/Kolkata", fallbackTime: "22:11", fallbackOffset: "GMT+5:30" },
+  { city: "Tokyo", code: "TKY", timeZone: "Asia/Tokyo", fallbackTime: "01:41", fallbackOffset: "GMT+9" },
 ];
 
 const features = [
@@ -34,15 +38,108 @@ const features = [
   },
 ];
 
+function dateParts(date: Date, timeZone?: string) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+
+  return Object.fromEntries(
+    parts
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, Number(part.value)]),
+  ) as Record<"year" | "month" | "day" | "hour", number>;
+}
+
+function relativeDay(now: Date, timeZone: string) {
+  const local = dateParts(now);
+  const target = dateParts(now, timeZone);
+  const localDay = Date.UTC(local.year, local.month - 1, local.day);
+  const targetDay = Date.UTC(target.year, target.month - 1, target.day);
+  const difference = Math.round((targetDay - localDay) / 86_400_000);
+
+  if (difference === 1) return "+1";
+  if (difference === -1) return "−1";
+  return undefined;
+}
+
 function ClockPopover() {
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const initialUpdate = window.setTimeout(() => setNow(new Date()), 0);
+    const timer = window.setInterval(() => setNow(new Date()), 30_000);
+    return () => {
+      window.clearTimeout(initialUpdate);
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const clocks = useMemo(() => clockDefinitions.map((clock) => {
+    if (!now) {
+      return {
+        ...clock,
+        time: clock.fallbackTime,
+        offset: clock.fallbackOffset,
+        active: clock.city === "San Francisco" || clock.city === "London",
+        day: clock.city === "Tokyo" ? "+1" : undefined,
+      };
+    }
+
+    const hour = dateParts(now, clock.timeZone).hour;
+    const offset = new Intl.DateTimeFormat("en-US", {
+      timeZone: clock.timeZone,
+      timeZoneName: "shortOffset",
+    }).formatToParts(now).find((part) => part.type === "timeZoneName")?.value
+      .replace("-", "−") ?? clock.fallbackOffset;
+
+    return {
+      ...clock,
+      time: new Intl.DateTimeFormat("en-GB", {
+        timeZone: clock.timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }).format(now),
+      offset,
+      active: hour >= 6 && hour < 20,
+      day: relativeDay(now, clock.timeZone),
+    };
+  }), [now]);
+
+  const dateLabel = now
+    ? new Intl.DateTimeFormat("en-GB", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+      }).format(now)
+    : "Monday, 27 July";
+  const workingClocks = now
+    ? clocks.filter((clock) => {
+        const hour = dateParts(now, clock.timeZone).hour;
+        return hour >= 9 && hour < 17;
+      }).length
+    : 3;
+  const overlapLabel = workingClocks >= 2
+    ? `${workingClocks} zones within working hours`
+    : "Not all in working hours";
+
   return (
     <div className="app-window">
       <div className="menu-preview">
         <span className="live-dot" />
-        SFO 09:41 <i /> LON 17:41 <i /> BLR 22:11
+        {clocks.slice(0, 3).map((clock, index) => (
+          <span key={clock.code}>
+            {index > 0 && <i />} {clock.code} {clock.time}
+          </span>
+        ))}
       </div>
       <div className="popover-head">
-        <span>Monday, 27 July</span>
+        <span>{dateLabel}</span>
         <button aria-label="Add a city">+</button>
       </div>
       <div className="clock-list">
@@ -63,7 +160,7 @@ function ClockPopover() {
       <div className="timeline">
         <div className="timeline-labels"><span>−12h</span><strong>Now</strong><span>+12h</span></div>
         <div className="timeline-track"><i /><b /></div>
-        <p><span /> Working hours overlap</p>
+        <p><span /> {overlapLabel}</p>
       </div>
       <div className="window-foot"><span>4 clocks</span><span>Settings&nbsp;&nbsp; Quit</span></div>
     </div>
