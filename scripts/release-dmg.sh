@@ -147,6 +147,7 @@ hdiutil convert \
     -format UDZO \
     -imagekey zlib-level=9 \
     -o "$DMG_PATH"
+rm -f "$RW_DMG_PATH"
 
 codesign --force --sign "$SIGNING_IDENTITY" --timestamp "$DMG_PATH"
 
