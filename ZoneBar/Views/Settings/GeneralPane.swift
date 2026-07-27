@@ -10,13 +10,8 @@ struct GeneralPane: View {
         SettingsPane(section: SettingsSection.general) {
             SettingsGroup {
                 SettingRow(title: "Launch at login") {
-                    Toggle("", isOn: $launchAtLogin)
+                    Toggle("", isOn: launchAtLoginBinding)
                         .settingsToggle()
-                        .onChange(of: launchAtLogin) { _, newValue in
-                            if !LaunchAtLogin.set(newValue) {
-                                launchAtLogin = LaunchAtLogin.isEnabled
-                            }
-                        }
                 }
 
                 SettingsDivider()
@@ -35,6 +30,21 @@ struct GeneralPane: View {
             }
         }
         .onAppear { launchAtLogin = LaunchAtLogin.isEnabled }
+    }
+
+    /// Writes to ServiceManagement only from direct toggle interaction.
+    /// Synchronizing state in `onAppear` must not re-register the login item.
+    private var launchAtLoginBinding: Binding<Bool> {
+        Binding(
+            get: { launchAtLogin },
+            set: { requestedValue in
+                if LaunchAtLogin.set(requestedValue) {
+                    launchAtLogin = requestedValue
+                } else {
+                    launchAtLogin = LaunchAtLogin.isEnabled
+                }
+            }
+        )
     }
 }
 
