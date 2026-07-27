@@ -78,7 +78,10 @@ jobs:
           security add-certificates \
             -k "$keychain_path" \
             "$public_certificate_path"
-          security list-keychain -d user -s "$keychain_path"
+          security list-keychain -d user -s \
+            "$keychain_path" \
+            "$HOME/Library/Keychains/login.keychain-db" \
+            "/Library/Keychains/System.keychain"
           security set-key-partition-list \
             -S apple-tool:,apple: \
             -s \
@@ -86,7 +89,7 @@ jobs:
             "$keychain_path"
 
           signing_identity="$(
-            security find-identity -v -p codesigning "$keychain_path" |
+            security find-identity -v -p codesigning |
               awk '/Developer ID Application/ { print $2; exit }'
           )"
           if [[ -z "$signing_identity" ]]; then
