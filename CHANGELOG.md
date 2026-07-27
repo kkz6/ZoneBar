@@ -5,6 +5,23 @@ All notable changes to ZoneBar will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-07-27
+
+### Added
+- Secure automatic update checks and installation through Sparkle
+- Manual “Check for Updates…” actions in Settings and the application menu
+- Signed appcast generation for every GitHub release
+
+### Changed
+- Refined settings spacing, alignment, typography, and rounded surfaces
+- Redesigned the DMG installation window
+- Improved release build numbering and reproducibility
+
+### Fixed
+- Prevented redundant launch-at-login registration
+- Restored native menu bar popover borders across display scales
+- Removed settings window layout recursion and inconsistent window controls
+
 ## [0.1.0] - 2026-07-27
 
 ### Added
