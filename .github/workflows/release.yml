@@ -29,6 +29,9 @@ jobs:
       NOTARY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
       NOTARY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       KEYCHAIN_PASSWORD: ${{ secrets.BUILD_KEYCHAIN_PASSWORD }}
+      BUILD_NUMBER: ${{ github.run_number }}
+      SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+      SPARKLE_VERSION: 2.9.2
 
     steps:
       - name: Check out release source
@@ -115,6 +118,42 @@ jobs:
       - name: Build, sign, and notarize DMG
         run: ./scripts/release-dmg.sh
 
+      - name: Generate signed update feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tools_dir="$RUNNER_TEMP/sparkle"
+          mkdir -p "$tools_dir"
+          gh release download "$SPARKLE_VERSION" \
+            --repo sparkle-project/Sparkle \
+            --pattern "Sparkle-${SPARKLE_VERSION}.tar.xz" \
+            --dir "$tools_dir"
+          tar -xf "$tools_dir/Sparkle-${SPARKLE_VERSION}.tar.xz" \
+            -C "$tools_dir"
+
+          dmg_path="$(find build/release -maxdepth 1 -name '*.dmg' -print -quit)"
+          if [[ -z "$dmg_path" ]]; then
+            echo "No release DMG was found for the update feed."
+            exit 1
+          fi
+
+          notes_path="${dmg_path%.dmg}.md"
+          gh release view "$RELEASE_TAG" --json body --jq '.body' > "$notes_path"
+
+          printf '%s\n' "$SPARKLE_ED_PRIVATE_KEY" |
+            "$tools_dir/bin/generate_appcast" \
+              --ed-key-file - \
+              --download-url-prefix \
+                "https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}/" \
+              --link "https://github.com/${GITHUB_REPOSITORY}" \
+              --embed-release-notes \
+              --maximum-deltas 0 \
+              -o build/release/appcast.xml \
+              build/release
+
+          test -s build/release/appcast.xml
+
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
@@ -122,6 +161,7 @@ jobs:
           path: |
             build/release/*.dmg
             build/release/*.sha256
+            build/release/appcast.xml
           if-no-files-found: error
 
       - name: Attach DMG to GitHub release
@@ -131,4 +171,5 @@ jobs:
           gh release upload "$RELEASE_TAG" \
             build/release/*.dmg \
             build/release/*.sha256 \
+            build/release/appcast.xml \
             --clobber

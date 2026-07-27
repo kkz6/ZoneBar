@@ -18,7 +18,7 @@ struct SnapshotTests {
         "menubar": "e05ff55a4620e178ef7c27d7f10b02f911876e47739647143fb8315f50488bae",
         "clocks": "9faf6c46eec21882079caaffe59c246ca047623570982d2edf3a621182c9899c",
         "appearance": "8a01341ba7ecb9d6472d6b10c443cbaf239524f12ddcbba01f3ee766d22db2f1",
-        "about": "a377f586306fa4fa3624e5b178bda5f1a2c3405c010d514cfe5fbdcc732c8c47",
+        "about": "ed89c64593c1df406a70813d704ebd03dbf3bfcbd60037b2e608eec8a59c17d4",
         "settings_full": "59e79610428cbf46b39a368afd662f72a629c8bb65c97b7d1e30955bc33d27c2",
         "popover": "52520e4a58ec334c7ef49da0b9505f91855a9e7c9f69ccea92e7eccf2e6186f5",
     ]
@@ -95,12 +95,14 @@ struct SnapshotTests {
             now: Date(timeIntervalSince1970: 1_722_241_800),
             startsAutomatically: false
         )
+        let updater = AppUpdater(startingUpdater: false)
 
         func wrap(_ view: some View) -> some View {
             view
                 .environment(store)
                 .environment(settings)
                 .environment(ticker)
+                .environment(updater)
                 .tint(.zoneAccent)
         }
 

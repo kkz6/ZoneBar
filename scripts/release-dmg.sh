@@ -19,6 +19,7 @@ NOTARY_KEY="${NOTARY_KEY:-}"
 NOTARY_KEY_ID="${NOTARY_KEY_ID:-}"
 NOTARY_ISSUER_ID="${NOTARY_ISSUER_ID:-}"
 SKIP_NOTARIZATION="${SKIP_NOTARIZATION:-0}"
+BUILD_NUMBER="${BUILD_NUMBER:-}"
 
 VERSION="$(
     xcodebuild \
@@ -30,6 +31,17 @@ VERSION="$(
 )"
 DMG_PATH="$BUILD_DIR/ZoneBar-${VERSION}.dmg"
 RW_DMG_PATH="$BUILD_DIR/ZoneBar-${VERSION}-rw.dmg"
+
+if [[ -z "$BUILD_NUMBER" ]]; then
+    BUILD_NUMBER="$(
+        xcodebuild \
+            -project "$PROJECT_PATH" \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -showBuildSettings 2>/dev/null |
+            awk '/CURRENT_PROJECT_VERSION/ { print $3; exit }'
+    )"
+fi
 
 if [[ -z "$VERSION" || -z "$TEAM_ID" ]]; then
     echo "Set TEAM_ID to the Apple Developer team used for this release."
@@ -69,6 +81,7 @@ xcodebuild \
     DEVELOPMENT_TEAM="$TEAM_ID" \
     CODE_SIGN_STYLE=Manual \
     CODE_SIGN_IDENTITY="$SIGNING_IDENTITY" \
+    CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
     OTHER_CODE_SIGN_FLAGS="--timestamp" \
     clean archive
 

@@ -40,6 +40,7 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 ### System Integration
 - Pure menu bar app (no dock icon)
 - Launch at login via SMAppService
+- Signed automatic updates and manual update checks via Sparkle
 - Respects system dark/light mode
 - App sandbox
 - Hardened runtime and direct-download distribution support
@@ -96,6 +97,7 @@ ZoneBar/
 - **State management:** Observation (`@Observable`) with environment injection
 - **Persistence:** JSON file for clocks, UserDefaults for settings
 - **Timer:** Minute-boundary aligned for accurate clock updates
+- **Updates:** Sparkle appcast generated and Ed25519-signed by the release workflow
 - **City data:** Hybrid approach -- bundled city database + Apple `TimeZone` API fallback
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.

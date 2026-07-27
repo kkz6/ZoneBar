@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AboutPane: View {
+    @Environment(AppUpdater.self) private var updater
     var usesApplicationIcon = true
 
     private var version: String {
@@ -32,6 +33,18 @@ struct AboutPane: View {
             .padding(.vertical, DS.Spacing.lg)
 
             SettingsGroup {
+                Button {
+                    updater.checkForUpdates()
+                } label: {
+                    SettingRow(icon: "arrow.triangle.2.circlepath", iconColor: .blue, title: "Check for Updates") {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .buttonStyle(.plain)
+
+                SettingsDivider()
                 LinkRow(icon: "chevron.left.forwardslash.chevron.right", color: .black, title: "Source Code", url: "https://github.com/kkz6/ZoneBar")
                 SettingsDivider()
                 LinkRow(icon: "ant.fill", color: .red, title: "Report an Issue", url: "https://github.com/kkz6/ZoneBar/issues")

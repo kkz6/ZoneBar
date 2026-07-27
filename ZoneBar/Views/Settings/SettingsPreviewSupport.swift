@@ -34,6 +34,8 @@ enum SettingsPreviewFixtures {
         now: Date(timeIntervalSince1970: 1_722_241_800),
         startsAutomatically: false
     )
+
+    static let updater = AppUpdater(startingUpdater: false)
 }
 
 extension View {
@@ -42,6 +44,7 @@ extension View {
         environment(SettingsPreviewFixtures.store)
             .environment(SettingsPreviewFixtures.settings)
             .environment(SettingsPreviewFixtures.ticker)
+            .environment(SettingsPreviewFixtures.updater)
             .tint(.zoneAccent)
             .background(Color(nsColor: .windowBackgroundColor))
     }

@@ -17,6 +17,7 @@ xcuserdata/
 .build/
 Packages/
 Package.resolved
+!ZoneBar.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
 # Archive
 *.xcarchive
