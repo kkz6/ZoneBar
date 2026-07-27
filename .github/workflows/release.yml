@@ -1,0 +1,119 @@
+name: Build release DMG
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to upload to
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      SIGNING_IDENTITY: ${{ secrets.DEVELOPER_ID_APPLICATION_NAME }}
+      NOTARY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      NOTARY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      KEYCHAIN_PASSWORD: ${{ secrets.BUILD_KEYCHAIN_PASSWORD }}
+
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Validate release version
+        run: |
+          set -euo pipefail
+          app_version="$(
+            xcodebuild \
+              -project ZoneBar.xcodeproj \
+              -scheme ZoneBar \
+              -configuration Release \
+              -showBuildSettings |
+              awk '/MARKETING_VERSION/ { print $3; exit }'
+          )"
+          if [[ "$RELEASE_TAG" != "v$app_version" ]]; then
+            echo "Release tag $RELEASE_TAG does not match app version v$app_version."
+            exit 1
+          fi
+
+      - name: Import Developer ID certificate
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.DEVELOPER_ID_APPLICATION_CERTIFICATE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          certificate_path="$RUNNER_TEMP/developer-id.p12"
+          keychain_path="$RUNNER_TEMP/zonebar-signing.keychain-db"
+
+          printf '%s' "$CERTIFICATE_BASE64" | base64 --decode > "$certificate_path"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$keychain_path"
+          security import "$certificate_path" \
+            -P "$CERTIFICATE_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12 \
+            -k "$keychain_path"
+          security list-keychain -d user -s "$keychain_path"
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -s \
+            -k "$KEYCHAIN_PASSWORD" \
+            "$keychain_path"
+
+      - name: Prepare notarization key
+        env:
+          API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+        run: |
+          set -euo pipefail
+          key_path="$RUNNER_TEMP/AuthKey_${NOTARY_KEY_ID}.p8"
+          printf '%s' "$API_KEY_BASE64" | base64 --decode > "$key_path"
+          chmod 600 "$key_path"
+          echo "NOTARY_KEY=$key_path" >> "$GITHUB_ENV"
+
+      - name: Run tests
+        run: |
+          xcodebuild \
+            -project ZoneBar.xcodeproj \
+            -scheme ZoneBar \
+            -destination "platform=macOS" \
+            CODE_SIGNING_ALLOWED=NO \
+            test
+
+      - name: Build, sign, and notarize DMG
+        run: ./scripts/release-dmg.sh
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZoneBar-${{ env.RELEASE_TAG }}
+          path: |
+            build/release/*.dmg
+            build/release/*.sha256
+          if-no-files-found: error
+
+      - name: Attach DMG to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$RELEASE_TAG" \
+            build/release/*.dmg \
+            build/release/*.sha256 \
+            --clobber

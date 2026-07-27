@@ -42,7 +42,7 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - Launch at login via SMAppService
 - Respects system dark/light mode
 - App sandbox
-- Ready for Mac App Store distribution
+- Hardened runtime and direct-download distribution support
 
 ## Requirements
 
@@ -70,18 +70,22 @@ On first launch, ZoneBar detects your local timezone and adds it along with UTC 
 ```
 ZoneBar/
 ├── ZoneBarApp.swift              # App entry point, MenuBarExtra + Settings
+├── DesignSystem/
+│   ├── DesignSystem.swift        # Reusable controls and visual tokens
+│   └── SettingsLayout.swift      # Reusable settings-window framework
 ├── Models/
 │   ├── WorldClock.swift          # Clock model, time formatting, day/night logic
 │   └── CityDatabase.swift        # Hybrid city search (bundled JSON + Apple API)
 ├── Views/
-│   ├── ClockListView.swift       # Main popover content
-│   ├── ClockRowView.swift        # Individual clock row
-│   ├── TimeSliderView.swift      # Time preview slider
+│   ├── ClockPopover.swift        # Main popover and clock rows
+│   ├── TimeScrubberView.swift    # Cross-timezone time preview
 │   ├── CitySearchView.swift      # City search and add
-│   ├── SettingsView.swift        # Settings window (3 tabs)
+│   ├── Settings/                 # Settings shell and five panes
 │   └── MenuBarLabel.swift        # Dynamic menu bar label
 ├── Services/
-│   └── ClockManager.swift        # Central state manager, persistence, timer
+│   ├── ClockStore.swift          # Clock persistence and CRUD
+│   ├── AppSettings.swift         # UserDefaults-backed preferences
+│   └── TimeTicker.swift          # Minute-aligned clock updates
 └── Resources/
     └── cities.json               # 176 cities, 124 timezones, all continents
 ```
@@ -89,7 +93,7 @@ ZoneBar/
 ## Architecture
 
 - **Pure SwiftUI** with `MenuBarExtra` (`.window` style)
-- **State management:** `ObservableObject` + `@Published` + `@AppStorage`
+- **State management:** Observation (`@Observable`) with environment injection
 - **Persistence:** JSON file for clocks, UserDefaults for settings
 - **Timer:** Minute-boundary aligned for accurate clock updates
 - **City data:** Hybrid approach -- bundled city database + Apple `TimeZone` API fallback

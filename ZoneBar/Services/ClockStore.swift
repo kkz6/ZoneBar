@@ -9,14 +9,24 @@ final class ClockStore {
 
     @ObservationIgnored private let saveURL: URL
 
-    init() {
-        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let appDir = appSupport.appendingPathComponent("ZoneBar", isDirectory: true)
-        try? FileManager.default.createDirectory(at: appDir, withIntermediateDirectories: true)
-        saveURL = appDir.appendingPathComponent("clocks.json")
+    init(saveURL: URL? = nil, seedDefaults: Bool = true) {
+        if let saveURL {
+            self.saveURL = saveURL
+        } else {
+            let appSupport = FileManager.default.urls(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask
+            ).first!
+            let appDir = appSupport.appendingPathComponent("ZoneBar", isDirectory: true)
+            try? FileManager.default.createDirectory(
+                at: appDir,
+                withIntermediateDirectories: true
+            )
+            self.saveURL = appDir.appendingPathComponent("clocks.json")
+        }
 
         load()
-        if clocks.isEmpty {
+        if clocks.isEmpty, seedDefaults {
             setupDefaults()
         }
     }

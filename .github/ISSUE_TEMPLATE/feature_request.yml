@@ -1,0 +1,41 @@
+name: Feature request
+description: Suggest an improvement or new capability for ZoneBar
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the workflow or limitation, not only the proposed feature.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Explain how you would like ZoneBar to behave.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Share any workarounds or alternative designs you considered.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add mockups, screenshots, or links that clarify the request.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for a similar request.
+          required: true

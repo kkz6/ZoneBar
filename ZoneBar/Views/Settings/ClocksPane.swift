@@ -6,7 +6,7 @@ struct ClocksPane: View {
     @Environment(TimeTicker.self) private var ticker
 
     var body: some View {
-        SettingsPane(section: .clocks) {
+        SettingsPane(section: SettingsSection.clocks) {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 SectionHeader(title: "Add a city")
                 CitySearchView()
@@ -16,7 +16,7 @@ struct ClocksPane: View {
                 emptyState
             } else {
                 SettingsGroup(header: "Your clocks") {
-                    ForEach(store.clocks) { clock in
+                    ForEach(Array(store.clocks.enumerated()), id: \.element.id) { index, clock in
                         ClockManageRow(clock: clock, now: ticker.now, settings: settings, store: store)
                             .draggable(clock.id.uuidString) {
                                 Text(clock.name)
@@ -26,13 +26,15 @@ struct ClocksPane: View {
                             .dropDestination(for: String.self) { items, _ in
                                 reorder(draggedID: items.first, onto: clock)
                             }
+                        if index < store.clocks.count - 1 {
+                            SettingsDivider()
+                        }
                     }
                 }
 
-                Text("Toggle the switch to show a clock in the menu bar. Drag a row to reorder.")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                    .padding(.horizontal, DS.Spacing.xs)
+                SettingsNote(
+                    text: "Toggle the switch to show a clock in the menu bar. Drag a row to reorder."
+                )
             }
         }
     }
@@ -113,10 +115,10 @@ private struct ClockManageRow: View {
                 get: { clock.showInMenuBar },
                 set: { store.setMenuBarVisibility(id: clock.id, visible: $0) }
             ))
-            .zoneToggle()
+            .settingsToggle()
             .help("Show in menu bar")
         }
-        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.horizontal, SettingsLayout.cardHorizontalInset)
         .frame(minHeight: DS.Size.rowHeight)
         .contentShape(Rectangle())
         .onHover { isHovering = $0 }
@@ -136,3 +138,11 @@ private struct ClockManageRow: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Clocks") {
+    ClocksPane()
+        .settingsPreviewEnvironment()
+        .frame(width: 400, height: 520, alignment: .top)
+}
+#endif

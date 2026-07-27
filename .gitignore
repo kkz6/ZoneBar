@@ -2,9 +2,11 @@
 build/
 DerivedData/
 *.xcuserdata
+*.xcuserstate
 *.xcworkspace
 !*.xcodeproj/project.xcworkspace/
 xcuserdata/
+/Timely.xcodeproj/
 
 # macOS
 .DS_Store
@@ -18,6 +20,23 @@ Package.resolved
 
 # Archive
 *.xcarchive
+*.tar.gz
+
+# Site is deployed from its own Sites-managed source repository
+/website/
+/website-zonebar*.tar.gz
+
+# Local agent/editor settings
+/.claude/
+
+# Signing and notarization material
+*.cer
+*.p8
+*.p12
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
 
 # Misc
 *.moved-aside

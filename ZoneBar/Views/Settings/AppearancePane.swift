@@ -6,7 +6,7 @@ struct AppearancePane: View {
     var body: some View {
         @Bindable var settings = settings
 
-        SettingsPane(section: .appearance) {
+        SettingsPane(section: SettingsSection.appearance) {
             SettingsGroup {
                 SegmentedRow(title: "Theme", selection: $settings.theme, options: [
                     .init(value: .system, title: "System", symbol: "circle.lefthalf.filled"),
@@ -15,10 +15,15 @@ struct AppearancePane: View {
                 ])
             }
 
-            Text("Choose how ZoneBar follows your system appearance.")
-                .font(.system(size: 12))
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, DS.Spacing.xs)
+            SettingsNote(text: "Choose how ZoneBar follows your system appearance.")
         }
     }
 }
+
+#if DEBUG
+#Preview("Appearance") {
+    AppearancePane()
+        .settingsPreviewEnvironment()
+        .frame(width: 400, height: 520, alignment: .top)
+}
+#endif

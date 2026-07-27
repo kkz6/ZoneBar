@@ -10,8 +10,11 @@ final class TimeTicker {
 
     @ObservationIgnored private var timer: AnyCancellable?
 
-    init() {
-        scheduleNextMinute()
+    init(now: Date = Date(), startsAutomatically: Bool = true) {
+        self.now = now
+        if startsAutomatically {
+            scheduleNextMinute()
+        }
     }
 
     private func scheduleNextMinute() {

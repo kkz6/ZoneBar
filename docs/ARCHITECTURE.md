@@ -128,20 +128,21 @@ and the logic pure (no hidden `Date()` calls), so it can be unit-tested.
 and the settings window:
 
 - `IconTile` — SF Symbol on a rounded, tinted gradient square.
-- `SettingsCard` — grouped card that lays children out as rows split by hairline
-  dividers (via `_VariadicView`).
+- `SettingsCard` and `SettingsDivider` — grouped cards with explicit,
+  public-API row separators.
 - `SettingRow` — icon + title/subtitle + trailing control.
-- `SectionHeader`, `SettingsGroup`, `SettingsPane` — section scaffolding.
+- `SettingsShell`, `SettingsPane`, and `SettingsGroup` — reusable settings
+  window, sidebar, and section scaffolding.
 - `DS` — spacing, radius, and size tokens.
 
 Toggles use the native switch style tinted with the macOS system accent colour.
 
 ## Testing
 
-The `ZoneBarTests` target (Swift Testing) covers the pure logic: `MenuBarRenderer`
-output across formats/separators/visibility, and `WorldClock` formatting, day/
-night, working-hours, compact-name, and GMT-offset computations. Tests pin a
-fixed `Date`, so they are deterministic regardless of wall-clock time.
+The `ZoneBarTests` target (Swift Testing) covers `MenuBarRenderer`, `WorldClock`,
+settings geometry, and visual regression fingerprints for every settings pane.
+Tests use isolated persistence and a fixed date so they do not touch user data
+and remain deterministic.
 
 ## Known Limitations
 
@@ -161,7 +162,7 @@ The app runs in App Sandbox. This means:
 
 | Decision | Rationale |
 |----------|-----------|
-| Pure SwiftUI (no AppKit views) | Simpler codebase, automatic dark mode, widget reuse potential |
+| SwiftUI-first with small AppKit bridges | Native menu-bar UI plus precise window material and titlebar control |
 | `@Observable` services via environment | Decoupled, single-responsibility state; no global singletons |
 | Pure `MenuBarRenderer` / formatting | Unit-testable logic isolated from UI and global state |
 | File-system-synchronized project group | New Swift files are picked up automatically — no pbxproj churn |

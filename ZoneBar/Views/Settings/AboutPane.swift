@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct AboutPane: View {
+    var usesApplicationIcon = true
+
     private var version: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
@@ -10,7 +12,7 @@ struct AboutPane: View {
     }
 
     var body: some View {
-        SettingsPane(section: .about) {
+        SettingsPane(section: SettingsSection.about) {
             VStack(spacing: DS.Spacing.md) {
                 appIcon
                     .frame(width: 84, height: 84)
@@ -31,6 +33,7 @@ struct AboutPane: View {
 
             SettingsGroup {
                 LinkRow(icon: "chevron.left.forwardslash.chevron.right", color: .black, title: "Source Code", url: "https://github.com/kkz6/ZoneBar")
+                SettingsDivider()
                 LinkRow(icon: "ant.fill", color: .red, title: "Report an Issue", url: "https://github.com/kkz6/ZoneBar/issues")
             }
 
@@ -46,7 +49,8 @@ struct AboutPane: View {
 
     @ViewBuilder
     private var appIcon: some View {
-        if let nsImage = NSApplication.shared.applicationIconImage {
+        if usesApplicationIcon,
+           let nsImage = NSApplication.shared.applicationIconImage {
             Image(nsImage: nsImage)
                 .resizable()
                 .interpolation(.high)
@@ -73,3 +77,11 @@ private struct LinkRow: View {
         .buttonStyle(.plain)
     }
 }
+
+#if DEBUG
+#Preview("About") {
+    AboutPane(usesApplicationIcon: false)
+        .settingsPreviewEnvironment()
+        .frame(width: 400, height: 520, alignment: .top)
+}
+#endif

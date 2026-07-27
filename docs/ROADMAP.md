@@ -2,7 +2,7 @@
 
 Feature roadmap for ZoneBar, organized by phase. Each phase builds on the previous one.
 
-## Phase 1 -- Core (v1.0) :white_check_mark:
+## Phase 1 -- Core (v0.1) :white_check_mark:
 
 The foundation. A working menu bar world clock app with meeting awareness.
 
@@ -14,8 +14,7 @@ The foundation. A working menu bar world clock app with meeting awareness.
 - [x] 12/24 hour time format toggle
 - [x] Date display option
 - [x] Interactive time slider with working hours overlap
-- [x] Calendar integration (next meeting, multi-timezone display)
-- [x] Settings window (General, Appearance, About)
+- [x] Settings window (General, Clocks, Menu Bar, Appearance, About)
 - [x] Launch at login
 - [x] System/Light/Dark appearance
 
@@ -28,7 +27,7 @@ Refining the experience and adding power-user features.
 - [ ] **Custom working hours per clock** -- Override the default 9-5 per timezone. Useful for colleagues with non-standard schedules.
 - [ ] **Timezone abbreviation display** -- Option to show PST, EST, CET alongside or instead of city names.
 - [ ] **Spotlight & Shortcuts integration** -- "What time is it in Tokyo?" via Siri and the Shortcuts app. Uses the App Intents framework.
-- [ ] **App icon** -- Custom app icon for the dock (when Settings is open) and App Store listing.
+- [x] **App icon** -- Custom app icon for the dock while Settings is open.
 
 ## Phase 3 -- Calendar Deep Integration
 

@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible problem with ZoneBar
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve ZoneBar. Please search existing issues before submitting.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+      placeholder: A clear, concise description of the issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open…
+        2. Select…
+        3. Observe…
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: ZoneBar version
+      description: Find this in ZoneBar → Settings → About.
+      placeholder: "0.1.0 (1)"
+    validations:
+      required: true
+
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac
+      placeholder: "macOS 15.5, MacBook Pro M3"
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or additional context
+      description: Add screenshots, screen recordings, logs, or other useful context. Remove private information first.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I can reproduce this with the latest ZoneBar release.
+          required: true

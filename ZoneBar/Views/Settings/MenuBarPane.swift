@@ -8,7 +8,7 @@ struct MenuBarPane: View {
     var body: some View {
         @Bindable var settings = settings
 
-        SettingsPane(section: .menuBar) {
+        SettingsPane(section: SettingsSection.menuBar) {
             SettingsGroup(header: "Preview") {
                 HStack {
                     Text(previewText)
@@ -18,20 +18,24 @@ struct MenuBarPane: View {
                         .truncationMode(.tail)
                     Spacer(minLength: 0)
                 }
-                .padding(.horizontal, DS.Spacing.lg)
+                .padding(.horizontal, SettingsLayout.cardHorizontalInset)
                 .frame(minHeight: DS.Size.rowHeight)
             }
 
             SettingsGroup(header: "Display") {
                 SettingRow(title: "Compact city names", subtitle: "New York → NY") {
                     Toggle("", isOn: $settings.compactMode)
-                        .zoneToggle()
+                        .settingsToggle()
                 }
+
+                SettingsDivider()
 
                 SettingRow(title: "Day / night icon", subtitle: "Prefix each clock with ☀ or ☾") {
                     Toggle("", isOn: $settings.showDayNightIcon)
-                        .zoneToggle()
+                        .settingsToggle()
                 }
+
+                SettingsDivider()
 
                 SegmentedRow(title: "Separator", selection: $settings.separatorStyle, options: [
                     .init(value: .spaces, title: "Spaces", symbol: "space"),
@@ -41,10 +45,10 @@ struct MenuBarPane: View {
                 ])
             }
 
-            Text("Choose which clocks appear in the menu bar from the Clocks section.")
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, DS.Spacing.xs)
+            SettingsNote(
+                text: "Choose which clocks appear in the menu bar from the Clocks section.",
+                fontSize: 11
+            )
         }
     }
 
@@ -61,3 +65,11 @@ struct MenuBarPane: View {
         return text.isEmpty ? "🕐  (no clocks selected)" : text
     }
 }
+
+#if DEBUG
+#Preview("Menu Bar") {
+    MenuBarPane()
+        .settingsPreviewEnvironment()
+        .frame(width: 400, height: 520, alignment: .top)
+}
+#endif

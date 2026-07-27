@@ -18,7 +18,7 @@ enum DS {
     }
 
     enum Size {
-        static let rowHeight: CGFloat = 50
+        static let rowHeight: CGFloat = 46
         static let tile: CGFloat = 26
         static let popoverWidth: CGFloat = 320
     }
@@ -59,7 +59,20 @@ struct SectionHeader: View {
         Text(title)
             .font(.system(size: 12, weight: .semibold))
             .foregroundStyle(.secondary)
-            .padding(.horizontal, DS.Spacing.xs)
+    }
+}
+
+/// Supplemental copy below a settings group. It intentionally adds no
+/// horizontal padding so its text shares the pane's content gutter.
+struct SettingsNote: View {
+    let text: String
+    var fontSize: CGFloat = 12
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: fontSize))
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -72,9 +85,7 @@ struct SettingsCard<Content: View>: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            _VariadicView.Tree(DividedLayout()) {
-                content
-            }
+            content
         }
         .background(
             RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous)
@@ -86,20 +97,15 @@ struct SettingsCard<Content: View>: View {
         )
         .shadow(color: .black.opacity(0.10), radius: 7, y: 2)
     }
+}
 
-    private struct DividedLayout: _VariadicView_MultiViewRoot {
-        @ViewBuilder
-        func body(children: _VariadicView.Children) -> some View {
-            let last = children.last?.id
-            ForEach(children) { child in
-                child
-                if child.id != last {
-                    Rectangle()
-                        .fill(DS.dividerColor)
-                        .frame(height: 1)
-                }
-            }
-        }
+/// Public-API separator for rows inside `SettingsCard`.
+struct SettingsDivider: View {
+    var body: some View {
+        Rectangle()
+            .fill(DS.dividerColor)
+            .frame(height: 1)
+            .accessibilityHidden(true)
     }
 }
 
@@ -134,7 +140,7 @@ struct SettingRow<Trailing: View>: View {
 
             trailing
         }
-        .padding(.horizontal, DS.Spacing.lg)
+        .padding(.horizontal, SettingsLayout.cardHorizontalInset)
         .frame(minHeight: DS.Size.rowHeight)
     }
 }
@@ -159,11 +165,12 @@ extension Color {
 // MARK: - Toggle styling helper
 
 extension View {
-    func zoneToggle() -> some View {
+    /// Standard compact toggle used by settings rows. It inherits the app's
+    /// environment tint, so the settings framework is reusable across brands.
+    func settingsToggle() -> some View {
         self.toggleStyle(.switch)
             .controlSize(.small)
             .labelsHidden()
-            .tint(.zoneAccent)
     }
 }
 
@@ -199,7 +206,7 @@ struct SegmentedSelector<Value: Hashable>: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 11, style: .continuous)
-                        .fill(isSelected ? AnyShapeStyle(Color.zoneAccent.opacity(0.12)) : AnyShapeStyle(Color.primary.opacity(0.05)))
+                        .fill(isSelected ? AnyShapeStyle(Color.accentColor.opacity(0.12)) : AnyShapeStyle(Color.primary.opacity(0.05)))
                     RoundedRectangle(cornerRadius: 11, style: .continuous)
                         .strokeBorder(
                             isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(DS.borderColor),
@@ -219,10 +226,14 @@ struct SegmentedSelector<Value: Hashable>: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(option.title)
+            .accessibilityValue(isSelected ? "Selected" : "Not selected")
+            .accessibilityAddTraits(isSelected ? [.isSelected] : [])
 
             Text(option.title)
                 .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
                 .foregroundStyle(isSelected ? .primary : .secondary)
+                .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity)
     }
@@ -240,8 +251,8 @@ struct SegmentedRow<Value: Hashable>: View {
                 .font(.system(size: 13))
             SegmentedSelector(selection: $selection, options: options)
         }
-        .padding(.horizontal, DS.Spacing.lg)
-        .padding(.vertical, DS.Spacing.md)
+        .padding(.horizontal, SettingsLayout.cardHorizontalInset)
+        .padding(.vertical, SettingsLayout.cardVerticalInset)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

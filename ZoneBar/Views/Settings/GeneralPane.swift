@@ -7,11 +7,11 @@ struct GeneralPane: View {
     var body: some View {
         @Bindable var settings = settings
 
-        SettingsPane(section: .general) {
+        SettingsPane(section: SettingsSection.general) {
             SettingsGroup {
                 SettingRow(title: "Launch at login") {
                     Toggle("", isOn: $launchAtLogin)
-                        .zoneToggle()
+                        .settingsToggle()
                         .onChange(of: launchAtLogin) { _, newValue in
                             if !LaunchAtLogin.set(newValue) {
                                 launchAtLogin = LaunchAtLogin.isEnabled
@@ -19,10 +19,14 @@ struct GeneralPane: View {
                         }
                 }
 
+                SettingsDivider()
+
                 SettingRow(title: "Show date in menu bar") {
                     Toggle("", isOn: $settings.showDate)
-                        .zoneToggle()
+                        .settingsToggle()
                 }
+
+                SettingsDivider()
 
                 SegmentedRow(title: "Time format", selection: $settings.is24Hour, options: [
                     .init(value: true, title: "24-hour", glyph: "24"),
@@ -33,3 +37,11 @@ struct GeneralPane: View {
         .onAppear { launchAtLogin = LaunchAtLogin.isEnabled }
     }
 }
+
+#if DEBUG
+#Preview("General") {
+    GeneralPane()
+        .settingsPreviewEnvironment()
+        .frame(width: 400, height: 520, alignment: .top)
+}
+#endif

@@ -5,7 +5,7 @@ All notable changes to ZoneBar will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-03-16
+## [0.1.0] - 2026-07-27
 
 ### Added
 - Multiple world clocks with add, remove, reorder, and inline rename
@@ -15,11 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compact mode for abbreviated city names
 - 12-hour and 24-hour time format toggle
 - Date display option in menu bar
-- Interactive time slider to preview times across all zones
+- Interactive time scrubber to preview times across all zones
 - Working hours overlap indicator on the time slider
-- Settings window with General, Appearance, and About tabs
+- Reusable sidebar settings window with General, Clocks, Menu Bar, Appearance,
+  and About sections
 - Launch at login via SMAppService
 - System/Light/Dark appearance modes
 - Automatic local timezone detection on first launch
 - JSON-based clock persistence
 - App sandbox
+- Xcode previews and visual regression tests for the settings interface
+- Automated GitHub release workflow for signed and notarized DMG artifacts

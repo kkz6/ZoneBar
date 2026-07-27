@@ -19,14 +19,14 @@ Thanks for your interest in contributing to ZoneBar.
 
 ### Requirements
 - macOS 14.0+ (Sonoma)
-- Xcode 15.0+
-- Swift 5.9+
+- Xcode 16.0+
+- Swift 5+
 
 ## Project Conventions
 
 ### Code Style
 - Follow standard Swift naming conventions (camelCase for properties/methods, PascalCase for types)
-- Use SwiftUI idioms (`@Published`, `@AppStorage`, `@StateObject`)
+- Use the Observation framework (`@Observable`) and environment injection
 - Keep views small and focused -- extract subviews when a view exceeds ~100 lines
 - Use SF Symbols for icons
 
@@ -56,7 +56,11 @@ Thanks for your interest in contributing to ZoneBar.
 1. Fork the repository
 2. Create a feature branch from `main`
 3. Make your changes
-4. Ensure the project builds without warnings
+4. Run the tests:
+   ```bash
+   xcodebuild -project ZoneBar.xcodeproj -scheme ZoneBar \
+     -destination "platform=macOS" CODE_SIGNING_ALLOWED=NO test
+   ```
 5. Open a pull request with a clear description of your changes
 
 ## Architecture Notes

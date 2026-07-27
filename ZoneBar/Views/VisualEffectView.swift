@@ -35,6 +35,8 @@ struct VisualEffectView: NSViewRepresentable {
 /// so the settings window always opens at the intended dimensions.
 struct WindowConfigurator: NSViewRepresentable {
     let size: CGSize
+    let trafficLightLeading: CGFloat
+    let trafficLightCenterFromTop: CGFloat
 
     func makeNSView(context: Context) -> NSView {
         let view = NSView(frame: .zero)
@@ -55,6 +57,8 @@ struct WindowConfigurator: NSViewRepresentable {
         window.standardWindowButton(.zoomButton)?.isEnabled = false
         window.collectionBehavior.insert(.fullScreenNone)
 
+        insetTrafficLights(in: window)
+
         // Force the window frame to exactly the content size, anchored at the
         // top-left, clearing any stale/restored larger frame that would leave an
         // uncovered (transparent) strip.
@@ -64,6 +68,22 @@ struct WindowConfigurator: NSViewRepresentable {
             frame.origin.y += frame.size.height - target.height
             frame.size = target
             window.setFrame(frame, display: true)
+        }
+    }
+
+    /// Align the titlebar controls to the grid supplied by the settings shell.
+    private func insetTrafficLights(in window: NSWindow) {
+        let buttons = [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton]
+            .compactMap { window.standardWindowButton($0) }
+        guard let closeButton = buttons.first, let container = closeButton.superview else { return }
+
+        let deltaX = trafficLightLeading - closeButton.frame.origin.x
+
+        for button in buttons {
+            var origin = button.frame.origin
+            origin.x += deltaX
+            origin.y = container.bounds.height - trafficLightCenterFromTop - button.frame.height / 2
+            button.setFrameOrigin(origin)
         }
     }
 }
