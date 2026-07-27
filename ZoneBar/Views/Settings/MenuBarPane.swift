@@ -60,9 +60,10 @@ struct MenuBarPane: View {
             compact: settings.compactMode,
             showDate: settings.showDate,
             showDayNightIcon: settings.showDayNightIcon,
-            separator: settings.separatorStyle
+            separator: settings.separatorStyle,
+            locale: settings.locale
         )
-        return text.isEmpty ? "🕐  (no clocks selected)" : text
+        return text.isEmpty ? settings.language.localized("🕐  (no clocks selected)") : text
     }
 }
 

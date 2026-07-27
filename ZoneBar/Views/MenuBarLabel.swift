@@ -13,7 +13,8 @@ struct MenuBarLabel: View {
             compact: settings.compactMode,
             showDate: settings.showDate,
             showDayNightIcon: settings.showDayNightIcon,
-            separator: settings.separatorStyle
+            separator: settings.separatorStyle,
+            locale: settings.locale
         )
 
         Group {

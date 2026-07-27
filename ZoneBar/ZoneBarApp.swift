@@ -14,6 +14,7 @@ struct ZoneBarApp: App {
                 .environment(settings)
                 .environment(ticker)
                 .environment(updater)
+                .environment(\.locale, settings.locale)
                 .tint(.zoneAccent)
                 .preferredColorScheme(settings.theme.colorScheme)
         } label: {
@@ -27,6 +28,7 @@ struct ZoneBarApp: App {
                 .environment(settings)
                 .environment(ticker)
                 .environment(updater)
+                .environment(\.locale, settings.locale)
                 .tint(.zoneAccent)
                 .preferredColorScheme(settings.theme.colorScheme)
         }

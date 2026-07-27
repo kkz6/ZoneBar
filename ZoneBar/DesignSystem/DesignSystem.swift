@@ -55,7 +55,7 @@ struct IconTile: View {
 // MARK: - Section Header
 
 struct SectionHeader: View {
-    let title: String
+    let title: LocalizedStringKey
 
     var body: some View {
         Text(title)
@@ -67,7 +67,7 @@ struct SectionHeader: View {
 /// Supplemental copy below a settings group. It intentionally adds no
 /// horizontal padding so its text shares the pane's content gutter.
 struct SettingsNote: View {
-    let text: String
+    let text: LocalizedStringKey
     var fontSize: CGFloat = 12
 
     var body: some View {
@@ -118,8 +118,8 @@ struct SettingsDivider: View {
 struct SettingRow<Trailing: View>: View {
     var icon: String?
     var iconColor: Color = .accentColor
-    let title: String
-    var subtitle: String?
+    let title: LocalizedStringKey
+    var subtitle: LocalizedStringKey?
     @ViewBuilder var trailing: Trailing
 
     var body: some View {
@@ -148,7 +148,12 @@ struct SettingRow<Trailing: View>: View {
 }
 
 extension SettingRow where Trailing == EmptyView {
-    init(icon: String? = nil, iconColor: Color = .accentColor, title: String, subtitle: String? = nil) {
+    init(
+        icon: String? = nil,
+        iconColor: Color = .accentColor,
+        title: LocalizedStringKey,
+        subtitle: LocalizedStringKey? = nil
+    ) {
         self.icon = icon
         self.iconColor = iconColor
         self.title = title
@@ -180,11 +185,11 @@ extension View {
 
 struct SegmentOption<Value: Hashable>: Identifiable {
     let value: Value
-    let title: String
+    let title: LocalizedStringKey
     var symbol: String? = nil
     var glyph: String? = nil
 
-    var id: String { title }
+    var id: Value { value }
 }
 
 /// Card-style segmented control: a row of tappable cards (icon or glyph) with a
@@ -228,8 +233,14 @@ struct SegmentedSelector<Value: Hashable>: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(option.title)
-            .accessibilityValue(isSelected ? "Selected" : "Not selected")
+            .accessibilityLabel(Text(option.title))
+            .accessibilityValue(
+                Text(
+                    isSelected
+                        ? LocalizedStringKey("Selected")
+                        : LocalizedStringKey("Not selected")
+                )
+            )
             .accessibilityAddTraits(isSelected ? [.isSelected] : [])
 
             Text(option.title)
@@ -243,7 +254,7 @@ struct SegmentedSelector<Value: Hashable>: View {
 
 /// A labelled segmented control sized to sit as a row inside a SettingsCard.
 struct SegmentedRow<Value: Hashable>: View {
-    let title: String
+    let title: LocalizedStringKey
     @Binding var selection: Value
     let options: [SegmentOption<Value>]
 

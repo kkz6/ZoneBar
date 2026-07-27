@@ -18,6 +18,24 @@ struct WorldClockTests {
         #expect(clock.formattedTime(at: noonUTC, is24Hour: true, includeSeconds: true) == "12:00:00")
     }
 
+    @Test func twelveHourTimeUsesSelectedLocale() {
+        let clock = WorldClock(name: "UTC", country: "", timezone: "UTC")
+
+        let english = clock.formattedTime(
+            at: noonUTC,
+            is24Hour: false,
+            locale: Locale(identifier: "en")
+        )
+        let japanese = clock.formattedTime(
+            at: noonUTC,
+            is24Hour: false,
+            locale: Locale(identifier: "ja")
+        )
+
+        #expect(english.contains("PM"))
+        #expect(japanese.contains("午後"))
+    }
+
     @Test func invalidTimezoneFallsBack() {
         let clock = WorldClock(name: "Nowhere", country: "", timezone: "Not/AZone")
         #expect(clock.formattedTime(at: noonUTC, is24Hour: true) == "--:--")

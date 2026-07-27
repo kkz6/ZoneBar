@@ -10,7 +10,8 @@ enum MenuBarRenderer {
         compact: Bool,
         showDate: Bool,
         showDayNightIcon: Bool,
-        separator: SeparatorStyle
+        separator: SeparatorStyle,
+        locale: Locale = .current
     ) -> String {
         let visible = clocks.filter(\.showInMenuBar)
         guard !visible.isEmpty else { return "" }
@@ -21,9 +22,9 @@ enum MenuBarRenderer {
                 parts.append(clock.isDaytime(at: now) ? "☀" : "☾")
             }
             parts.append(compact ? clock.compactName : clock.name)
-            parts.append(clock.formattedTime(at: now, is24Hour: is24Hour))
+            parts.append(clock.formattedTime(at: now, is24Hour: is24Hour, locale: locale))
             if showDate {
-                parts.append(clock.formattedDate(at: now))
+                parts.append(clock.formattedDate(at: now, locale: locale))
             }
             return parts.joined(separator: " ")
         }

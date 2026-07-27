@@ -58,7 +58,13 @@ struct ClockPopover: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .help(addExpanded ? "Close" : "Add a city")
+            .help(
+                Text(
+                    addExpanded
+                        ? LocalizedStringKey("Close")
+                        : LocalizedStringKey("Add a city")
+                )
+            )
         }
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.top, DS.Spacing.md)
@@ -95,9 +101,15 @@ struct ClockPopover: View {
 
     private var footer: some View {
         HStack(spacing: DS.Spacing.md) {
-            Text("\(store.clocks.count) \(store.clocks.count == 1 ? "clock" : "clocks")")
-                .font(.system(size: 11))
-                .foregroundStyle(.tertiary)
+            Group {
+                if store.clocks.count == 1 {
+                    Text("1 clock")
+                } else {
+                    Text("\(store.clocks.count) clocks")
+                }
+            }
+            .font(.system(size: 11))
+            .foregroundStyle(.tertiary)
 
             Spacer()
 
@@ -149,7 +161,8 @@ struct ClockPopover: View {
 
     private var dateString: String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, dd MMMM"
+        formatter.locale = settings.locale
+        formatter.setLocalizedDateFormatFromTemplate("EEEEddMMMM")
         return formatter.string(from: ticker.now)
     }
 }
@@ -181,7 +194,7 @@ private struct ClockRow: View {
 
             Spacer(minLength: DS.Spacing.sm)
 
-            if let dayLabel = clock.relativeDayLabel(at: now) {
+            if let dayLabel = clock.relativeDayLabel(at: now, language: settings.language) {
                 Text(dayLabel)
                     .font(.system(size: 9, weight: .semibold))
                     .foregroundStyle(.secondary)
@@ -190,7 +203,13 @@ private struct ClockRow: View {
                     .background(.secondary.opacity(0.12), in: Capsule())
             }
 
-            Text(clock.formattedTime(at: now, is24Hour: settings.is24Hour))
+            Text(
+                clock.formattedTime(
+                    at: now,
+                    is24Hour: settings.is24Hour,
+                    locale: settings.locale
+                )
+            )
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(day ? .primary : .secondary)

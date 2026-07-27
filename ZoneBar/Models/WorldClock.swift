@@ -40,27 +40,33 @@ struct WorldClock: Identifiable, Codable, Hashable {
         return hour >= 6 && hour < 20
     }
 
-    func formattedTime(at now: Date, is24Hour: Bool, includeSeconds: Bool = false) -> String {
+    func formattedTime(
+        at now: Date,
+        is24Hour: Bool,
+        includeSeconds: Bool = false,
+        locale: Locale = .current
+    ) -> String {
         guard let tz = timeZone else { return "--:--" }
         let formatter = DateFormatter()
+        formatter.locale = locale
         formatter.timeZone = tz
-        if is24Hour {
-            formatter.dateFormat = includeSeconds ? "HH:mm:ss" : "HH:mm"
-        } else {
-            formatter.dateFormat = includeSeconds ? "h:mm:ss a" : "h:mm a"
-        }
+        let template = is24Hour
+            ? (includeSeconds ? "HHmmss" : "HHmm")
+            : (includeSeconds ? "hmmssa" : "hmma")
+        formatter.setLocalizedDateFormatFromTemplate(template)
         return formatter.string(from: now)
     }
 
-    func formattedDate(at now: Date) -> String {
+    func formattedDate(at now: Date, locale: Locale = .current) -> String {
         guard let tz = timeZone else { return "" }
         let formatter = DateFormatter()
+        formatter.locale = locale
         formatter.timeZone = tz
-        formatter.dateFormat = "EEE, dd MMM"
+        formatter.setLocalizedDateFormatFromTemplate("EEEddMMM")
         return formatter.string(from: now)
     }
 
-    func relativeDayLabel(at now: Date) -> String? {
+    func relativeDayLabel(at now: Date, language: AppLanguage = .automatic) -> String? {
         guard let tz = timeZone else { return nil }
         let calendar = Calendar.current
 
@@ -71,8 +77,12 @@ struct WorldClock: Identifiable, Codable, Hashable {
 
         let diff = targetDay - localDay
         if diff == 0 { return nil }
-        if diff == 1 || diff < -25 { return "Tomorrow" }
-        if diff == -1 || diff > 25 { return "Yesterday" }
+        if diff == 1 || diff < -25 {
+            return language.localized("Tomorrow")
+        }
+        if diff == -1 || diff > 25 {
+            return language.localized("Yesterday")
+        }
         return nil
     }
 

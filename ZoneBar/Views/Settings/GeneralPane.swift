@@ -28,6 +28,16 @@ struct GeneralPane: View {
                     .init(value: false, title: "12-hour", glyph: "12"),
                 ])
             }
+
+            SettingsGroup(header: "Language") {
+                SegmentedRow(title: "App language", selection: $settings.language, options: [
+                    .init(value: .automatic, title: "Automatic", symbol: "globe"),
+                    .init(value: .english, title: "English", glyph: "EN"),
+                    .init(value: .japanese, title: "Japanese", glyph: "日本"),
+                ])
+            }
+
+            SettingsNote(text: "Automatic follows your Mac’s language.")
         }
         .onAppear { launchAtLogin = LaunchAtLogin.isEnabled }
     }

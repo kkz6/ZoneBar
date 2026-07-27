@@ -9,9 +9,9 @@ enum AppTheme: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .system: return "System"
-        case .light: return "Light"
-        case .dark: return "Dark"
+        case .system: return String(localized: "System")
+        case .light: return String(localized: "Light")
+        case .dark: return String(localized: "Dark")
         }
     }
 
@@ -42,10 +42,10 @@ enum SeparatorStyle: String, CaseIterable, Identifiable {
 
     var label: String {
         switch self {
-        case .spaces: return "Spaces"
-        case .dot: return "Dot"
-        case .pipe: return "Pipe"
-        case .slash: return "Slash"
+        case .spaces: return String(localized: "Spaces")
+        case .dot: return String(localized: "Dot")
+        case .pipe: return String(localized: "Pipe")
+        case .slash: return String(localized: "Slash")
         }
     }
 

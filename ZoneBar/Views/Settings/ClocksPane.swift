@@ -112,7 +112,13 @@ private struct ClockManageRow: View {
                 .buttonStyle(.plain)
                 .help("Remove clock")
             } else {
-                Text(clock.formattedTime(at: now, is24Hour: settings.is24Hour))
+                Text(
+                    clock.formattedTime(
+                        at: now,
+                        is24Hour: settings.is24Hour,
+                        locale: settings.locale
+                    )
+                )
                     .font(.system(size: 13, design: .monospaced))
                     .foregroundStyle(.secondary)
             }

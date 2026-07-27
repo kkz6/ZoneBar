@@ -27,11 +27,10 @@ struct TimeScrubberView: View {
     private var previewDate: Date { baseDate.addingTimeInterval(offset) }
 
     private var previewTimeString: String {
-        let minute = Int(previewMinute.rounded())
-        let h = minute / 60, m = minute % 60
-        if settings.is24Hour { return String(format: "%02d:%02d", h, m) }
-        let displayHour = h % 12 == 0 ? 12 : h % 12
-        return String(format: "%d:%02d %@", displayHour, m, h < 12 ? "AM" : "PM")
+        let formatter = DateFormatter()
+        formatter.locale = settings.locale
+        formatter.setLocalizedDateFormatFromTemplate(settings.is24Hour ? "HHmm" : "hmma")
+        return formatter.string(from: previewDate)
     }
 
     private var allInWorkingHours: Bool {
@@ -45,7 +44,7 @@ struct TimeScrubberView: View {
                 Image(systemName: "clock.arrow.circlepath")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
-                Text(isPreviewing ? "Previewing" : "Drag to compare times")
+                Text(isPreviewing ? LocalizedStringKey("Previewing") : LocalizedStringKey("Drag to compare times"))
                     .font(.system(size: 11, weight: .medium))
                     .foregroundStyle(.secondary)
 
@@ -75,7 +74,11 @@ struct TimeScrubberView: View {
                 Circle()
                     .fill(allInWorkingHours ? .green : .orange)
                     .frame(width: 6, height: 6)
-                Text(allInWorkingHours ? "All clocks in working hours (9–5)" : "Not all in working hours")
+                Text(
+                    allInWorkingHours
+                        ? LocalizedStringKey("All clocks in working hours (9–5)")
+                        : LocalizedStringKey("Not all in working hours")
+                )
                     .font(.system(size: 10))
                     .foregroundStyle(.secondary)
                 Spacer()

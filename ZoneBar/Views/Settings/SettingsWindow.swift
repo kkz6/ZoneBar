@@ -9,7 +9,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
 
     var id: String { rawValue }
 
-    var title: String {
+    var title: LocalizedStringKey {
         switch self {
         case .general: return "General"
         case .menuBar: return "Menu Bar"
@@ -65,7 +65,7 @@ struct SettingsWindow: View {
                 NSApplication.shared.windows
                     .first(where: {
                         $0.identifier?.rawValue == Self.windowID ||
-                        $0.title == "Settings"
+                        $0.title == String(localized: "Settings")
                     })?
                     .makeKeyAndOrderFront(nil)
             }
@@ -112,7 +112,7 @@ struct SettingsPane<Destination: SettingsDestination, Content: View>: View {
 
 /// A labelled group: an optional section header above a SettingsCard.
 struct SettingsGroup<Content: View>: View {
-    var header: String?
+    var header: LocalizedStringKey?
     @ViewBuilder var content: Content
 
     var body: some View {

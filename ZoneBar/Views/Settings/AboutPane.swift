@@ -98,7 +98,7 @@ struct AboutPane: View {
 private struct LinkRow: View {
     let icon: String
     let color: Color
-    let title: String
+    let title: LocalizedStringKey
     let url: String
 
     var body: some View {

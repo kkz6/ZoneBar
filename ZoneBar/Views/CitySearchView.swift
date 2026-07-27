@@ -126,8 +126,9 @@ struct CitySearchView: View {
     private func timeFor(_ city: CityEntry) -> String {
         guard let tz = TimeZone(identifier: city.timezone) else { return "" }
         let formatter = DateFormatter()
+        formatter.locale = settings.locale
         formatter.timeZone = tz
-        formatter.dateFormat = settings.is24Hour ? "HH:mm" : "h:mm a"
+        formatter.setLocalizedDateFormatFromTemplate(settings.is24Hour ? "HHmm" : "hmma")
         return formatter.string(from: ticker.now)
     }
 }

@@ -31,7 +31,7 @@ enum SettingsLayout {
 
 /// A destination displayed by the reusable settings sidebar and detail header.
 protocol SettingsDestination: Identifiable, Hashable {
-    var title: String { get }
+    var title: LocalizedStringKey { get }
     var symbol: String { get }
     var color: Color { get }
 }
@@ -39,10 +39,10 @@ protocol SettingsDestination: Identifiable, Hashable {
 /// One labelled group in the reusable settings sidebar.
 struct SettingsSidebarGroup<Destination: SettingsDestination>: Identifiable {
     let id: String
-    let header: String?
+    let header: LocalizedStringKey?
     let destinations: [Destination]
 
-    init(_ id: String, header: String? = nil, destinations: [Destination]) {
+    init(_ id: String, header: LocalizedStringKey? = nil, destinations: [Destination]) {
         self.id = id
         self.header = header
         self.destinations = destinations

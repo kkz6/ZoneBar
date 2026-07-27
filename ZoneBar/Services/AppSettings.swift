@@ -27,6 +27,12 @@ final class AppSettings {
         didSet { defaults.set(theme.rawValue, forKey: Keys.theme) }
     }
 
+    var language: AppLanguage {
+        didSet { defaults.set(language.rawValue, forKey: Keys.language) }
+    }
+
+    var locale: Locale { language.locale }
+
     private let defaults: UserDefaults
 
     init(defaults: UserDefaults = .standard) {
@@ -39,6 +45,7 @@ final class AppSettings {
             Keys.showDayNightIcon: false,
             Keys.separatorStyle: SeparatorStyle.spaces.rawValue,
             Keys.theme: AppTheme.system.rawValue,
+            Keys.language: AppLanguage.automatic.rawValue,
         ])
 
         is24Hour = defaults.bool(forKey: Keys.is24Hour)
@@ -47,6 +54,7 @@ final class AppSettings {
         showDayNightIcon = defaults.bool(forKey: Keys.showDayNightIcon)
         separatorStyle = SeparatorStyle(rawValue: defaults.string(forKey: Keys.separatorStyle) ?? "") ?? .spaces
         theme = AppTheme(rawValue: defaults.string(forKey: Keys.theme) ?? "") ?? .system
+        language = AppLanguage(rawValue: defaults.string(forKey: Keys.language) ?? "") ?? .automatic
     }
 
     private enum Keys {
@@ -56,5 +64,6 @@ final class AppSettings {
         static let showDayNightIcon = "showDayNightIcon"
         static let separatorStyle = "separatorStyle"
         static let theme = "appearanceMode"
+        static let language = "appLanguage"
     }
 }
