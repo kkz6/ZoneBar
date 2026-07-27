@@ -92,7 +92,6 @@ hdiutil create \
     -format UDRW \
     "$RW_DMG_PATH"
 
-MOUNT_DIR="$(mktemp -d "$BUILD_DIR/mount.XXXXXX")"
 DEVICE=""
 
 cleanup_mount() {
@@ -107,7 +106,6 @@ DEVICE="$(
         -readwrite \
         -noverify \
         -noautoopen \
-        -mountpoint "$MOUNT_DIR" \
         "$RW_DMG_PATH" |
         awk '/Apple_APFS|Apple_HFS/ { print $1; exit }'
 )"
@@ -119,6 +117,7 @@ fi
 
 osascript <<APPLESCRIPT
 tell application "Finder"
+    delay 2
     tell disk "ZoneBar"
         open
         set current view of container window to icon view
