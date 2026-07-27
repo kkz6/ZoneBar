@@ -23,8 +23,6 @@ Package.resolved
 *.xcarchive
 *.tar.gz
 
-# Site is deployed from its own Sites-managed source repository
-/website/
 /website-zonebar*.tar.gz
 
 # Local agent/editor settings
