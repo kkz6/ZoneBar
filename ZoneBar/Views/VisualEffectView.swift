@@ -37,7 +37,6 @@ struct WindowConfigurator: NSViewRepresentable {
     let size: CGSize
     let trafficLightLeading: CGFloat
     let trafficLightCenterFromTop: CGFloat
-    let cornerRadius: CGFloat
 
     func makeNSView(context: Context) -> NSView {
         let view = NSView(frame: .zero)
@@ -59,13 +58,6 @@ struct WindowConfigurator: NSViewRepresentable {
         window.collectionBehavior.insert(.fullScreenNone)
         window.isOpaque = false
         window.backgroundColor = .clear
-
-        if let contentView = window.contentView {
-            contentView.wantsLayer = true
-            contentView.layer?.cornerRadius = cornerRadius
-            contentView.layer?.cornerCurve = .continuous
-            contentView.layer?.masksToBounds = true
-        }
 
         insetTrafficLights(in: window)
 

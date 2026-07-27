@@ -72,7 +72,14 @@ final class ClockStore {
 
     func setMenuBarVisibility(id: UUID, visible: Bool) {
         guard let index = clocks.firstIndex(where: { $0.id == id }) else { return }
-        clocks[index].showInMenuBar = visible
+        guard clocks[index].showInMenuBar != visible else { return }
+
+        // Replacing the array produces one unambiguous Observation change.
+        // In-place mutation of a value-type element can otherwise leave a
+        // MenuBarExtra label displaying its previously rendered value.
+        var updatedClocks = clocks
+        updatedClocks[index].showInMenuBar = visible
+        clocks = updatedClocks
         save()
     }
 

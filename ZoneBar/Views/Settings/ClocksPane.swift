@@ -118,7 +118,10 @@ private struct ClockManageRow: View {
             }
 
             Toggle("", isOn: Binding(
-                get: { clock.showInMenuBar },
+                get: {
+                    store.clocks.first(where: { $0.id == clock.id })?
+                        .showInMenuBar ?? false
+                },
                 set: { store.setMenuBarVisibility(id: clock.id, visible: $0) }
             ))
             .settingsToggle()

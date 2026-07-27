@@ -12,7 +12,6 @@ enum DS {
     }
 
     enum Radius {
-        static let window: CGFloat = 20
         static let card: CGFloat = 17
         static let row: CGFloat = 13
         static let control: CGFloat = 13

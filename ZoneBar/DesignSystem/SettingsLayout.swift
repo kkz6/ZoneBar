@@ -84,8 +84,7 @@ struct SettingsShell<Destination: SettingsDestination, Detail: View>: View {
         .background(WindowConfigurator(
             size: SettingsLayout.windowSize,
             trafficLightLeading: SettingsLayout.trafficLightLeading,
-            trafficLightCenterFromTop: SettingsLayout.titlebarControlCenterFromTop,
-            cornerRadius: DS.Radius.window
+            trafficLightCenterFromTop: SettingsLayout.titlebarControlCenterFromTop
         ))
         .ignoresSafeArea()
     }
