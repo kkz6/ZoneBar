@@ -12,9 +12,13 @@ enum DS {
     }
 
     enum Radius {
-        static let row: CGFloat = 10
-        static let card: CGFloat = 13
-        static let tile: CGFloat = 7
+        static let window: CGFloat = 20
+        static let popover: CGFloat = 18
+        static let card: CGFloat = 17
+        static let row: CGFloat = 13
+        static let control: CGFloat = 13
+        static let selection: CGFloat = 11
+        static let tile: CGFloat = 8
     }
 
     enum Size {
@@ -205,9 +209,9 @@ struct SegmentedSelector<Value: Hashable>: View {
                 withAnimation(.easeOut(duration: 0.15)) { selection = option.value }
             } label: {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                    RoundedRectangle(cornerRadius: DS.Radius.control, style: .continuous)
                         .fill(isSelected ? AnyShapeStyle(Color.accentColor.opacity(0.12)) : AnyShapeStyle(Color.primary.opacity(0.05)))
-                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                    RoundedRectangle(cornerRadius: DS.Radius.control, style: .continuous)
                         .strokeBorder(
                             isSelected ? AnyShapeStyle(.tint) : AnyShapeStyle(DS.borderColor),
                             lineWidth: isSelected ? 2 : 1

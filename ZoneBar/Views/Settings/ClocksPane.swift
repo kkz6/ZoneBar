@@ -21,7 +21,13 @@ struct ClocksPane: View {
                             .draggable(clock.id.uuidString) {
                                 Text(clock.name)
                                     .padding(6)
-                                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 6))
+                                    .background(
+                                        .regularMaterial,
+                                        in: RoundedRectangle(
+                                            cornerRadius: DS.Radius.tile,
+                                            style: .continuous
+                                        )
+                                    )
                             }
                             .dropDestination(for: String.self) { items, _ in
                                 reorder(draggedID: items.first, onto: clock)

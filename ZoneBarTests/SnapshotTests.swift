@@ -14,13 +14,13 @@ struct SnapshotTests {
 
     // Updated only after reviewing an intentional visual change.
     private static let approvedHashes: [String: String] = [
-        "general": "960e6a4de46f72e8192df5f0bb3bb3f3c5af3479fdac939e5404538d034d0b53",
-        "menubar": "21e11f84e2b445e25f4cd7e1e037ec7fc19bdb120c674e0c030f2b68bb7d1732",
-        "clocks": "2906cc4271e925267da2b6b0e4119d1f1c080fe46b256bda91f3db73203f46d6",
-        "appearance": "96055818806854acfb8d3b695614d4113f781cc8b39a62882080089fa2022468",
-        "about": "58669c31429671f83184f3af3b744e0097f00e9af384d48fb31946dbb72f61b6",
-        "settings_full": "b4f8301a393736bd95bce1dac1ca40797e3b6fab64ced8fe7f809f9fa3102d07",
-        "popover": "65e3851121e606d9aa5f3678466231c232bc3901de74a2f62876cc4d2040823d",
+        "general": "37a5835465c5f3db8146d593fe29c8733e3e9c720cc406875e5b21195f8a9318",
+        "menubar": "e05ff55a4620e178ef7c27d7f10b02f911876e47739647143fb8315f50488bae",
+        "clocks": "9faf6c46eec21882079caaffe59c246ca047623570982d2edf3a621182c9899c",
+        "appearance": "8a01341ba7ecb9d6472d6b10c443cbaf239524f12ddcbba01f3ee766d22db2f1",
+        "about": "a377f586306fa4fa3624e5b178bda5f1a2c3405c010d514cfe5fbdcc732c8c47",
+        "settings_full": "59e79610428cbf46b39a368afd662f72a629c8bb65c97b7d1e30955bc33d27c2",
+        "popover": "52520e4a58ec334c7ef49da0b9505f91855a9e7c9f69ccea92e7eccf2e6186f5",
     ]
 
     private func snapshot(

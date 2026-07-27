@@ -37,6 +37,7 @@ struct WindowConfigurator: NSViewRepresentable {
     let size: CGSize
     let trafficLightLeading: CGFloat
     let trafficLightCenterFromTop: CGFloat
+    let cornerRadius: CGFloat
 
     func makeNSView(context: Context) -> NSView {
         let view = NSView(frame: .zero)
@@ -51,11 +52,20 @@ struct WindowConfigurator: NSViewRepresentable {
     private func apply(from view: NSView) {
         guard let window = view.window else { return }
         window.styleMask.remove(.resizable)
+        window.styleMask.remove(.miniaturizable)
         window.isRestorable = false
         window.minSize = size
         window.maxSize = size
-        window.standardWindowButton(.zoomButton)?.isEnabled = false
         window.collectionBehavior.insert(.fullScreenNone)
+        window.isOpaque = false
+        window.backgroundColor = .clear
+
+        if let contentView = window.contentView {
+            contentView.wantsLayer = true
+            contentView.layer?.cornerRadius = cornerRadius
+            contentView.layer?.cornerCurve = .continuous
+            contentView.layer?.masksToBounds = true
+        }
 
         insetTrafficLights(in: window)
 
@@ -73,17 +83,52 @@ struct WindowConfigurator: NSViewRepresentable {
 
     /// Align the titlebar controls to the grid supplied by the settings shell.
     private func insetTrafficLights(in window: NSWindow) {
-        let buttons = [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton]
-            .compactMap { window.standardWindowButton($0) }
-        guard let closeButton = buttons.first, let container = closeButton.superview else { return }
-
-        let deltaX = trafficLightLeading - closeButton.frame.origin.x
-
-        for button in buttons {
-            var origin = button.frame.origin
-            origin.x += deltaX
-            origin.y = container.bounds.height - trafficLightCenterFromTop - button.frame.height / 2
-            button.setFrameOrigin(origin)
+        let closeButton = window.standardWindowButton(.closeButton)
+        let hiddenButtons = [
+            window.standardWindowButton(.miniaturizeButton),
+            window.standardWindowButton(.zoomButton),
+        ]
+        for button in hiddenButtons.compactMap({ $0 }) {
+            button.isEnabled = false
+            button.isHidden = true
         }
+
+        guard let closeButton, let container = closeButton.superview else { return }
+        closeButton.isEnabled = true
+        closeButton.isHidden = false
+        closeButton.setFrameOrigin(NSPoint(
+            x: trafficLightLeading,
+            y: container.bounds.height
+                - trafficLightCenterFromTop
+                - closeButton.frame.height / 2
+        ))
+    }
+}
+
+/// Applies a continuous corner mask to system-hosted windows such as
+/// `MenuBarExtra`, whose outer chrome is otherwise outside the SwiftUI tree.
+struct WindowCornerConfigurator: NSViewRepresentable {
+    let cornerRadius: CGFloat
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView(frame: .zero)
+        DispatchQueue.main.async { apply(from: view) }
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        DispatchQueue.main.async { apply(from: nsView) }
+    }
+
+    private func apply(from view: NSView) {
+        guard let window = view.window, let contentView = window.contentView else {
+            return
+        }
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        contentView.wantsLayer = true
+        contentView.layer?.cornerRadius = cornerRadius
+        contentView.layer?.cornerCurve = .continuous
+        contentView.layer?.masksToBounds = true
     }
 }

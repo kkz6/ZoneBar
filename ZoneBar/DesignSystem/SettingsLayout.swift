@@ -84,7 +84,8 @@ struct SettingsShell<Destination: SettingsDestination, Detail: View>: View {
         .background(WindowConfigurator(
             size: SettingsLayout.windowSize,
             trafficLightLeading: SettingsLayout.trafficLightLeading,
-            trafficLightCenterFromTop: SettingsLayout.titlebarControlCenterFromTop
+            trafficLightCenterFromTop: SettingsLayout.titlebarControlCenterFromTop,
+            cornerRadius: DS.Radius.window
         ))
         .ignoresSafeArea()
     }
@@ -143,7 +144,13 @@ private struct SettingsSidebarRow<Destination: SettingsDestination>: View {
             }
             .padding(.horizontal, SettingsLayout.sidebarRowInnerInset)
             .frame(height: SettingsLayout.sidebarRowHeight)
-            .background(background, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .background(
+                background,
+                in: RoundedRectangle(
+                    cornerRadius: DS.Radius.selection,
+                    style: .continuous
+                )
+            )
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

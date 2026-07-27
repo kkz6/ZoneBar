@@ -53,4 +53,13 @@ struct SettingsLayoutTests {
                 < SettingsLayout.detailHorizontalInset
         )
     }
+
+    @Test func surfacesUseOneSoftCornerScale() {
+        #expect(DS.Radius.window == 20)
+        #expect(DS.Radius.popover == 18)
+        #expect(DS.Radius.card == 17)
+        #expect(DS.Radius.row == 13)
+        #expect(DS.Radius.control == 13)
+        #expect(DS.Radius.selection == 11)
+    }
 }
