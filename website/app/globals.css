@@ -74,6 +74,19 @@ button { font: inherit; }
 .site-nav nav { display: flex; gap: 30px; font-size: var(--text-ui); font-weight: 600; color: var(--muted); }
 .site-nav nav a, .text-link { transition: color .2s ease; }
 .site-nav nav a:hover, .text-link:hover { color: var(--mint-dark); }
+.nav-actions { justify-self: end; display: flex; align-items: center; gap: 16px; }
+.github-link {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel);
+  transition: border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.github-link:hover { border-color: #aebbb3; color: var(--mint-dark); transform: translateY(-1px); }
+.github-link svg { width: 18px; height: 18px; }
 .nav-cta { justify-self: end; display: flex; align-items: center; gap: 8px; font-size: var(--text-ui); font-weight: 750; }
 .nav-cta span, .text-link span { color: var(--mint-dark); }
 
@@ -272,6 +285,10 @@ h2 { margin: 0; font-size: var(--text-section); line-height: 1.04; letter-spacin
 .install-steps li > span { padding-top: 2px; color: var(--mint-dark); font-family: var(--font-plex-mono); font-size: var(--text-caption); }
 .install-steps strong { font-size: var(--text-body); letter-spacing: -.02em; }
 .install-steps p { margin: 5px 0 0; color: var(--muted); font-size: var(--text-small); }
+.project-actions { display: flex; flex-wrap: wrap; gap: 11px 18px; margin-top: 20px; }
+.project-actions a { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: var(--text-small); font-weight: 650; transition: color .2s ease; }
+.project-actions a:hover { color: var(--mint-dark); }
+.project-actions svg { width: 15px; height: 15px; }
 
 .faq { padding-block: 68px; }
 .faq header { display: block; max-width: 650px; margin-bottom: 28px; }

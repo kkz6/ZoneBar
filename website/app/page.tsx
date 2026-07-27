@@ -235,7 +235,19 @@ export default function Home() {
           <a href="#install">Install</a>
           <a href="#faq">FAQ</a>
         </nav>
-        <a className="nav-cta" href={downloadUrl}>Download <span>↓</span></a>
+        <div className="nav-actions">
+          <a
+            className="github-link"
+            href={sourceUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="View ZoneBar source code on GitHub"
+            title="View source code on GitHub"
+          >
+            <GitHubMark />
+          </a>
+          <a className="nav-cta" href={downloadUrl}>Download <span>↓</span></a>
+        </div>
       </header>
 
       <main id="content">
@@ -305,6 +317,17 @@ export default function Home() {
               <h2>On your Mac<br />in under a minute.</h2>
               <p>A familiar drag-to-Applications install. No installer wizard and no account setup.</p>
               <a className="button primary" href={downloadUrl}>Download ZoneBar <span>↓</span></a>
+              <nav className="project-actions" aria-label="ZoneBar project support">
+                <a href={sourceUrl} target="_blank" rel="noreferrer">
+                  <GitHubMark /> View source
+                </a>
+                <a href={issueUrl} target="_blank" rel="noreferrer">
+                  <Bug aria-hidden="true" /> Report an issue
+                </a>
+                <a href={featureUrl} target="_blank" rel="noreferrer">
+                  <Lightbulb aria-hidden="true" /> Request a feature
+                </a>
+              </nav>
             </div>
             <ol className="install-steps">
               <li><span>01</span><div><strong>Download the DMG</strong><p>Get the latest signed and notarized release.</p></div></li>
