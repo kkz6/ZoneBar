@@ -160,6 +160,21 @@ jobs:
 
           test -s build/release/appcast.xml
 
+      - name: Create stable download alias
+        run: |
+          set -euo pipefail
+          versioned_dmg="$(find build/release -maxdepth 1 -name 'ZoneBar-*.dmg' -print -quit)"
+          if [[ -z "$versioned_dmg" ]]; then
+            echo "No versioned ZoneBar DMG was found."
+            exit 1
+          fi
+
+          cp "$versioned_dmg" build/release/ZoneBar.dmg
+          (
+            cd build/release
+            shasum -a 256 ZoneBar.dmg > ZoneBar.dmg.sha256
+          )
+
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
         with:
