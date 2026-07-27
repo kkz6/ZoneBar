@@ -154,24 +154,27 @@ fi
 osascript <<APPLESCRIPT
 tell application "Finder"
     delay 2
-    tell disk "ZoneBar"
-        open
-        set current view of container window to icon view
-        set toolbar visible of container window to false
-        set statusbar visible of container window to false
-        set pathbar visible of container window to false
-        set bounds of container window to {120, 120, 800, 550}
-        set theViewOptions to the icon view options of container window
+    set dmgDisk to disk "ZoneBar"
+    set dmgWindow to make new Finder window to dmgDisk
+    tell dmgWindow
+        set current view of dmgWindow to icon view
+        set toolbar visible of dmgWindow to false
+        set statusbar visible of dmgWindow to false
+        set pathbar visible of dmgWindow to false
+        set bounds of dmgWindow to {120, 120, 800, 550}
+        set theViewOptions to the icon view options of dmgWindow
         set arrangement of theViewOptions to not arranged
         set icon size of theViewOptions to 112
         set text size of theViewOptions to 13
-        set background picture of theViewOptions to file ".background:background.png"
+        set background picture of theViewOptions to file ".background:background.png" of dmgDisk
+    end tell
+    tell dmgDisk
         set position of item "ZoneBar.app" to {190, 218}
         set position of item "Applications" to {490, 218}
         update without registering applications
-        delay 2
-        close
     end tell
+    delay 2
+    close dmgWindow
 end tell
 APPLESCRIPT
 

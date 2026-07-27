@@ -5,6 +5,19 @@ All notable changes to ZoneBar will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-07-27
+
+### Changed
+- Build releases with macOS 26 and Xcode 26.5 to match local SDK styling
+- Added more top spacing to the DMG installation artwork
+- Open the DMG layout in a dedicated Finder window when generating releases
+
+### Fixed
+- Keep Settings in accessory-app mode so opening it does not restyle the
+  menu-bar popover
+- Activate the Settings window after creation without changing the process-wide
+  application policy
+
 ## [0.2.1] - 2026-07-27
 
 ### Added

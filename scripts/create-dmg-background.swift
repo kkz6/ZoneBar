@@ -53,7 +53,7 @@ let titleAttributes: [NSAttributedString.Key: Any] = [
     .kern: -0.45,
 ]
 "Install ZoneBar".draw(
-    in: NSRect(x: 80, y: 354, width: 520, height: 36),
+    in: NSRect(x: 80, y: 336, width: 520, height: 36),
     withAttributes: titleAttributes
 )
 
@@ -63,13 +63,13 @@ let subtitleAttributes: [NSAttributedString.Key: Any] = [
     .paragraphStyle: titleStyle,
 ]
 "Drag ZoneBar into Applications".draw(
-    in: NSRect(x: 80, y: 326, width: 520, height: 24),
+    in: NSRect(x: 80, y: 308, width: 520, height: 24),
     withAttributes: subtitleAttributes
 )
 
 if let icon = NSImage(contentsOf: iconURL) {
     icon.draw(
-        in: NSRect(x: 318, y: 386, width: 44, height: 44),
+        in: NSRect(x: 318, y: 368, width: 44, height: 44),
         from: .zero,
         operation: .sourceOver,
         fraction: 0.92

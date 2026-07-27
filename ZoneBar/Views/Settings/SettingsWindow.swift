@@ -56,12 +56,19 @@ struct SettingsWindow: View {
             detail(for: section)
         }
         .onAppear {
-            // Show a Dock icon + ⌘Tab entry while settings is open so the app is easy to switch to.
-            NSApplication.shared.setActivationPolicy(.regular)
-            NSApplication.shared.activate(ignoringOtherApps: true)
-        }
-        .onDisappear {
-            NSApplication.shared.setActivationPolicy(.accessory)
+            // The app remains an accessory app so MenuBarExtra keeps its native
+            // panel styling. Activate only after SwiftUI has created the
+            // settings window, allowing it to become key without changing the
+            // process-wide activation policy.
+            DispatchQueue.main.async {
+                NSApplication.shared.activate(ignoringOtherApps: true)
+                NSApplication.shared.windows
+                    .first(where: {
+                        $0.identifier?.rawValue == Self.windowID ||
+                        $0.title == "Settings"
+                    })?
+                    .makeKeyAndOrderFront(nil)
+            }
         }
     }
 
