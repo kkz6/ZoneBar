@@ -104,3 +104,8 @@ xcodebuild \
 Copy the reviewed `SNAPSHOT_HASH` values into `approvedHashes`. On a mismatch,
 the actual PNG is written to the temporary `zonebar_snapshots` diagnostics
 directory.
+
+Pixel snapshot hashes are intentionally evaluated only on a developer Mac.
+Hosted CI runner images can produce different AppKit pixels across macOS and
+Xcode versions. CI instead runs `SettingsLayoutTests`, which verifies the
+framework's deterministic spacing and alignment invariants.
