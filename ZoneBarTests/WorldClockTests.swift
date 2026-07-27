@@ -45,6 +45,16 @@ struct WorldClockTests {
         #expect(clock.compactName == "LON")
     }
 
+    @Test func compactNameUsesCuratedAbbreviation() {
+        let clock = WorldClock(
+            name: "Tokyo",
+            country: "JP",
+            timezone: "Asia/Tokyo",
+            abbreviation: "TKY"
+        )
+        #expect(clock.compactName == "TKY")
+    }
+
     @Test func gmtOffsetWholeHour() {
         let clock = WorldClock(name: "UTC", country: "", timezone: "UTC")
         #expect(clock.gmtOffsetString == "GMT+0")

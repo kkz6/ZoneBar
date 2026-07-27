@@ -39,13 +39,14 @@ final class ClockStore {
         clocks.contains { $0.timezone == timezone }
     }
 
-    func addClock(name: String, country: String, timezone: String) {
+    func addClock(name: String, country: String, timezone: String, abbreviation: String? = nil) {
         guard !contains(timezone: timezone) else { return }
         let maxOrder = clocks.map(\.sortOrder).max() ?? -1
         clocks.append(WorldClock(
             name: name,
             country: country,
             timezone: timezone,
+            abbreviation: abbreviation,
             showInMenuBar: true,
             sortOrder: maxOrder + 1
         ))
@@ -101,9 +102,16 @@ final class ClockStore {
 
     private func setupDefaults() {
         if let local = CityDatabase.shared.detectLocalCity() {
-            clocks.append(WorldClock(name: local.name, country: local.country, timezone: local.timezone, showInMenuBar: true, sortOrder: 0))
+            clocks.append(WorldClock(
+                name: local.name,
+                country: local.country,
+                timezone: local.timezone,
+                abbreviation: local.compactName,
+                showInMenuBar: true,
+                sortOrder: 0
+            ))
         }
-        clocks.append(WorldClock(name: "UTC", country: "", timezone: "UTC", showInMenuBar: true, sortOrder: 1))
+        clocks.append(WorldClock(name: "UTC", country: "", timezone: "UTC", abbreviation: "UTC", showInMenuBar: true, sortOrder: 1))
         save()
     }
 
@@ -118,5 +126,11 @@ final class ClockStore {
             return
         }
         clocks = decoded.sorted { $0.sortOrder < $1.sortOrder }
+        for index in clocks.indices where clocks[index].abbreviation == nil {
+            clocks[index].abbreviation = CityDatabase.shared.compactName(
+                for: clocks[index].name,
+                timezone: clocks[index].timezone
+            )
+        }
     }
 }

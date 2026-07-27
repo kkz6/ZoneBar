@@ -112,7 +112,12 @@ struct CitySearchView: View {
     }
 
     private func add(_ city: CityEntry) {
-        store.addClock(name: city.name, country: city.country, timezone: city.timezone)
+        store.addClock(
+            name: city.name,
+            country: city.country,
+            timezone: city.timezone,
+            abbreviation: city.compactName
+        )
         searchText = ""
         results = []
         onAdded?()

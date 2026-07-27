@@ -5,6 +5,18 @@ All notable changes to ZoneBar will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-07-27
+
+### Added
+- User-controlled automatic update checks in About settings
+- Curated compact abbreviations for bundled cities
+
+### Fixed
+- Made the first manual update check wait until Sparkle is ready
+- Corrected settings traffic-light hover and click targets
+- Kept disabled minimize and zoom indicators free of hover glyphs
+- Migrated existing clocks to their curated compact abbreviations
+
 ## [0.2.0] - 2026-07-27
 
 ### Added

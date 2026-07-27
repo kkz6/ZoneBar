@@ -5,14 +5,23 @@ struct WorldClock: Identifiable, Codable, Hashable {
     var name: String
     var country: String
     var timezone: String
+    var abbreviation: String?
     var showInMenuBar: Bool
     var sortOrder: Int
 
-    init(name: String, country: String, timezone: String, showInMenuBar: Bool = true, sortOrder: Int = 0) {
+    init(
+        name: String,
+        country: String,
+        timezone: String,
+        abbreviation: String? = nil,
+        showInMenuBar: Bool = true,
+        sortOrder: Int = 0
+    ) {
         self.id = UUID()
         self.name = name
         self.country = country
         self.timezone = timezone
+        self.abbreviation = abbreviation
         self.showInMenuBar = showInMenuBar
         self.sortOrder = sortOrder
     }
@@ -22,11 +31,7 @@ struct WorldClock: Identifiable, Codable, Hashable {
     }
 
     var compactName: String {
-        let words = name.split(separator: " ")
-        if words.count > 1 {
-            return words.map { String($0.prefix(1)) }.joined().uppercased()
-        }
-        return String(name.prefix(3)).uppercased()
+        abbreviation ?? CityEntry.fallbackCompactName(for: name)
     }
 
     func isDaytime(at now: Date) -> Bool {

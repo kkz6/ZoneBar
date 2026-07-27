@@ -37,12 +37,34 @@ struct AboutPane: View {
                     updater.checkForUpdates()
                 } label: {
                     SettingRow(icon: "arrow.triangle.2.circlepath", iconColor: .blue, title: "Check for Updates") {
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(.tertiary)
+                        if updater.isPreparingUpdateCheck {
+                            ProgressView()
+                                .controlSize(.small)
+                        } else {
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
                 .buttonStyle(.plain)
+                .disabled(updater.isPreparingUpdateCheck)
+
+                SettingsDivider()
+                SettingRow(
+                    icon: "arrow.clockwise.circle.fill",
+                    iconColor: .green,
+                    title: "Automatically Check for Updates"
+                ) {
+                    Toggle(
+                        "",
+                        isOn: Binding(
+                            get: { updater.automaticallyChecksForUpdates },
+                            set: { updater.automaticallyChecksForUpdates = $0 }
+                        )
+                    )
+                    .settingsToggle()
+                }
 
                 SettingsDivider()
                 LinkRow(icon: "chevron.left.forwardslash.chevron.right", color: .black, title: "Source Code", url: "https://github.com/kkz6/ZoneBar")

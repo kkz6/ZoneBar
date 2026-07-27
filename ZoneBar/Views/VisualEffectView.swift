@@ -34,6 +34,9 @@ struct VisualEffectView: NSViewRepresentable {
 /// Pins the host window to a fixed size and disables resizing / frame restoration,
 /// so the settings window always opens at the intended dimensions.
 struct WindowConfigurator: NSViewRepresentable {
+    private static let disabledTrafficLightIdentifier =
+        NSUserInterfaceItemIdentifier("ZoneBarDisabledTrafficLight")
+
     let size: CGSize
     let trafficLightLeading: CGFloat
     let trafficLightCenterFromTop: CGFloat
@@ -75,24 +78,76 @@ struct WindowConfigurator: NSViewRepresentable {
 
     /// Align the titlebar controls to the grid supplied by the settings shell.
     private func insetTrafficLights(in window: NSWindow) {
-        let closeButton = window.standardWindowButton(.closeButton)
-        let hiddenButtons = [
+        guard let closeButton = window.standardWindowButton(.closeButton),
+              let container = closeButton.superview else { return }
+
+        let disabledButtons = [
             window.standardWindowButton(.miniaturizeButton),
             window.standardWindowButton(.zoomButton),
-        ]
-        for button in hiddenButtons.compactMap({ $0 }) {
+        ].compactMap { $0 }
+
+        closeButton.isHidden = false
+        closeButton.isEnabled = true
+        for button in disabledButtons {
+            // Native disabled titlebar buttons still reveal their glyphs when
+            // the group is hovered. Non-interactive indicators below preserve
+            // the three-light appearance without suggesting those actions work.
             button.isEnabled = false
             button.isHidden = true
         }
 
-        guard let closeButton, let container = closeButton.superview else { return }
-        closeButton.isEnabled = true
-        closeButton.isHidden = false
-        closeButton.setFrameOrigin(NSPoint(
-            x: trafficLightLeading,
-            y: container.bounds.height
-                - trafficLightCenterFromTop
-                - closeButton.frame.height / 2
-        ))
+        let buttonSpacing: CGFloat = 6
+        let y = container.bounds.height
+            - trafficLightCenterFromTop
+            - closeButton.frame.height / 2
+        closeButton.setFrameOrigin(NSPoint(x: trafficLightLeading, y: y))
+
+        let indicatorSize = closeButton.frame.size
+        let firstIndicatorX = trafficLightLeading + indicatorSize.width + buttonSpacing
+        var indicators = container.subviews.filter {
+            $0.identifier == Self.disabledTrafficLightIdentifier
+        }
+        while indicators.count < 2 {
+            let indicator = DisabledTrafficLightView(frame: .zero)
+            indicator.identifier = Self.disabledTrafficLightIdentifier
+            container.addSubview(indicator)
+            indicators.append(indicator)
+        }
+        for (index, indicator) in indicators.prefix(2).enumerated() {
+            indicator.frame = NSRect(
+                x: firstIndicatorX + CGFloat(index) * (indicatorSize.width + buttonSpacing),
+                y: y,
+                width: indicatorSize.width,
+                height: indicatorSize.height
+            )
+        }
+
+        // AppKit caches tracking areas for the close button. Refreshing them
+        // after moving its frame keeps hover and click hit testing aligned.
+        closeButton.updateTrackingAreas()
+        container.updateTrackingAreas()
+    }
+}
+
+private final class DisabledTrafficLightView: NSView {
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        wantsLayer = true
+        layer?.backgroundColor = NSColor.systemGray.withAlphaComponent(0.42).cgColor
+        layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.25).cgColor
+        layer?.borderWidth = 0.5
+    }
+
+    required init?(coder: NSCoder) {
+        nil
+    }
+
+    override func layout() {
+        super.layout()
+        layer?.cornerRadius = bounds.height / 2
+    }
+
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        nil
     }
 }

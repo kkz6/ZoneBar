@@ -7,6 +7,42 @@ struct CityEntry: Codable, Identifiable {
     let timezone: String
     let population: Int
     let aliases: [String]
+
+    /// A short, recognizable label for the menu bar. Search aliases contain
+    /// curated city/location codes; a few common cities use friendlier display
+    /// forms than their airport or metropolitan-area code.
+    var compactName: String {
+        if let override = Self.compactNameOverrides[name] {
+            return override
+        }
+        if let code = aliases.first(where: { $0.range(of: #"^[A-Z]{3}$"#, options: .regularExpression) != nil }) {
+            return code
+        }
+        return Self.fallbackCompactName(for: name)
+    }
+
+    private static let compactNameOverrides = [
+        "Tokyo": "TKY",
+        "New York": "NY",
+        "Los Angeles": "LA",
+        "São Paulo": "SP",
+        "Buenos Aires": "BA",
+        "Kuala Lumpur": "KL",
+        "Hong Kong": "HK",
+        "Singapore": "SG",
+        "Washington D.C.": "DC",
+        "Ho Chi Minh City": "HCM",
+        "San Francisco": "SFO",
+        "UTC": "UTC",
+    ]
+
+    static func fallbackCompactName(for name: String) -> String {
+        let words = name.split(whereSeparator: { !$0.isLetter })
+        if words.count > 1 {
+            return words.prefix(3).compactMap(\.first).map(String.init).joined().uppercased()
+        }
+        return String(name.prefix(3)).uppercased()
+    }
 }
 
 final class CityDatabase {
@@ -80,5 +116,12 @@ final class CityDatabase {
             population: 0,
             aliases: []
         )
+    }
+
+    func compactName(for name: String, timezone: String) -> String? {
+        cities.first {
+            $0.name.caseInsensitiveCompare(name) == .orderedSame &&
+            $0.timezone == timezone
+        }?.compactName
     }
 }
