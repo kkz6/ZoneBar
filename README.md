@@ -119,6 +119,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
+## Acknowledgements
+
+ZoneBar was inspired by [Hovrly](https://github.com/tarutin/hovrly).
+
 ## License
 
 MIT
