@@ -17,6 +17,23 @@ Thanks for your interest in contributing to ZoneBar.
 
 3. Build and run with **Cmd+R**.
 
+### Optional Local Code Signing
+
+Xcode can run ZoneBar with ad-hoc signing, but recent macOS versions may then log
+repeated `com.apple.linkd.autoShortcut` warnings because the Debug app has no
+development team identifier. To use your own signing identity locally:
+
+1. Copy the example configuration:
+   ```bash
+   cp Configuration/LocalSigning.xcconfig.example Configuration/LocalSigning.xcconfig
+   ```
+2. Replace `YOUR_TEAM_ID` with your Apple Developer team ID.
+3. Keep `Apple Development` as the identity when that certificate is installed.
+
+`LocalSigning.xcconfig` is ignored by Git, so personal team IDs and signing
+preferences are never committed. Release signing remains controlled by the
+release workflow and is not changed by this local configuration.
+
 ### Requirements
 - macOS 14.0+ (Sonoma)
 - Xcode 16.0+

@@ -1,0 +1,6 @@
+// Use an Apple Development identity when available. A Developer ID Application
+// identity also gives local Debug builds a Team ID, but Apple Development is
+// the preferred identity for day-to-day Xcode debugging.
+DEVELOPMENT_TEAM = YOUR_TEAM_ID
+CODE_SIGN_STYLE = Manual
+CODE_SIGN_IDENTITY = Apple Development

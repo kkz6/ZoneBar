@@ -33,7 +33,7 @@ Refining the experience and adding power-user features.
 
 Making ZoneBar the go-to tool for scheduling across timezones.
 
-- [ ] **Inline calendar events** -- Show today's events beneath each clock, converted to that clock's timezone.
+- [x] **Calendar timeline events** -- Optionally connect macOS Calendar, show timed events on the comparison timeline, and identify events at the selected time.
 - [ ] **Best meeting time finder** -- Algorithm to find optimal meeting times where all selected timezones overlap within working hours. Visual display of overlap windows.
 - [ ] **Meeting countdown in menu bar** -- Option to show "Meeting in 12m" in the menu bar label alongside clock times.
 - [ ] **Calendar event creation** -- Create events directly from ZoneBar with automatic timezone conversion for attendees in different zones.

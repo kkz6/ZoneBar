@@ -26,6 +26,8 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2026 GigCodes. All rights reserved.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>ZoneBar uses your calendar to show scheduled events on the time comparison timeline.</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUEnableInstallerLauncherService</key>

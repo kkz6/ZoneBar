@@ -1,8 +1,8 @@
 # Architecture
 
-ZoneBar is a pure SwiftUI macOS menu bar app, built with the Observation
-framework (`@Observable`). This document covers key architectural decisions and
-patterns.
+ZoneBar is a SwiftUI-first macOS menu bar app, built with the Observation
+framework (`@Observable`). A focused AppKit controller owns the fixed settings
+window because frame geometry and titlebar chrome are AppKit responsibilities.
 
 ## Overview
 
@@ -10,14 +10,15 @@ patterns.
 ┌──────────────────────────────────────────────────────┐
 │                      ZoneBarApp                         │
 │  ┌────────────────────┐   ┌────────────────────────┐  │
-│  │   MenuBarExtra      │   │   Settings Scene        │  │
-│  │   (.window)         │   │   (hidden title bar)    │  │
+│  │   MenuBarExtra      │   │ SettingsWindowController│  │
+│  │   (.window)         │   │   (AppKit-owned frame)  │  │
 │  │                     │   │                         │  │
 │  │  MenuBarLabel       │   │  SettingsWindow         │  │
 │  │  ClockPopover       │   │  ├─ custom sidebar      │  │
 │  │  ├─ ClockRow        │   │  ├─ GeneralPane         │  │
 │  │  ├─ TimeScrubberView│   │  ├─ MenuBarPane         │  │
 │  │  └─ CitySearchView  │   │  ├─ ClocksPane          │  │
+│  │                     │   │  ├─ CalendarPane        │  │
 │  │                     │   │  ├─ AppearancePane      │  │
 │  │                     │   │  └─ AboutPane           │  │
 │  └─────────┬───────────┘   └───────────┬────────────┘  │
@@ -27,6 +28,7 @@ patterns.
 │  │  ClockStore     @Observable  clocks + JSON CRUD    │  │
 │  │  AppSettings    @Observable  UserDefaults-backed   │  │
 │  │  TimeTicker     @Observable  minute-aligned `now`  │  │
+│  │  CalendarEventService  EventKit access + events    │  │
 │  │  MenuBarRenderer  pure  (clocks, settings) → text  │  │
 │  │  LaunchAtLogin    SMAppService wrapper             │  │
 │  └────────────────────────────────────────────────────┘  │
@@ -41,15 +43,18 @@ formatting) is unit-tested in the `ZoneBarTests` target.
 
 ## App Lifecycle
 
-ZoneBar is an **accessory app** (`LSUIElement = true`), meaning it has no dock icon and lives entirely in the menu bar. The app uses two SwiftUI scenes:
-
-1. **MenuBarExtra** (`.window` style) -- The main popover shown when clicking the menu bar item
-2. **Window** (`.hiddenTitleBar`) -- The settings window, opened via `openWindow` from the popover gear (or ⌘,). The hidden title bar lets the custom sidebar run to the top with the traffic lights overlaid, matching the reference design.
+ZoneBar is an **accessory app** (`LSUIElement = true`), meaning it has no dock
+icon and lives entirely in the menu bar. `MenuBarExtra` is the app's SwiftUI
+scene. `SettingsWindowController` creates a non-resizable `NSWindow`, disables
+hosting-controller sizing propagation, and embeds `SettingsWindow` as SwiftUI
+content. This gives one owner to frame size, material coverage, activation, and
+the custom close-only traffic-light group.
 
 ## State Management
 
-State is split across three `@Observable` services, owned by `ZoneBarApp` as
-`@State` and injected into both scenes via `.environment(...)`:
+State is split across focused `@Observable` services, owned by `ZoneBarApp` as
+`@State` and injected into the menu scene and hosted settings root via
+`.environment(...)`:
 
 ```
 ClockStore (@Observable)
@@ -61,6 +66,9 @@ AppSettings (@Observable)
 
 TimeTicker (@Observable)
 └── now: Date   ← minute-aligned; views observing `now` re-render each minute
+
+CalendarEventService (@Observable)
+└── accessState, events   ← EventKit authorization and current-day timed events
 ```
 
 `MenuBarRenderer` and `LaunchAtLogin` are stateless helpers (an enum each).
@@ -84,14 +92,16 @@ ZoneBarApp
 ├── @State store    = ClockStore()
 ├── @State settings = AppSettings()
 ├── @State ticker   = TimeTicker()
+├── @State calendar = CalendarEventService()
 │
 ├── MenuBarLabel ← MenuBarRenderer.text(store, settings, ticker.now)
-├── ClockPopover ← @Environment(ClockStore/AppSettings/TimeTicker)
+├── ClockPopover ← @Environment(ClockStore/AppSettings/TimeTicker/CalendarEventService)
 │   ├── ClockRow          ← reads clock + (ticker.now + scrubber offset)
-│   ├── TimeScrubberView  ← reads/writes local offset binding
+│   ├── TimeScrubberView  ← offset binding + optional Calendar event overlays
 │   └── CitySearchView    ← store.addClock()
 │
-└── SettingsWindow ← @Environment(...) ; panes use @Bindable bindings
+└── SettingsWindowController
+    └── ZoneBarSettingsRoot → SettingsWindow ← @Environment(...)
 ```
 
 ## City Search
@@ -133,6 +143,8 @@ and the settings window:
 - `SettingRow` — icon + title/subtitle + trailing control.
 - `SettingsShell`, `SettingsPane`, and `SettingsGroup` — reusable settings
   window, sidebar, and section scaffolding.
+- `SettingsWindowController` — reusable AppKit owner for fixed frame geometry,
+  SwiftUI hosting, material coverage, activation, and close-only window chrome.
 - `DS` — spacing, radius, and size tokens.
 
 Toggles use the native switch style tinted with the macOS system accent colour.
@@ -140,29 +152,31 @@ Toggles use the native switch style tinted with the macOS system accent colour.
 ## Testing
 
 The `ZoneBarTests` target (Swift Testing) covers `MenuBarRenderer`, `WorldClock`,
-settings geometry, and visual regression fingerprints for every settings pane.
-Tests use isolated persistence and a fixed date so they do not touch user data
-and remain deterministic.
+settings geometry, the actual AppKit window/frame/traffic-light contract, and
+visual regression fingerprints for every settings pane. Tests use isolated
+persistence and a fixed date so they do not touch user data and remain
+deterministic.
 
 ## Known Limitations
 
 ### MenuBarExtra `.window` Style
 
 1. **No programmatic dismiss** -- The popover can't be closed from code. Users click outside to dismiss.
-2. **Settings window activation** -- Opened via `SettingsLink` from the popover footer (works on macOS 14+).
+2. **Settings window activation** -- Routed through an environment action to the AppKit-owned settings controller.
 3. **Menu bar highlight** -- The status item doesn't maintain highlight while the popover is open.
 
 ### Sandbox Constraints
 
 The app runs in App Sandbox. This means:
 - No access to arbitrary files
-- No network access (city data is fully bundled)
+- Network access is limited to Sparkle's signed update feed; city data is bundled
+- Calendar events require explicit user permission and remain on-device
 
 ## Key Design Decisions
 
 | Decision | Rationale |
 |----------|-----------|
-| SwiftUI-first with small AppKit bridges | Native menu-bar UI plus precise window material and titlebar control |
+| SwiftUI content with an AppKit-owned settings window | One authoritative owner for fixed frame, material bounds, activation, and window chrome |
 | `@Observable` services via environment | Decoupled, single-responsibility state; no global singletons |
 | Pure `MenuBarRenderer` / formatting | Unit-testable logic isolated from UI and global state |
 | File-system-synchronized project group | New Swift files are picked up automatically — no pbxproj churn |

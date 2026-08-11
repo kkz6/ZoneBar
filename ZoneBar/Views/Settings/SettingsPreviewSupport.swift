@@ -36,6 +36,10 @@ enum SettingsPreviewFixtures {
     )
 
     static let updater = AppUpdater(startingUpdater: false)
+
+    static let calendarService = CalendarEventService(
+        accessStateOverride: .notDetermined
+    )
 }
 
 extension View {
@@ -45,6 +49,7 @@ extension View {
             .environment(SettingsPreviewFixtures.settings)
             .environment(SettingsPreviewFixtures.ticker)
             .environment(SettingsPreviewFixtures.updater)
+            .environment(SettingsPreviewFixtures.calendarService)
             .tint(.zoneAccent)
             .background(Color(nsColor: .windowBackgroundColor))
     }

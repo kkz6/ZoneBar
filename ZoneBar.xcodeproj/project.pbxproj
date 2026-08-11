@@ -23,6 +23,8 @@
 /* Begin PBXFileReference section */
 		B100000099 /* ZoneBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZoneBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B200000099 /* ZoneBarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZoneBarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B300000001 /* DebugSigning.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DebugSigning.xcconfig; sourceTree = "<group>"; };
+		B300000002 /* LocalSigning.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LocalSigning.xcconfig.example; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -64,6 +66,7 @@
 			children = (
 				D100000002 /* ZoneBar */,
 				D200000002 /* ZoneBarTests */,
+				D300000001 /* Configuration */,
 				D100000099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -75,6 +78,15 @@
 				B200000099 /* ZoneBarTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D300000001 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				B300000001 /* DebugSigning.xcconfig */,
+				B300000002 /* LocalSigning.xcconfig.example */,
+			);
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +222,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -274,6 +287,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -327,13 +341,13 @@
 		};
 		F100000020 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B300000001 /* DebugSigning.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ZoneBar/ZoneBar.entitlements;
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -345,7 +359,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2.3;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.zonebar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPARKLE_PUBLIC_ED_KEY = "yjXJxgc5jeVnKyI/DPtPPvK5jDLSMtxLLYrAojAsqes=";
@@ -362,7 +376,7 @@
 				CODE_SIGN_ENTITLEMENTS = ZoneBar/ZoneBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -374,7 +388,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.2.3;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gigcodes.zonebar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SPARKLE_PUBLIC_ED_KEY = "yjXJxgc5jeVnKyI/DPtPPvK5jDLSMtxLLYrAojAsqes=";
@@ -385,9 +399,9 @@
 		};
 		F200000020 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B300000001 /* DebugSigning.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;

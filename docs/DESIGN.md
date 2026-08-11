@@ -8,21 +8,26 @@ ZoneBar is the successor to [Hovrly](https://hovrly.com), an Electron-based menu
 
 1. **Performance** -- Electron apps are ~200MB and memory-heavy. ZoneBar targets <20MB.
 2. **Native integration** -- Deep macOS features: Widgets, Shortcuts, calendar, notifications.
-3. **App Store distribution** -- Sandboxed, signed, notarized for the Mac App Store.
+3. **Direct distribution** -- Sandboxed, Developer ID signed, notarized, and
+   delivered as a downloadable DMG.
 
 ## Design Decisions
 
-### Why Pure SwiftUI (no AppKit)?
+### Why SwiftUI-first with an AppKit settings host?
 
 We evaluated three approaches:
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| **SwiftUI + AppKit hybrid** | Full control over NSStatusItem/NSPopover | More boilerplate, AppKit knowledge required |
+| **SwiftUI + focused AppKit window host** | SwiftUI feature views plus deterministic settings frame and chrome | Small, isolated AppKit boundary |
 | **Pure AppKit** | Maximum pixel control | Significantly more code, no widget reuse |
-| **Pure SwiftUI with MenuBarExtra** | Cleanest code, modern, zero AppKit | Less control over popover behavior |
+| **Pure SwiftUI with MenuBarExtra and Window** | Minimal code | Hosting intrinsic size and native titlebar layout can override fixed custom geometry |
 
-**Chosen: Pure SwiftUI with MenuBarExtra.** The simplicity and maintainability outweigh the control tradeoffs, especially for a v1 where iteration speed matters.
+**Chosen: SwiftUI-first with a focused AppKit settings host.** `MenuBarExtra`
+and every feature pane remain SwiftUI. `SettingsWindowController` alone owns
+the fixed `NSWindow`, disables hosting intrinsic-size propagation, and renders
+the close-only traffic-light group. This avoids split ownership of window
+geometry while keeping AppKit out of feature views.
 
 ### Why Hybrid City Data?
 
@@ -59,7 +64,9 @@ A migration tool can be added in Phase 2 if demand arises.
 ### MenuBarExtra `.window` Style
 
 1. **No programmatic dismiss.** The popover can't be closed from within its content. Users click outside to dismiss. Acceptable for v1.
-2. **Settings window from MenuBarExtra.** `SettingsLink` has historically been unreliable from MenuBarExtra context. macOS 14 improved this significantly. For older OS workarounds, the [SettingsAccess](https://github.com/orchetect/SettingsAccess) library is available.
+2. **Settings window from MenuBarExtra.** A typed environment action routes to
+   the AppKit-owned settings controller, avoiding `SettingsLink` and SwiftUI
+   Window-scene sizing behavior.
 3. **Menu bar highlight.** The status item doesn't maintain highlight while the popover is open. Cosmetic issue with no current workaround.
 
 ### App Sandbox

@@ -5,6 +5,34 @@ All notable changes to ZoneBar will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.3.0] - 2026-08-11
+
+### Added
+- Optional macOS Calendar connection with explicit full-access permission
+- Blue timed-event ranges on the comparison scrubber and active event details
+- Clickable event details that open the selected event in macOS Calendar
+- A subtle, Reduce Motion-aware menu panel presentation animation
+- English and Japanese Calendar permission and interface text
+
+### Fixed
+- Move Settings frame sizing and close-only traffic lights under one reusable
+  AppKit window controller, preventing resizing, split control alignment, and
+  transparent overflow below the SwiftUI content
+
+## [0.2.3] - 2026-07-27
+
+### Added
+- Complete English and Japanese interface localization
+- Automatic language detection based on macOS settings
+- An in-app language selector for Automatic, English, and Japanese
+
+### Changed
+- Localize dates, time formatting, relative-day labels, settings, tooltips,
+  and accessibility text
+- Extend reusable settings components for future languages
+
 ## [0.2.2] - 2026-07-27
 
 ### Changed

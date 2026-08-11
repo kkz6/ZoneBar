@@ -1,0 +1,7 @@
+// Optional machine-specific signing for local Debug builds.
+//
+// Copy LocalSigning.xcconfig.example to LocalSigning.xcconfig and provide a
+// development signing identity. The local file is ignored by Git so an
+// open-source checkout never publishes developer-specific signing settings.
+CODE_SIGN_STYLE = Automatic
+#include? "LocalSigning.xcconfig"

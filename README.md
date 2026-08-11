@@ -1,6 +1,7 @@
 # ZoneBar
 
-A lightweight native macOS menu bar app for tracking world clocks. Built with pure SwiftUI, targeting macOS 14+ (Sonoma).
+A lightweight native macOS menu bar app for tracking world clocks. Built with
+SwiftUI and a focused AppKit settings-window host, targeting macOS 14+ (Sonoma).
 
 ZoneBar replaces heavy Electron-based world clock apps with a fast, native experience that integrates deeply with macOS -- system appearance, launch at login, and more.
 
@@ -19,6 +20,8 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - Whole-row scrolling list (no clipped rows) that scrolls past six clocks
 - **Time scrubber** — drag the bar to compare what time it is across every clock,
   with a green "match" dot when all zones are in working hours, and a Now reset
+- Optional Calendar connection overlays timed events in blue, identifies the
+  event at the selected comparison time, and opens it directly in Calendar
 - Quick-add a city inline with the **+** button
 - Settings and quit in the footer
 
@@ -34,6 +37,7 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - **General:** time format, date display, launch at login
 - **Menu Bar:** compact names, day/night icon, separator, live preview
 - **Clocks:** add, reorder, rename, delete, and choose menu-bar visibility
+- **Calendar:** connect macOS Calendar and control timeline event visibility
 - **Appearance:** System, Light, or Dark theme (accent follows macOS)
 - **About:** version and links
 
@@ -43,6 +47,7 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - Signed automatic updates and manual update checks via Sparkle
 - Respects system dark/light mode
 - App sandbox
+- Calendar data stays on-device and is only read after explicit permission
 - Hardened runtime and direct-download distribution support
 
 ## Requirements
@@ -73,7 +78,8 @@ ZoneBar/
 ├── ZoneBarApp.swift              # App entry point, MenuBarExtra + Settings
 ├── DesignSystem/
 │   ├── DesignSystem.swift        # Reusable controls and visual tokens
-│   └── SettingsLayout.swift      # Reusable settings-window framework
+│   ├── SettingsLayout.swift      # Reusable settings content framework
+│   └── SettingsWindowController.swift # Fixed AppKit window and chrome owner
 ├── Models/
 │   ├── WorldClock.swift          # Clock model, time formatting, day/night logic
 │   └── CityDatabase.swift        # Hybrid city search (bundled JSON + Apple API)
@@ -81,11 +87,12 @@ ZoneBar/
 │   ├── ClockPopover.swift        # Main popover and clock rows
 │   ├── TimeScrubberView.swift    # Cross-timezone time preview
 │   ├── CitySearchView.swift      # City search and add
-│   ├── Settings/                 # Settings shell and five panes
+│   ├── Settings/                 # Settings shell and six panes
 │   └── MenuBarLabel.swift        # Dynamic menu bar label
 ├── Services/
 │   ├── ClockStore.swift          # Clock persistence and CRUD
 │   ├── AppSettings.swift         # UserDefaults-backed preferences
+│   ├── CalendarEventService.swift # EventKit permission and event queries
 │   └── TimeTicker.swift          # Minute-aligned clock updates
 └── Resources/
     └── cities.json               # 176 cities, 124 timezones, all continents
@@ -93,7 +100,7 @@ ZoneBar/
 
 ## Architecture
 
-- **Pure SwiftUI** with `MenuBarExtra` (`.window` style)
+- **SwiftUI-first:** `MenuBarExtra` plus an AppKit-owned fixed settings window
 - **State management:** Observation (`@Observable`) with environment injection
 - **Persistence:** JSON file for clocks, UserDefaults for settings
 - **Timer:** Minute-boundary aligned for accurate clock updates
@@ -107,7 +114,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
 See [docs/ROADMAP.md](docs/ROADMAP.md) for the full feature roadmap, organized into phases:
 
 - **Phase 2:** Widgets, keyboard shortcuts, Spotlight/Shortcuts integration
-- **Phase 3:** Calendar deep integration, best meeting time finder
+- **Phase 3:** Calendar-aware meeting suggestions and best meeting time finder
 - **Phase 4:** Focus timer, quick time converter, travel mode
 - **Phase 5:** iCloud sync, iOS app, watchOS complication
 

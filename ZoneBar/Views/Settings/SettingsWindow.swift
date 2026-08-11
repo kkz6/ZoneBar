@@ -4,6 +4,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
     case general
     case menuBar
     case clocks
+    case calendar
     case appearance
     case about
 
@@ -14,6 +15,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
         case .general: return "General"
         case .menuBar: return "Menu Bar"
         case .clocks: return "Clocks"
+        case .calendar: return "Calendar"
         case .appearance: return "Appearance"
         case .about: return "About"
         }
@@ -24,6 +26,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
         case .general: return "gearshape.fill"
         case .menuBar: return "menubar.rectangle"
         case .clocks: return "clock.fill"
+        case .calendar: return "calendar"
         case .appearance: return "paintbrush.fill"
         case .about: return "info.circle.fill"
         }
@@ -34,6 +37,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
         case .general: return .gray
         case .menuBar: return .blue
         case .clocks: return .orange
+        case .calendar: return .blue
         case .appearance: return .purple
         case .about: return .teal
         }
@@ -44,10 +48,16 @@ struct SettingsWindow: View {
     static let windowID = "settings"
 
     @State private var selection: SettingsSection = .general
+    private let launchAtLoginOverride: Bool?
+
+    init(launchAtLoginOverride: Bool? = nil) {
+        self.launchAtLoginOverride = launchAtLoginOverride
+    }
 
     private let groups: [SettingsSidebarGroup<SettingsSection>] = [
         .init("general", destinations: [.general]),
         .init("clocks", header: "Clocks", destinations: [.clocks, .menuBar]),
+        .init("integrations", header: "Integrations", destinations: [.calendar]),
         .init("app", header: "App", destinations: [.appearance, .about]),
     ]
 
@@ -55,29 +65,15 @@ struct SettingsWindow: View {
         SettingsShell(selection: $selection, groups: groups) { section in
             detail(for: section)
         }
-        .onAppear {
-            // The app remains an accessory app so MenuBarExtra keeps its native
-            // panel styling. Activate only after SwiftUI has created the
-            // settings window, allowing it to become key without changing the
-            // process-wide activation policy.
-            DispatchQueue.main.async {
-                NSApplication.shared.activate(ignoringOtherApps: true)
-                NSApplication.shared.windows
-                    .first(where: {
-                        $0.identifier?.rawValue == Self.windowID ||
-                        $0.title == String(localized: "Settings")
-                    })?
-                    .makeKeyAndOrderFront(nil)
-            }
-        }
     }
 
     @ViewBuilder
     private func detail(for section: SettingsSection) -> some View {
         switch section {
-        case .general: GeneralPane()
+        case .general: GeneralPane(launchAtLoginOverride: launchAtLoginOverride)
         case .menuBar: MenuBarPane()
         case .clocks: ClocksPane()
+        case .calendar: CalendarPane()
         case .appearance: AppearancePane()
         case .about: AboutPane()
         }
@@ -129,7 +125,7 @@ struct SettingsGroup<Content: View>: View {
 
 #if DEBUG
 #Preview("Settings Window") {
-    SettingsWindow()
+    SettingsWindow(launchAtLoginOverride: false)
         .settingsPreviewEnvironment()
         .frame(
             width: SettingsLayout.windowSize.width,

@@ -6,6 +6,7 @@ import SwiftUI
 struct TimeScrubberView: View {
     @Environment(ClockStore.self) private var store
     @Environment(AppSettings.self) private var settings
+    @Environment(CalendarEventService.self) private var calendarService
 
     @Binding var offset: TimeInterval
     let baseDate: Date
@@ -38,6 +39,19 @@ struct TimeScrubberView: View {
         return store.clocks.allSatisfy { $0.isInWorkingHours(at: previewDate) }
     }
 
+    private var visibleEvents: [CalendarTimelineEvent] {
+        guard settings.showCalendarEvents,
+              calendarService.accessState.canReadEvents else { return [] }
+        return calendarService.events
+    }
+
+    private var activeEvents: [CalendarTimelineEvent] {
+        guard isPreviewing,
+              settings.showCalendarEvents,
+              calendarService.accessState.canReadEvents else { return [] }
+        return calendarService.events(at: previewDate)
+    }
+
     var body: some View {
         VStack(spacing: DS.Spacing.sm) {
             HStack(spacing: DS.Spacing.xs) {
@@ -66,31 +80,77 @@ struct TimeScrubberView: View {
                 .help("Reset to now")
             }
 
-            ScrubberTrack(minute: previewMinute, isDragging: $isDragging) { newMinute in
+            ScrubberTrack(
+                minute: previewMinute,
+                date: baseDate,
+                events: visibleEvents,
+                isDragging: $isDragging
+            ) { newMinute in
                 offset = (newMinute - baseMinuteOfDay) * 60
             }
 
-            HStack(spacing: DS.Spacing.xs) {
-                Circle()
-                    .fill(allInWorkingHours ? .green : .orange)
-                    .frame(width: 6, height: 6)
-                Text(
-                    allInWorkingHours
-                        ? LocalizedStringKey("All clocks in working hours (9–5)")
-                        : LocalizedStringKey("Not all in working hours")
-                )
-                    .font(.system(size: 10))
-                    .foregroundStyle(.secondary)
-                Spacer()
+            VStack(alignment: .leading, spacing: 5) {
+                HStack(spacing: DS.Spacing.xs) {
+                    Circle()
+                        .fill(allInWorkingHours ? .green : .orange)
+                        .frame(width: 6, height: 6)
+                    Text(
+                        allInWorkingHours
+                            ? LocalizedStringKey("All clocks in working hours (9–5)")
+                            : LocalizedStringKey("Not all in working hours")
+                    )
+                        .font(.system(size: 10))
+                        .foregroundStyle(.secondary)
+
+                    Spacer(minLength: DS.Spacing.sm)
+
+                    if !visibleEvents.isEmpty {
+                        Circle()
+                            .fill(.blue)
+                            .frame(width: 6, height: 6)
+                        Text("Calendar event")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                if let event = activeEvents.first {
+                    ActiveCalendarEventRow(
+                        event: event,
+                        additionalEventCount: activeEvents.count - 1,
+                        locale: settings.locale,
+                        is24Hour: settings.is24Hour,
+                        onOpen: { calendarService.openInCalendar(event) }
+                    )
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                }
             }
+            .animation(.easeOut(duration: 0.16), value: activeEvents.map(\.id))
         }
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.sm)
+        .onAppear {
+            if settings.showCalendarEvents {
+                calendarService.refresh(for: baseDate)
+            }
+        }
+        .onChange(of: settings.showCalendarEvents) { _, isEnabled in
+            if isEnabled {
+                calendarService.refresh(for: baseDate)
+            }
+        }
+        .onChange(of: Calendar.current.startOfDay(for: baseDate)) { _, _ in
+            if settings.showCalendarEvents {
+                calendarService.refresh(for: baseDate)
+            }
+        }
     }
 }
 
 private struct ScrubberTrack: View {
     let minute: Double
+    let date: Date
+    let events: [CalendarTimelineEvent]
     @Binding var isDragging: Bool
     let onChange: (Double) -> Void
 
@@ -122,6 +182,23 @@ private struct ScrubberTrack: View {
                     .fill(Color.zoneAccent)
                     .frame(width: markerX, height: barHeight)
 
+                ForEach(events) { event in
+                    if let range = event.minuteRange(on: date) {
+                        let startX = (range.lowerBound / totalMinutes) * width
+                        let endX = (range.upperBound / totalMinutes) * width
+                        RoundedRectangle(cornerRadius: barHeight / 2, style: .continuous)
+                            .fill(.blue)
+                            .frame(width: max(2, endX - startX), height: barHeight)
+                            .offset(x: startX)
+                            .accessibilityLabel(Text("Calendar event"))
+                            .accessibilityValue(
+                                event.title.isEmpty
+                                    ? Text("Untitled event")
+                                    : Text(verbatim: event.title)
+                            )
+                    }
+                }
+
                 Circle()
                     .fill(.white)
                     .shadow(color: .black.opacity(0.2), radius: 2, y: 1)
@@ -147,5 +224,63 @@ private struct ScrubberTrack: View {
             )
         }
         .frame(height: 18)
+    }
+}
+
+private struct ActiveCalendarEventRow: View {
+    let event: CalendarTimelineEvent
+    let additionalEventCount: Int
+    let locale: Locale
+    let is24Hour: Bool
+    let onOpen: () -> Void
+
+    var body: some View {
+        Button(action: onOpen) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(.blue)
+
+                Group {
+                    if event.title.isEmpty {
+                        Text("Untitled event")
+                    } else {
+                        Text(verbatim: event.title)
+                    }
+                }
+                .font(.system(size: 10, weight: .medium))
+                .lineLimit(1)
+
+                if additionalEventCount > 0 {
+                    Text("+\(additionalEventCount)")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.blue)
+                }
+
+                Spacer(minLength: DS.Spacing.xs)
+
+                Text(timeRange)
+                    .font(.system(size: 9, design: .monospaced))
+                    .foregroundStyle(.secondary)
+
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 8, weight: .semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.horizontal, DS.Spacing.sm)
+            .frame(height: 24)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .background(Color.blue.opacity(0.09), in: RoundedRectangle(cornerRadius: 7))
+        .help("Open in Calendar")
+        .accessibilityHint(Text("Open in Calendar"))
+    }
+
+    private var timeRange: String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate(is24Hour ? "HHmm" : "hmma")
+        return "\(formatter.string(from: event.startDate))–\(formatter.string(from: event.endDate))"
     }
 }

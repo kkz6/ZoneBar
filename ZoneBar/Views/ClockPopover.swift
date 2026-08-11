@@ -4,7 +4,7 @@ struct ClockPopover: View {
     @Environment(ClockStore.self) private var store
     @Environment(AppSettings.self) private var settings
     @Environment(TimeTicker.self) private var ticker
-    @Environment(\.openWindow) private var openWindow
+    @Environment(\.openSettingsWindow) private var openSettingsWindow
 
     @State private var addExpanded = false
     @State private var offset: TimeInterval = 0
@@ -114,8 +114,7 @@ struct ClockPopover: View {
             Spacer()
 
             Button {
-                NSApplication.shared.activate(ignoringOtherApps: true)
-                openWindow(id: SettingsWindow.windowID)
+                openSettingsWindow()
             } label: {
                 Image(systemName: "gearshape")
                     .font(.system(size: 13))

@@ -30,6 +30,17 @@ struct AppSettingsTests {
         #expect(AppLanguage.japanese.localized("Tomorrow") == "明日")
     }
 
+    @Test func calendarEventsAreOptInAndPersist() throws {
+        let (defaults, suiteName) = try makeDefaults()
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let settings = AppSettings(defaults: defaults)
+        #expect(!settings.showCalendarEvents)
+
+        settings.showCalendarEvents = true
+        #expect(AppSettings(defaults: defaults).showCalendarEvents)
+    }
+
     private func makeDefaults() throws -> (UserDefaults, String) {
         let suiteName = "AppSettingsTests.\(UUID().uuidString)"
         return (try #require(UserDefaults(suiteName: suiteName)), suiteName)

@@ -2,7 +2,18 @@ import SwiftUI
 
 struct GeneralPane: View {
     @Environment(AppSettings.self) private var settings
-    @State private var launchAtLogin = LaunchAtLogin.isEnabled
+    @State private var launchAtLogin: Bool
+
+    /// A fixed value keeps previews and snapshots independent from the host
+    /// Mac's registered login-item state. Production callers use the default.
+    private let launchAtLoginOverride: Bool?
+
+    init(launchAtLoginOverride: Bool? = nil) {
+        self.launchAtLoginOverride = launchAtLoginOverride
+        _launchAtLogin = State(
+            initialValue: launchAtLoginOverride ?? LaunchAtLogin.isEnabled
+        )
+    }
 
     var body: some View {
         @Bindable var settings = settings
@@ -39,7 +50,11 @@ struct GeneralPane: View {
 
             SettingsNote(text: "Automatic follows your Mac’s language.")
         }
-        .onAppear { launchAtLogin = LaunchAtLogin.isEnabled }
+        .onAppear {
+            if launchAtLoginOverride == nil {
+                launchAtLogin = LaunchAtLogin.isEnabled
+            }
+        }
     }
 
     /// Writes to ServiceManagement only from direct toggle interaction.
@@ -48,6 +63,11 @@ struct GeneralPane: View {
         Binding(
             get: { launchAtLogin },
             set: { requestedValue in
+                if launchAtLoginOverride != nil {
+                    launchAtLogin = requestedValue
+                    return
+                }
+
                 if LaunchAtLogin.set(requestedValue) {
                     launchAtLogin = requestedValue
                 } else {
@@ -60,7 +80,7 @@ struct GeneralPane: View {
 
 #if DEBUG
 #Preview("General") {
-    GeneralPane()
+    GeneralPane(launchAtLoginOverride: false)
         .settingsPreviewEnvironment()
         .frame(width: 400, height: 520, alignment: .top)
 }

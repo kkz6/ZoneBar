@@ -74,18 +74,14 @@ struct SettingsShell<Destination: SettingsDestination, Detail: View>: View {
             .scrollContentBackground(.hidden)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        // Match the fixed frame owned by SettingsWindowController. The hosting
+        // controller has intrinsic sizing disabled, so this is a content layout
+        // token rather than a competing window-resizing policy.
         .frame(
-            idealWidth: SettingsLayout.windowSize.width,
-            maxWidth: .infinity,
-            idealHeight: SettingsLayout.windowSize.height,
-            maxHeight: .infinity
+            width: SettingsLayout.windowSize.width,
+            height: SettingsLayout.windowSize.height
         )
         .background(VisualEffectView(material: .underWindowBackground).ignoresSafeArea())
-        .background(WindowConfigurator(
-            size: SettingsLayout.windowSize,
-            trafficLightLeading: SettingsLayout.trafficLightLeading,
-            trafficLightCenterFromTop: SettingsLayout.titlebarControlCenterFromTop
-        ))
         .ignoresSafeArea()
     }
 }

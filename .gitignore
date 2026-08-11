@@ -29,6 +29,7 @@ Package.resolved
 /.claude/
 
 # Signing and notarization material
+/Configuration/LocalSigning.xcconfig
 *.cer
 *.p8
 *.p12

@@ -31,6 +31,10 @@ final class AppSettings {
         didSet { defaults.set(language.rawValue, forKey: Keys.language) }
     }
 
+    var showCalendarEvents: Bool {
+        didSet { defaults.set(showCalendarEvents, forKey: Keys.showCalendarEvents) }
+    }
+
     var locale: Locale { language.locale }
 
     private let defaults: UserDefaults
@@ -46,6 +50,7 @@ final class AppSettings {
             Keys.separatorStyle: SeparatorStyle.spaces.rawValue,
             Keys.theme: AppTheme.system.rawValue,
             Keys.language: AppLanguage.automatic.rawValue,
+            Keys.showCalendarEvents: false,
         ])
 
         is24Hour = defaults.bool(forKey: Keys.is24Hour)
@@ -55,6 +60,7 @@ final class AppSettings {
         separatorStyle = SeparatorStyle(rawValue: defaults.string(forKey: Keys.separatorStyle) ?? "") ?? .spaces
         theme = AppTheme(rawValue: defaults.string(forKey: Keys.theme) ?? "") ?? .system
         language = AppLanguage(rawValue: defaults.string(forKey: Keys.language) ?? "") ?? .automatic
+        showCalendarEvents = defaults.bool(forKey: Keys.showCalendarEvents)
     }
 
     private enum Keys {
@@ -65,5 +71,6 @@ final class AppSettings {
         static let separatorStyle = "separatorStyle"
         static let theme = "appearanceMode"
         static let language = "appLanguage"
+        static let showCalendarEvents = "showCalendarEvents"
     }
 }
