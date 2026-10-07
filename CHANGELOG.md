@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show a translucent header background on scroll, with full coverage through
   the header midpoint and a soft fade to transparent below
 - Animate the header background and respect Reduce Motion
+- Use native macOS traffic lights with Close enabled and Minimize and Zoom disabled
 - Remove the docs folder and update README and contributing links
 
 ## [0.4.0] - 2026-10-07

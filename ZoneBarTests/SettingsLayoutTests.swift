@@ -88,34 +88,31 @@ struct SettingsLayoutTests {
         #expect(window.maxSize == SettingsLayout.windowSize)
         #expect(!window.styleMask.contains(.resizable))
         #expect(!window.styleMask.contains(.miniaturizable))
-        #expect(window.standardWindowButton(.closeButton)?.isHidden == true)
-        #expect(window.standardWindowButton(.miniaturizeButton)?.isHidden == true)
-        #expect(window.standardWindowButton(.zoomButton)?.isHidden == true)
-
         let contentView = try #require(window.contentView)
-        let group = try #require(contentView.subviews.first {
-            $0.identifier == .settingsTrafficLightGroup
-        })
-        let closeButton = try #require(group.subviews.first {
-            $0.identifier == .settingsCloseTrafficLight
-        })
-        let indicators = group.subviews
-            .filter { $0.identifier == .settingsDisabledTrafficLight }
-            .sorted { $0.frame.minX < $1.frame.minX }
+        let closeButton = try #require(window.standardWindowButton(.closeButton))
+        let minimizeButton = try #require(window.standardWindowButton(.miniaturizeButton))
+        let zoomButton = try #require(window.standardWindowButton(.zoomButton))
+        let buttons = [closeButton, minimizeButton, zoomButton]
+        #expect(closeButton.isEnabled)
+        #expect(!minimizeButton.isEnabled)
+        #expect(!zoomButton.isEnabled)
+        #expect(buttons.allSatisfy { !$0.isHidden })
 
-        #expect(indicators.count == 2)
-        #expect(group.frame.minX == SettingsLayout.trafficLightLeading)
-        #expect(
-            SettingsLayout.windowSize.height - group.frame.midY
-                == SettingsLayout.titlebarControlCenterFromTop
-        )
-        let centerSpacing: CGFloat = 23
-        let closeCenter = closeButton.frame.midX
-        #expect(closeButton.frame.size == CGSize(width: 14, height: 14))
-        #expect(indicators[0].frame.size == closeButton.frame.size)
-        #expect(indicators[0].layer?.cornerRadius == closeButton.layer?.cornerRadius)
-        #expect(indicators[0].layer?.borderWidth == closeButton.layer?.borderWidth)
-        #expect(indicators[0].frame.midX - closeCenter == centerSpacing)
-        #expect(indicators[1].frame.midX - indicators[0].frame.midX == centerSpacing)
+        let frames = try buttons.map { button -> NSRect in
+            let parent = try #require(button.superview)
+            // System buttons remain in the native titlebar, outside SwiftUI content.
+            #expect(parent !== contentView)
+            #expect(parent.bounds.contains(button.frame))
+            return contentView.convert(button.frame, from: parent)
+        }
+        #expect(frames[0].minX == SettingsLayout.trafficLightLeading)
+        for frame in frames {
+            #expect(SettingsLayout.windowSize.height - frame.midY == SettingsLayout.titlebarControlCenterFromTop)
+        }
+        #expect(frames[1].midX - frames[0].midX == 23)
+        #expect(frames[2].midX - frames[1].midX == 23)
+        #expect(closeButton.frame.size == minimizeButton.frame.size)
+        #expect(closeButton.frame.size == zoomButton.frame.size)
+
     }
 }

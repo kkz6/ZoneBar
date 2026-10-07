@@ -17,12 +17,13 @@ struct SettingsWindowConfiguration {
 /// Reusable owner for a fixed-size settings window containing arbitrary SwiftUI
 /// content. AppKit owns frame and chrome; SwiftUI owns only the rendered body.
 @MainActor
-final class SettingsWindowController {
+final class SettingsWindowController: NSObject, NSWindowDelegate {
     private let configuration: SettingsWindowConfiguration
     private var windowController: NSWindowController?
 
     init(configuration: SettingsWindowConfiguration) {
         self.configuration = configuration
+        super.init()
     }
 
     func show<Content: View>(_ rootView: Content) {
@@ -30,6 +31,7 @@ final class SettingsWindowController {
         NSApplication.shared.activate(ignoringOtherApps: true)
         windowController?.showWindow(nil)
         window.makeKeyAndOrderFront(nil)
+        configureNativeTrafficLights(in: window)
     }
 
     /// Creates the window once and returns the same instance on later calls.
@@ -58,22 +60,11 @@ final class SettingsWindowController {
         hostingController.view.autoresizingMask = [.width, .height]
         container.addSubview(hostingController.view)
 
-        let trafficLights = SettingsTrafficLightGroup()
-        trafficLights.identifier = .settingsTrafficLightGroup
-        trafficLights.frame = NSRect(
-            x: configuration.trafficLightLeading,
-            y: configuration.size.height
-                - configuration.trafficLightCenterFromTop
-                - SettingsTrafficLightGroup.lightDiameter / 2,
-            width: SettingsTrafficLightGroup.width,
-            height: SettingsTrafficLightGroup.lightDiameter
-        )
-        trafficLights.autoresizingMask = [.minYMargin]
-        container.addSubview(trafficLights)
-
         window.contentViewController = containerController
         configureFrame(of: window)
-        hideNativeTrafficLights(in: window)
+        window.contentView?.superview?.layoutSubtreeIfNeeded()
+        configureNativeTrafficLights(in: window)
+        window.delegate = self
 
         let controller = NSWindowController(window: window)
         windowController = controller
@@ -95,6 +86,14 @@ final class SettingsWindowController {
         window.title = configuration.title
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
+        // A unified native titlebar gives the system controls enough vertical
+        // room to align with the settings header without clipping their edges.
+        let toolbar = NSToolbar(identifier: "SettingsToolbar")
+        toolbar.showsBaselineSeparator = false
+        toolbar.allowsUserCustomization = false
+        toolbar.displayMode = .iconOnly
+        window.toolbar = toolbar
+        window.toolbarStyle = .unified
         window.isMovableByWindowBackground = true
         window.isRestorable = false
         window.isReleasedWhenClosed = false
@@ -117,13 +116,53 @@ final class SettingsWindowController {
         window.center()
     }
 
-    private func hideNativeTrafficLights(in window: NSWindow) {
-        for type in [
-            NSWindow.ButtonType.closeButton,
-            .miniaturizeButton,
-            .zoomButton,
-        ] {
-            window.standardWindowButton(type)?.isHidden = true
+    func windowDidResize(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+        configureNativeTrafficLights(in: window)
+    }
+
+    func windowDidBecomeKey(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+        configureNativeTrafficLights(in: window)
+    }
+
+    private func configureNativeTrafficLights(in window: NSWindow) {
+        // Some AppKit versions add unified-toolbar height to the limits
+        // assigned to a full-size content window. Compensate for the reported
+        // difference so both limits describe the actual fixed window frame.
+        if window.minSize != configuration.size {
+            window.minSize = configuration.size
+            let reportedSize = window.minSize
+            if reportedSize != configuration.size {
+                window.minSize = NSSize(
+                    width: configuration.size.width * 2 - reportedSize.width,
+                    height: configuration.size.height * 2 - reportedSize.height
+                )
+            }
+        }
+        if window.maxSize != configuration.size {
+            window.maxSize = configuration.size
+            let reportedSize = window.maxSize
+            if reportedSize != configuration.size {
+                window.maxSize = NSSize(
+                    width: configuration.size.width * 2 - reportedSize.width,
+                    height: configuration.size.height * 2 - reportedSize.height
+                )
+            }
+        }
+        guard let contentView = window.contentView else { return }
+        let types: [NSWindow.ButtonType] = [.closeButton, .miniaturizeButton, .zoomButton]
+        for (index, type) in types.enumerated() {
+            guard let button = window.standardWindowButton(type), let parent = button.superview else { continue }
+            button.isHidden = false
+            button.isEnabled = type == .closeButton
+            // Preserve each system control's size and AppKit-owned titlebar
+            // parent so rendering, hover tracking, and accessibility stay native.
+            let origin = NSPoint(
+                x: configuration.trafficLightLeading + CGFloat(index) * 23,
+                y: contentView.bounds.height - configuration.trafficLightCenterFromTop - button.frame.height / 2
+            )
+            button.setFrameOrigin(contentView.convert(origin, to: parent))
         }
     }
 }
@@ -151,141 +190,4 @@ extension EnvironmentValues {
         get { self[SettingsWindowOpeningKey.self] }
         set { self[SettingsWindowOpeningKey.self] = newValue }
     }
-}
-
-private final class SettingsTrafficLightGroup: NSView {
-    static let lightDiameter: CGFloat = 14
-    static let lightGap: CGFloat = 9
-    static let width = lightDiameter * 3 + lightGap * 2
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-
-        let closeButton = CloseTrafficLightButton(frame: lightFrame(at: 0))
-        closeButton.identifier = .settingsCloseTrafficLight
-        closeButton.target = self
-        closeButton.action = #selector(closeWindow)
-        addSubview(closeButton)
-
-        for index in 1...2 {
-            let indicator = DisabledTrafficLightView(frame: lightFrame(at: index))
-            indicator.identifier = .settingsDisabledTrafficLight
-            addSubview(indicator)
-        }
-    }
-
-    required init?(coder: NSCoder) {
-        nil
-    }
-
-    @objc private func closeWindow() {
-        window?.performClose(nil)
-    }
-
-    private func lightFrame(at index: Int) -> NSRect {
-        NSRect(
-            x: CGFloat(index) * (Self.lightDiameter + Self.lightGap),
-            y: 0,
-            width: Self.lightDiameter,
-            height: Self.lightDiameter
-        )
-    }
-}
-
-private final class CloseTrafficLightButton: NSButton {
-    private var trackingAreaReference: NSTrackingArea?
-    private var isHovering = false
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        isBordered = false
-        imagePosition = .noImage
-        title = ""
-        SettingsTrafficLightAppearance.apply(
-            to: self,
-            color: NSColor(calibratedRed: 1, green: 0.37, blue: 0.34, alpha: 1)
-        )
-        toolTip = String(localized: "Close")
-        setAccessibilityLabel(String(localized: "Close"))
-    }
-
-    required init?(coder: NSCoder) {
-        nil
-    }
-
-    override func updateTrackingAreas() {
-        super.updateTrackingAreas()
-        if let trackingAreaReference {
-            removeTrackingArea(trackingAreaReference)
-        }
-
-        let trackingArea = NSTrackingArea(
-            rect: bounds,
-            options: [.activeAlways, .mouseEnteredAndExited],
-            owner: self
-        )
-        addTrackingArea(trackingArea)
-        trackingAreaReference = trackingArea
-    }
-
-    override func mouseEntered(with event: NSEvent) {
-        isHovering = true
-        needsDisplay = true
-    }
-
-    override func mouseExited(with event: NSEvent) {
-        isHovering = false
-        needsDisplay = true
-    }
-
-    override func draw(_ dirtyRect: NSRect) {
-        guard isHovering else { return }
-        let inset: CGFloat = 4.25
-        let cross = NSBezierPath()
-        cross.move(to: NSPoint(x: inset, y: inset))
-        cross.line(to: NSPoint(x: bounds.maxX - inset, y: bounds.maxY - inset))
-        cross.move(to: NSPoint(x: inset, y: bounds.maxY - inset))
-        cross.line(to: NSPoint(x: bounds.maxX - inset, y: inset))
-        cross.lineWidth = 1.1
-        cross.lineCapStyle = .round
-        NSColor.black.withAlphaComponent(0.55).setStroke()
-        cross.stroke()
-    }
-}
-
-private final class DisabledTrafficLightView: NSView {
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-        SettingsTrafficLightAppearance.apply(
-            to: self,
-            color: NSColor.systemGray.withAlphaComponent(0.50)
-        )
-    }
-
-    required init?(coder: NSCoder) {
-        nil
-    }
-
-    override func hitTest(_ point: NSPoint) -> NSView? {
-        nil
-    }
-}
-
-/// One renderer for every traffic light keeps their visible diameter and border
-/// identical. The close control only draws its hover glyph above this layer.
-private enum SettingsTrafficLightAppearance {
-    static func apply(to view: NSView, color: NSColor) {
-        view.wantsLayer = true
-        view.layer?.backgroundColor = color.cgColor
-        view.layer?.borderColor = NSColor.black.withAlphaComponent(0.18).cgColor
-        view.layer?.borderWidth = 0.5
-        view.layer?.cornerRadius = SettingsTrafficLightGroup.lightDiameter / 2
-        view.layer?.masksToBounds = true
-    }
-}
-
-extension NSUserInterfaceItemIdentifier {
-    static let settingsTrafficLightGroup = Self("SettingsTrafficLightGroup")
-    static let settingsCloseTrafficLight = Self("SettingsCloseTrafficLight")
-    static let settingsDisabledTrafficLight = Self("SettingsDisabledTrafficLight")
 }
