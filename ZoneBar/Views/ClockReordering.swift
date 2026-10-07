@@ -8,11 +8,14 @@ final class ClockDragSession {
     private(set) var translation: CGFloat = 0
     private(set) var rowStride: CGFloat = 47
     private(set) var isSettling = false
+    @ObservationIgnored private var orderedIDs: [UUID] = []
 
-    func update(id: UUID, translation: CGFloat, rowStride: CGFloat, store: ClockStore) {
+    func update(id: UUID, translation: CGFloat, rowStride: CGFloat, store: ClockStore, displayedClocks: [WorldClock]? = nil) {
         guard !isSettling, rowStride > 0 else { return }
         if draggedID == nil {
-            guard let index = store.clocks.firstIndex(where: { $0.id == id }) else { return }
+            let clocks = displayedClocks ?? store.clocks
+            guard let index = clocks.firstIndex(where: { $0.id == id }) else { return }
+            orderedIDs = clocks.map(\.id)
             draggedID = id
             startIndex = index
             targetIndex = index
@@ -20,14 +23,14 @@ final class ClockDragSession {
         }
         guard draggedID == id else { return }
         self.translation = min(max(translation, -CGFloat(startIndex) * self.rowStride),
-                               CGFloat(store.clocks.count - 1 - startIndex) * self.rowStride)
+                               CGFloat(orderedIDs.count - 1 - startIndex) * self.rowStride)
         targetIndex = startIndex + Int((self.translation / self.rowStride).rounded())
     }
 
     func offset(id: UUID, store: ClockStore) -> CGFloat {
         guard let draggedID else { return 0 }
         if id == draggedID { return translation }
-        guard let index = store.clocks.firstIndex(where: { $0.id == id }) else { return 0 }
+        guard let index = orderedIDs.firstIndex(of: id) else { return 0 }
         if targetIndex > startIndex && index > startIndex && index <= targetIndex { return -rowStride }
         if targetIndex < startIndex && index >= targetIndex && index < startIndex { return rowStride }
         return 0
@@ -40,8 +43,8 @@ final class ClockDragSession {
     }
 
     func commit(store: ClockStore) {
-        if let id = draggedID, let index = store.clocks.firstIndex(where: { $0.id == id }) {
-            store.moveClock(id: id, by: targetIndex - index)
+        if let id = draggedID, orderedIDs.indices.contains(targetIndex) {
+            store.moveClock(id: id, onto: orderedIDs[targetIndex])
         }
         finish()
     }
@@ -52,6 +55,7 @@ final class ClockDragSession {
         startIndex = 0
         targetIndex = 0
         isSettling = false
+        orderedIDs = []
     }
 }
 
@@ -64,10 +68,13 @@ struct ClockReorderTile: View {
     let color: Color
     let isHovering: Bool
     var rowStride: CGFloat = DS.Size.rowHeight + 1
+    var displayedClocks: [WorldClock]? = nil
+
+    private var clocks: [WorldClock] { displayedClocks ?? store.clocks }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var showsHandle: Bool { (isHovering || dragSession.draggedID == clock.id) && store.clocks.count > 1 }
+    private var showsHandle: Bool { (isHovering || dragSession.draggedID == clock.id) && clocks.count > 1 }
 
     var body: some View {
         ZStack {
@@ -85,7 +92,7 @@ struct ClockReorderTile: View {
                     DragGesture(minimumDistance: 3, coordinateSpace: .global)
                         .onChanged { value in
                             dragSession.update(id: clock.id, translation: value.translation.height,
-                                               rowStride: rowStride, store: store)
+                                               rowStride: rowStride, store: store, displayedClocks: displayedClocks)
                         }
                         .onEnded { _ in
                             guard dragSession.draggedID == clock.id else { return }
@@ -108,22 +115,28 @@ struct ClockReorderTile: View {
                 .accessibilityLabel(Text("Drag to reorder"))
                 .accessibilityAction(named: Text("Move clock up")) {
                     withAnimation(reduceMotion ? nil : .snappy(duration: 0.25)) {
-                        store.moveClock(id: clock.id, by: -1)
+                        move(by: -1)
                     }
                 }
                 .accessibilityAction(named: Text("Move clock down")) {
                     withAnimation(reduceMotion ? nil : .snappy(duration: 0.25)) {
-                        store.moveClock(id: clock.id, by: 1)
+                        move(by: 1)
                     }
                 }
                 .opacity(showsHandle ? 1 : 0)
                 .allowsHitTesting(showsHandle)
-                .accessibilityHidden(store.clocks.count < 2)
+                .accessibilityHidden(clocks.count < 2)
         }
         .font(.system(size: DS.Size.tile * 0.5, weight: .semibold))
         .foregroundStyle(.white)
         .shadow(color: color.opacity(0.25), radius: 1, y: 0.5)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.15), value: showsHandle)
+    }
+
+    private func move(by offset: Int) {
+        guard let index = clocks.firstIndex(where: { $0.id == clock.id }),
+              clocks.indices.contains(index + offset) else { return }
+        store.moveClock(id: clock.id, onto: clocks[index + offset].id)
     }
 }
 

@@ -73,4 +73,28 @@ struct ClockDragSessionTests {
         session.commit(store: store)
         #expect(store.clocks.map(\.id) == original)
     }
+    @Test func filteredDragUsesVisibleRowsAndPreservesHiddenClockOrder() {
+        let saveURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: saveURL) }
+        let store = ClockStore(saveURL: saveURL, seedDefaults: false)
+        store.addClock(name: "Tokyo", country: "JP", timezone: "Asia/Tokyo")
+        store.addClock(name: "Dublin", country: "IE", timezone: "Europe/Dublin")
+        store.addClock(name: "Sydney", country: "AU", timezone: "Australia/Sydney")
+        store.addClock(name: "UTC", country: "", timezone: "UTC")
+        let visible = [store.clocks[0], store.clocks[3]]
+        let session = ClockDragSession()
+
+        session.update(id: visible[0].id, translation: 500, rowStride: 47,
+                       store: store, displayedClocks: visible)
+        #expect(session.translation == 47)
+        #expect(session.targetIndex == 1)
+        #expect(session.offset(id: visible[1].id, store: store) == -47)
+        #expect(session.offset(id: store.clocks[1].id, store: store) == 0)
+        #expect(session.offset(id: store.clocks[2].id, store: store) == 0)
+        session.settle()
+        session.commit(store: store)
+        #expect(store.clocks.map(\.name) == ["Dublin", "Sydney", "UTC", "Tokyo"])
+        #expect(ClockStore(saveURL: saveURL, seedDefaults: false).clocks.map(\.id) == store.clocks.map(\.id))
+    }
+
 }

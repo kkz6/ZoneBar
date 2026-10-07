@@ -30,6 +30,10 @@ enum SettingsPreviewFixtures {
         defaults: UserDefaults(suiteName: "ZoneBar.SettingsPreview")!
     )
 
+    static let focusFilter = FocusClockFilter(
+        defaults: UserDefaults(suiteName: "ZoneBar.FocusPreview")!, loadCurrent: { nil }
+    )
+
     static let ticker = TimeTicker(
         now: Date(timeIntervalSince1970: 1_722_241_800),
         startsAutomatically: false
@@ -50,6 +54,7 @@ extension View {
             .environment(SettingsPreviewFixtures.ticker)
             .environment(SettingsPreviewFixtures.updater)
             .environment(SettingsPreviewFixtures.calendarService)
+            .environment(SettingsPreviewFixtures.focusFilter)
             .tint(.zoneAccent)
             .background(Color(nsColor: .windowBackgroundColor))
     }

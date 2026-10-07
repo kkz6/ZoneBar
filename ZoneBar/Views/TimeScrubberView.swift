@@ -10,6 +10,9 @@ struct TimeScrubberView: View {
 
     @Binding var offset: TimeInterval
     let baseDate: Date
+    var clocks: [WorldClock]? = nil
+
+    private var comparedClocks: [WorldClock] { clocks ?? store.clocks }
 
     @State private var isDragging = false
 
@@ -35,8 +38,8 @@ struct TimeScrubberView: View {
     }
 
     private var allInWorkingHours: Bool {
-        guard !store.clocks.isEmpty else { return false }
-        return store.clocks.allSatisfy { $0.isInWorkingHours(at: previewDate) }
+        guard !comparedClocks.isEmpty else { return false }
+        return comparedClocks.allSatisfy { $0.isInWorkingHours(at: previewDate) }
     }
 
     private var visibleEvents: [CalendarTimelineEvent] {

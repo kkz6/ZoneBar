@@ -5,6 +5,7 @@ struct ZoneBarApp: App {
     @State private var store = ClockStore()
     @State private var settings = AppSettings()
     @State private var ticker = TimeTicker()
+    @State private var focusFilter = FocusClockFilter.shared
     @State private var updater = AppUpdater()
     @State private var calendarService = CalendarEventService()
     @State private var settingsWindowController = SettingsWindowController(
@@ -25,6 +26,7 @@ struct ZoneBarApp: App {
                 .environment(ticker)
                 .environment(updater)
                 .environment(calendarService)
+                .environment(focusFilter)
                 .environment(
                     \.openSettingsWindow,
                     SettingsWindowOpeningAction { openSettings() }
@@ -34,7 +36,7 @@ struct ZoneBarApp: App {
                 .preferredColorScheme(settings.theme.colorScheme)
                 .modifier(MenuPanelPresentationAnimation())
         } label: {
-            MenuBarLabel(store: store, settings: settings, ticker: ticker)
+            MenuBarLabel(store: store, settings: settings, ticker: ticker, focusFilter: focusFilter)
         }
         .menuBarExtraStyle(.window)
         .commands {
@@ -54,7 +56,8 @@ struct ZoneBarApp: App {
                 settings: settings,
                 ticker: ticker,
                 updater: updater,
-                calendarService: calendarService
+                calendarService: calendarService,
+                focusFilter: focusFilter
             )
         )
     }
@@ -68,6 +71,7 @@ private struct ZoneBarSettingsRoot: View {
     let ticker: TimeTicker
     let updater: AppUpdater
     let calendarService: CalendarEventService
+    let focusFilter: FocusClockFilter
 
     var body: some View {
         SettingsWindow()
@@ -76,6 +80,7 @@ private struct ZoneBarSettingsRoot: View {
             .environment(ticker)
             .environment(updater)
             .environment(calendarService)
+            .environment(focusFilter)
             .environment(\.locale, settings.locale)
             .tint(.zoneAccent)
             .preferredColorScheme(settings.theme.colorScheme)

@@ -5,6 +5,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
     case menuBar
     case clocks
     case calendar
+    case focus
     case appearance
     case about
 
@@ -16,6 +17,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
         case .menuBar: return "Menu Bar"
         case .clocks: return "Clocks"
         case .calendar: return "Calendar"
+        case .focus: return "Focus"
         case .appearance: return "Appearance"
         case .about: return "About"
         }
@@ -27,6 +29,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
         case .menuBar: return "menubar.rectangle"
         case .clocks: return "clock.fill"
         case .calendar: return "calendar"
+        case .focus: return "moon.fill"
         case .appearance: return "paintbrush.fill"
         case .about: return "info.circle.fill"
         }
@@ -38,6 +41,7 @@ enum SettingsSection: String, CaseIterable, Identifiable, SettingsDestination {
         case .menuBar: return .blue
         case .clocks: return .orange
         case .calendar: return .blue
+        case .focus: return .indigo
         case .appearance: return .purple
         case .about: return .teal
         }
@@ -57,7 +61,7 @@ struct SettingsWindow: View {
     private let groups: [SettingsSidebarGroup<SettingsSection>] = [
         .init("general", destinations: [.general]),
         .init("clocks", header: "Clocks", destinations: [.clocks, .menuBar]),
-        .init("integrations", header: "Integrations", destinations: [.calendar]),
+        .init("integrations", header: "Integrations", destinations: [.focus, .calendar]),
         .init("app", header: "App", destinations: [.appearance, .about]),
     ]
 
@@ -74,6 +78,7 @@ struct SettingsWindow: View {
         case .menuBar: MenuBarPane()
         case .clocks: ClocksPane()
         case .calendar: CalendarPane()
+        case .focus: FocusPane()
         case .appearance: AppearancePane()
         case .about: AboutPane()
         }

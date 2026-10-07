@@ -4,6 +4,7 @@ struct MenuBarPane: View {
     @Environment(AppSettings.self) private var settings
     @Environment(ClockStore.self) private var store
     @Environment(TimeTicker.self) private var ticker
+    @Environment(FocusClockFilter.self) private var focusFilter
 
     var body: some View {
         @Bindable var settings = settings
@@ -54,7 +55,7 @@ struct MenuBarPane: View {
 
     private var previewText: String {
         let text = MenuBarRenderer.text(
-            for: store.clocks,
+            for: focusFilter.menuBarClocks(from: store.clocks),
             at: ticker.now,
             is24Hour: settings.is24Hour,
             compact: settings.compactMode,

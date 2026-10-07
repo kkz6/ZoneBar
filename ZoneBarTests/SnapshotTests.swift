@@ -96,6 +96,9 @@ struct SnapshotTests {
             now: Date(timeIntervalSince1970: 1_722_241_800),
             startsAutomatically: false
         )
+        let focusFilter = FocusClockFilter(
+            defaults: UserDefaults(suiteName: "ZoneBar.FocusSnapshots")!, loadCurrent: { nil }
+        )
         let updater = AppUpdater(startingUpdater: false)
         let calendarService = CalendarEventService(
             accessStateOverride: .notDetermined
@@ -108,6 +111,7 @@ struct SnapshotTests {
                 .environment(ticker)
                 .environment(updater)
                 .environment(calendarService)
+                .environment(focusFilter)
                 .tint(.zoneAccent)
         }
 

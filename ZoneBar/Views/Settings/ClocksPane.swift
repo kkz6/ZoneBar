@@ -4,6 +4,7 @@ struct ClocksPane: View {
     @Environment(ClockStore.self) private var store
     @Environment(AppSettings.self) private var settings
     @Environment(TimeTicker.self) private var ticker
+    @Environment(FocusClockFilter.self) private var focusFilter
 
     @State private var dragSession = ClockDragSession()
 
@@ -33,6 +34,9 @@ struct ClocksPane: View {
                 SettingsNote(
                     text: "Toggle the switch to show a clock in the menu bar. Hover over a row and drag its handle to reorder."
                 )
+                if focusFilter.isFiltering {
+                    SettingsNote(text: "A Focus filter controls the menu bar right now. These switches update your normal selection.")
+                }
             }
         }
         .onDisappear { dragSession.finish() }

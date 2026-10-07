@@ -15,6 +15,7 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - Hover over a clock and drag its handle to reorder in Clocks settings and the menu bar popover
 - Inline rename and delete from the Clocks settings
 - Toggle which clocks appear in the menu bar
+- Link clock selections to macOS Focus modes through native Focus filters
 
 ### Streamlined Popover
 - Clean, glanceable clock rows with day/night icon, GMT offset, and large time
@@ -38,9 +39,18 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - **General:** time format, date display, launch at login
 - **Menu Bar:** compact names, day/night icon, separator, live preview
 - **Clocks:** add, reorder, rename, delete, and choose menu-bar visibility
+- **Focus:** follow Focus filters, view the current selection, and temporarily show all clocks
 - **Calendar:** connect macOS Calendar and control timeline event visibility
 - **Appearance:** System, Light, or Dark theme (accent follows macOS)
 - **About:** version and links
+
+### Focus-linked Clocks
+
+In **System Settings → Focus**, select a Focus, add a **ZoneBar** filter, and
+choose your saved clocks. ZoneBar shows those clocks in the menu bar and dropdown
+while the filter is active. The usual clock selection returns when the filter
+ends. Use **Show all** to temporarily pause filtering, or disable it from
+**ZoneBar Settings → Focus**. Clock order and saved visibility settings are preserved.
 
 ### System Integration
 - Pure menu bar app (no dock icon)

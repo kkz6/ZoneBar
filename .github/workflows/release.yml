@@ -10,6 +10,10 @@ on:
         description: Existing release tag to upload to
         required: true
         type: string
+      ref:
+        description: Optional source branch or commit (draft releases only)
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -25,6 +29,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.5.app/Contents/Developer
       RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      SOURCE_REF: ${{ inputs.ref || github.event.release.tag_name || inputs.tag }}
       TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       SIGNING_IDENTITY: ${{ secrets.DEVELOPER_ID_APPLICATION_NAME }}
       NOTARY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
@@ -38,7 +43,19 @@ jobs:
       - name: Check out release source
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.RELEASE_TAG }}
+          ref: ${{ env.SOURCE_REF }}
+
+      - name: Require a draft when building an alternate source
+        if: inputs.ref != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          is_draft="$(gh release view "$RELEASE_TAG" --json isDraft --jq '.isDraft')"
+          if [[ "$is_draft" != "true" ]]; then
+            echo "Alternate source builds may only upload to an unpublished draft release."
+            exit 1
+          fi
 
       - name: Verify Xcode toolchain
         run: |
