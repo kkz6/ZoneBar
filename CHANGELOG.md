@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - Unreleased
+
+### Changed
+- Keep settings section headers fixed while their content scrolls underneath
+- Show a translucent header background on scroll, with full coverage through
+  the header midpoint and a soft fade to transparent below
+- Animate the header background and respect Reduce Motion
+- Remove the docs folder and update README and contributing links
+
 ## [0.4.0] - 2026-10-07
 
 ### Added

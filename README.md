@@ -108,11 +108,9 @@ ZoneBar/
 - **Updates:** Sparkle appcast generated and Ed25519-signed by the release workflow
 - **City data:** Hybrid approach -- bundled city database + Apple `TimeZone` API fallback
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.
-
 ## Roadmap
 
-See [docs/ROADMAP.md](docs/ROADMAP.md) for the full feature roadmap, organized into phases:
+Planned features:
 
 - **Phase 2:** Widgets, keyboard shortcuts, Spotlight/Shortcuts integration
 - **Phase 3:** Calendar-aware meeting suggestions and best meeting time finder

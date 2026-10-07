@@ -66,7 +66,7 @@ release workflow and is not changed by this local configuration.
 - Attach screenshots if relevant
 
 ### Suggesting Features
-- Check the [roadmap](docs/ROADMAP.md) first to see if it's already planned
+- Check existing issues first to see if the feature has already been requested
 - Open an issue describing the feature and its use case
 
 ### Submitting Changes
@@ -79,7 +79,3 @@ release workflow and is not changed by this local configuration.
      -destination "platform=macOS" CODE_SIGNING_ALLOWED=NO test
    ```
 5. Open a pull request with a clear description of your changes
-
-## Architecture Notes
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for an overview of the codebase architecture, state management patterns, and key design decisions.

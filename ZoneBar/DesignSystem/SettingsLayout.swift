@@ -68,11 +68,8 @@ struct SettingsShell<Destination: SettingsDestination, Detail: View>: View {
 
             Divider()
 
-            ScrollView {
-                detail(selection)
-            }
-            .scrollContentBackground(.hidden)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            detail(selection)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         // Match the fixed frame owned by SettingsWindowController. The hosting
         // controller has intrinsic sizing disabled, so this is a content layout
