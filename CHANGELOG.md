@@ -7,14 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-08
+
 ### Added
 - Native Focus filters for selecting the clocks shown in the menu bar and dropdown
 - Focus settings with setup guidance, active-filter status, and a temporary Show all option
 - Restore normal clock visibility when the Focus filter ends without changing saved selections
 - Reorder and compare the clocks shown by a Focus filter
 - English and Japanese Focus interface text
-
-## [0.4.1] - Unreleased
 
 ### Changed
 - Keep settings section headers fixed while their content scrolls underneath
