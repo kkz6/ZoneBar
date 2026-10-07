@@ -16,12 +16,12 @@ struct SnapshotTests {
     private static let approvedHashes: [String: String] = [
         "general": "86a5a9eee67ed141f50d1eeac13853a099b799b440fa5a9640261f95b5671609",
         "menubar": "e05ff55a4620e178ef7c27d7f10b02f911876e47739647143fb8315f50488bae",
-        "clocks": "9faf6c46eec21882079caaffe59c246ca047623570982d2edf3a621182c9899c",
+        "clocks": "53cd28259f3fa4741becf4f6873c0a1886e82299fdc0064d971dc2c0acd908cf",
         "calendar": "d81aee7ed64f665378ef33d425b8f762c2b618f6793386d3d0c01cdd8f676478",
         "appearance": "8a01341ba7ecb9d6472d6b10c443cbaf239524f12ddcbba01f3ee766d22db2f1",
         "about": "56741dab23feef86f9f978ed5638e778ff4d5c2dbfac36d8f6a2efcbc136d229",
         "settings_full": "e91f047ad9b1a7aa3a3963c1b340d48d2ec0115906ff277cc1eb4bb568f2b90d",
-        "popover": "52520e4a58ec334c7ef49da0b9505f91855a9e7c9f69ccea92e7eccf2e6186f5",
+        "popover": "4b8f53f2b39bc674227ba4ee931e6883c88d70985b1e4be82d820283958ecbeb",
     ]
 
     private func snapshot(

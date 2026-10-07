@@ -84,3 +84,7 @@
 "Your clocks" = "あなたの時計";
 "ZoneBar" = "ZoneBar";
 "🕐  (no clocks selected)" = "🕐 （時計が選択されていません）";
+"Move clock up" = "時計を上に移動";
+"Move clock down" = "時計を下に移動";
+"Drag to reorder" = "ドラッグして並べ替え";
+"Toggle the switch to show a clock in the menu bar. Hover over a row and drag its handle to reorder." = "スイッチでメニューバーに表示する時計を選択します。行にポインタを合わせ、ハンドルをドラッグして並べ替えます。";

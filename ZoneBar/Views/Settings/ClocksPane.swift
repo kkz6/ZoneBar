@@ -5,6 +5,8 @@ struct ClocksPane: View {
     @Environment(AppSettings.self) private var settings
     @Environment(TimeTicker.self) private var ticker
 
+    @State private var dragSession = ClockDragSession()
+
     var body: some View {
         SettingsPane(section: SettingsSection.clocks) {
             VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -16,42 +18,24 @@ struct ClocksPane: View {
                 emptyState
             } else {
                 SettingsGroup(header: "Your clocks") {
-                    ForEach(Array(store.clocks.enumerated()), id: \.element.id) { index, clock in
-                        ClockManageRow(clock: clock, now: ticker.now, settings: settings, store: store)
-                            .draggable(clock.id.uuidString) {
-                                Text(clock.name)
-                                    .padding(6)
-                                    .background(
-                                        .regularMaterial,
-                                        in: RoundedRectangle(
-                                            cornerRadius: DS.Radius.tile,
-                                            style: .continuous
-                                        )
-                                    )
+                    VStack(spacing: 0) {
+                        ForEach(Array(store.clocks.enumerated()), id: \.element.id) { index, clock in
+                            ClockManageRow(clock: clock, now: ticker.now, settings: settings, store: store, dragSession: dragSession)
+                                .clockReordering(clock: clock, store: store, dragSession: dragSession)
+                            if index < store.clocks.count - 1 {
+                                SettingsDivider()
                             }
-                            .dropDestination(for: String.self) { items, _ in
-                                reorder(draggedID: items.first, onto: clock)
-                            }
-                        if index < store.clocks.count - 1 {
-                            SettingsDivider()
                         }
                     }
+                    .clipShape(RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous))
                 }
 
                 SettingsNote(
-                    text: "Toggle the switch to show a clock in the menu bar. Drag a row to reorder."
+                    text: "Toggle the switch to show a clock in the menu bar. Hover over a row and drag its handle to reorder."
                 )
             }
         }
-    }
-
-    private func reorder(draggedID: String?, onto target: WorldClock) -> Bool {
-        guard let draggedID,
-              let from = store.clocks.firstIndex(where: { $0.id.uuidString == draggedID }),
-              let to = store.clocks.firstIndex(where: { $0.id == target.id }),
-              from != to else { return false }
-        store.moveClock(from: IndexSet(integer: from), to: to > from ? to + 1 : to)
-        return true
+        .onDisappear { dragSession.finish() }
     }
 
     private var emptyState: some View {
@@ -75,6 +59,7 @@ private struct ClockManageRow: View {
     let now: Date
     let settings: AppSettings
     let store: ClockStore
+    let dragSession: ClockDragSession
 
     @State private var name = ""
     @State private var isHovering = false
@@ -83,7 +68,12 @@ private struct ClockManageRow: View {
     var body: some View {
         let day = clock.isDaytime(at: now)
         HStack(spacing: DS.Spacing.md) {
-            IconTile(symbol: day ? "sun.max.fill" : "moon.fill", color: day ? .orange : .indigo)
+            ClockReorderTile(
+                clock: clock, store: store, dragSession: dragSession,
+                symbol: day ? "sun.max.fill" : "moon.fill",
+                color: day ? .orange : .indigo,
+                isHovering: isHovering
+            )
 
             VStack(alignment: .leading, spacing: 2) {
                 TextField("City name", text: $name)

@@ -12,7 +12,8 @@ ZoneBar replaces heavy Electron-based world clock apps with a fast, native exper
 - Day/night indicators with sun and moon icons
 - Relative day labels (Tomorrow, Yesterday)
 - Per-clock GMT offset display
-- Drag-and-drop reordering, inline rename, and delete from the Clocks settings
+- Hover over a clock and drag its handle to reorder in Clocks settings and the menu bar popover
+- Inline rename and delete from the Clocks settings
 - Toggle which clocks appear in the menu bar
 
 ### Streamlined Popover

@@ -14,6 +14,8 @@ struct ClockPopover: View {
 
     private var previewDate: Date { ticker.now.addingTimeInterval(offset) }
 
+    @State private var dragSession = ClockDragSession()
+
     var body: some View {
         VStack(spacing: 0) {
             header
@@ -36,7 +38,7 @@ struct ClockPopover: View {
             footer
         }
         .frame(width: DS.Size.popoverWidth)
-        .onDisappear { offset = 0; addExpanded = false }
+        .onDisappear { offset = 0; addExpanded = false; dragSession.finish() }
     }
 
     // MARK: - Header
@@ -89,7 +91,8 @@ struct ClockPopover: View {
     private var clockRows: some View {
         VStack(spacing: 0) {
             ForEach(store.clocks) { clock in
-                ClockRow(clock: clock, now: previewDate, settings: settings, height: rowHeight)
+                ClockRow(clock: clock, now: previewDate, settings: settings, height: rowHeight, store: store, dragSession: dragSession)
+                    .clockReordering(clock: clock, store: store, dragSession: dragSession)
                 if clock.id != store.clocks.last?.id {
                     Divider().padding(.leading, 54)
                 }
@@ -166,20 +169,26 @@ struct ClockPopover: View {
     }
 }
 
-// MARK: - Clock Row (read-only)
+// MARK: - Clock Row
 
 private struct ClockRow: View {
     let clock: WorldClock
     let now: Date
     let settings: AppSettings
     let height: CGFloat
+    let store: ClockStore
+    let dragSession: ClockDragSession
+
+    @State private var isHovering = false
 
     var body: some View {
         let day = clock.isDaytime(at: now)
         HStack(spacing: DS.Spacing.md) {
-            IconTile(
+            ClockReorderTile(
+                clock: clock, store: store, dragSession: dragSession,
                 symbol: day ? "sun.max.fill" : "moon.fill",
-                color: day ? .orange : .indigo
+                color: day ? .orange : .indigo,
+                isHovering: isHovering
             )
 
             VStack(alignment: .leading, spacing: 1) {
@@ -215,5 +224,7 @@ private struct ClockRow: View {
         }
         .padding(.horizontal, DS.Spacing.lg)
         .frame(height: height)
+        .contentShape(Rectangle())
+        .onHover { isHovering = $0 }
     }
 }

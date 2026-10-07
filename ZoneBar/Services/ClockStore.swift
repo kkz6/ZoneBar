@@ -60,9 +60,29 @@ final class ClockStore {
     }
 
     func moveClock(from source: IndexSet, to destination: Int) {
-        clocks.move(fromOffsets: source, toOffset: destination)
-        reindex()
+        var updatedClocks = clocks
+        updatedClocks.move(fromOffsets: source, toOffset: destination)
+        for index in updatedClocks.indices {
+            updatedClocks[index].sortOrder = index
+        }
+        clocks = updatedClocks
         save()
+    }
+
+    func moveClock(id: UUID, by offset: Int) {
+        guard let source = clocks.firstIndex(where: { $0.id == id }) else { return }
+        let target = source + offset
+        guard clocks.indices.contains(target), target != source else { return }
+        moveClock(from: IndexSet(integer: source), to: target > source ? target + 1 : target)
+    }
+
+    @discardableResult
+    func moveClock(id: UUID, onto targetID: UUID) -> Bool {
+        guard let source = clocks.firstIndex(where: { $0.id == id }),
+              let target = clocks.firstIndex(where: { $0.id == targetID }),
+              source != target else { return false }
+        moveClock(from: IndexSet(integer: source), to: target > source ? target + 1 : target)
+        return true
     }
 
     func toggleMenuBarVisibility(id: UUID) {

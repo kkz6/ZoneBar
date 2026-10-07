@@ -84,3 +84,7 @@
 "Your clocks" = "Your clocks";
 "ZoneBar" = "ZoneBar";
 "🕐  (no clocks selected)" = "🕐  (no clocks selected)";
+"Move clock up" = "Move clock up";
+"Move clock down" = "Move clock down";
+"Drag to reorder" = "Drag to reorder";
+"Toggle the switch to show a clock in the menu bar. Hover over a row and drag its handle to reorder." = "Toggle the switch to show a clock in the menu bar. Hover over a row and drag its handle to reorder.";

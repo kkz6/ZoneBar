@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-07
+
+### Added
+- Hover-revealed drag handles for reordering clocks in the menu bar dropdown and
+  Clocks settings
+- In-place row dragging with animated neighboring rows and snap-to-position
+  transitions that respect Reduce Motion
+- Accessible actions for moving clocks up and down
+
+### Fixed
+- Keep clock ordering synchronized with the menu bar and saved across restarts
+- Preserve day/night tile colors while showing the drag handle
+- Clip dragged settings rows to the card's rounded border
+
 ## [0.3.0] - 2026-08-11
 
 ### Added
