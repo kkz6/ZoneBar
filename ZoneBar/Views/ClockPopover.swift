@@ -45,6 +45,7 @@ struct ClockPopover: View {
             footer
         }
         .frame(width: DS.Size.popoverWidth)
+        .onAppear { ticker.synchronize() }
         .task { await focusFilter.refresh() }
         .onChange(of: visibleClocks.map(\.id)) { _, _ in dragSession.finish() }
         .onDisappear { offset = 0; addExpanded = false; dragSession.finish() }

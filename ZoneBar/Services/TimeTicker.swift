@@ -1,39 +1,84 @@
+import AppKit
 import Foundation
-import Combine
 import Observation
 
-/// Publishes the current time, aligned to minute boundaries so the displayed
-/// clocks never drift. Views observe `now` and re-render when it changes.
+/// Keeps every clock on the current wall-clock minute. Each tick is scheduled
+/// afresh so a delayed callback, sleep, or a clock correction cannot cause drift.
+@MainActor
 @Observable
 final class TimeTicker {
-    private(set) var now: Date = Date()
+    typealias TimerFactory = (Date, @escaping @MainActor () -> Void) -> Timer
 
-    @ObservationIgnored private var timer: AnyCancellable?
+    private(set) var now: Date
 
-    init(now: Date = Date(), startsAutomatically: Bool = true) {
+    @ObservationIgnored private let automaticallyUpdates: Bool
+    @ObservationIgnored private let dateProvider: () -> Date
+    @ObservationIgnored private let timerFactory: TimerFactory
+    @ObservationIgnored private var timer: Timer?
+    @ObservationIgnored private var observers: [(NotificationCenter, NSObjectProtocol)] = []
+
+    init(
+        now: Date = Date(),
+        startsAutomatically: Bool = true,
+        dateProvider: @escaping () -> Date = Date.init,
+        timerFactory: @escaping TimerFactory = { date, action in
+            Timer(fire: date, interval: 0, repeats: false) { _ in
+                MainActor.assumeIsolated { action() }
+            }
+        },
+        notificationCenter: NotificationCenter = .default,
+        workspaceNotificationCenter: NotificationCenter = NSWorkspace.shared.notificationCenter
+    ) {
         self.now = now
+        automaticallyUpdates = startsAutomatically
+        self.dateProvider = dateProvider
+        self.timerFactory = timerFactory
+
         if startsAutomatically {
-            scheduleNextMinute()
+            observe([
+                NSApplication.didBecomeActiveNotification,
+                .NSSystemClockDidChange,
+                .NSSystemTimeZoneDidChange
+            ], on: notificationCenter)
+            observe([
+                NSWorkspace.didWakeNotification,
+                NSWorkspace.screensDidWakeNotification,
+                NSWorkspace.sessionDidBecomeActiveNotification
+            ], on: workspaceNotificationCenter)
+            synchronize()
         }
     }
 
-    private func scheduleNextMinute() {
-        let seconds = Calendar.current.component(.second, from: Date())
-        let delay = Double(60 - seconds)
-
-        timer = Just(())
-            .delay(for: .seconds(delay), scheduler: RunLoop.main)
-            .sink { [weak self] _ in
-                self?.now = Date()
-                self?.startRepeating()
-            }
+    deinit {
+        timer?.invalidate()
+        for (center, token) in observers { center.removeObserver(token) }
     }
 
-    private func startRepeating() {
-        timer = Timer.publish(every: 60, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                self?.now = Date()
+    /// Also called when the popover opens. Frozen previews do not start ticking.
+    func synchronize() {
+        guard automaticallyUpdates else { return }
+        let current = dateProvider()
+        now = current
+        timer?.invalidate()
+        let next = timerFactory(Self.nextMinute(after: current)) { [weak self] in
+            self?.synchronize()
+        }
+        next.tolerance = 0.05
+        timer = next
+        // Applies to the very first tick too, including menu/event tracking.
+        RunLoop.main.add(next, forMode: .common)
+    }
+
+    static func nextMinute(after date: Date) -> Date {
+        Date(timeIntervalSince1970: (floor(date.timeIntervalSince1970 / 60) + 1) * 60)
+    }
+
+    private func observe(_ names: [Notification.Name], on center: NotificationCenter) {
+        for name in names {
+            let token = center.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.synchronize() }
             }
+            observers.append((center, token))
+        }
     }
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-21
+
+### Fixed
+- Keep clock updates aligned to wall-clock minute boundaries, including during menu tracking
+- Refresh clocks immediately after wake, unlock, system clock changes, and opening the dropdown
+
 ## [0.5.0] - 2026-10-08
 
 ### Added
