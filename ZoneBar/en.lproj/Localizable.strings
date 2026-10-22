@@ -23,7 +23,7 @@
 "Read access required" = "Read access required";
 "Show events on timeline" = "Show events on timeline";
 "Untitled event" = "Untitled event";
-"ZoneBar only reads event times and titles on this Mac. It never edits your calendar." = "ZoneBar only reads event times and titles on this Mac. It never edits your calendar.";
+"ZoneBar reads calendar titles, times, and availability on this Mac. It never edits your calendar." = "ZoneBar reads calendar titles, times, and availability on this Mac. It never edits your calendar.";
 "Appearance" = "Appearance";
 "Automatically Check for Updates" = "Automatically Check for Updates";
 "Automatic follows your Mac’s language." = "Automatic follows your Mac’s language.";
@@ -117,3 +117,7 @@
 "Choose which clocks ZoneBar shows while this Focus is active." = "Choose which clocks ZoneBar shows while this Focus is active.";
 "Switch clocks with your Focus." = "Switch clocks with your Focus.";
 "A Focus filter controls the menu bar right now. These switches update your normal selection." = "A Focus filter controls the menu bar right now. These switches update your normal selection.";
+"Unavailable" = "Unavailable";
+"All day" = "All day";
+"Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate." = "Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate.";
+"Scroll to see all %lld items" = "Scroll to see all %lld items";

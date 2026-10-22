@@ -23,7 +23,7 @@
 "Read access required" = "読み取りアクセスが必要です";
 "Show events on timeline" = "タイムラインにイベントを表示";
 "Untitled event" = "タイトルなしのイベント";
-"ZoneBar only reads event times and titles on this Mac. It never edits your calendar." = "ZoneBarはこのMac上のイベントの時刻とタイトルのみを読み取ります。カレンダーを編集することはありません。";
+"ZoneBar reads calendar titles, times, and availability on this Mac. It never edits your calendar." = "ZoneBarはこのMac上のカレンダーのタイトル、時刻、公開状況を読み取ります。カレンダーを編集することはありません。";
 "Appearance" = "外観";
 "Automatically Check for Updates" = "アップデートを自動的に確認";
 "Automatic follows your Mac’s language." = "「自動」ではMacの言語設定に従います。";
@@ -117,3 +117,7 @@
 "Choose which clocks ZoneBar shows while this Focus is active." = "この集中モードの間にZoneBarが表示する時計を選択します。";
 "Switch clocks with your Focus." = "集中モードに合わせて時計を切り替えます。";
 "A Focus filter controls the menu bar right now. These switches update your normal selection." = "現在、集中モードフィルタがメニューバーの表示を設定しています。これらのスイッチは通常の表示設定を変更します。";
+"Unavailable" = "不在";
+"All day" = "終日";
+"Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate." = "不在の時間帯は通常のイベントと区別して表示されます。「Out of office」「OOO」「PTO」「Annual leave」などを含むタイトルを自動で判定します。タイトルによる判定は正確でない場合があります。";
+"Scroll to see all %lld items" = "スクロールして全%lld件を表示";

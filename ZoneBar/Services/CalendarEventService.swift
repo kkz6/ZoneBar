@@ -10,6 +10,46 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
     let startDate: Date
     let endDate: Date
     let calendarName: String
+    let kind: Kind
+    let isAllDay: Bool
+
+    enum Kind: Equatable {
+        case event
+        case unavailable
+
+        static func classify(title: String, availability: EKEventAvailability) -> Self {
+            if availability == .unavailable { return .unavailable }
+
+            // EventKit doesn't expose Google's eventType. Title matching is a
+            // fallback: require whole words and avoid meetings about absences.
+            let words = title.folding(options: [.caseInsensitive, .widthInsensitive],
+                                      locale: Locale(identifier: "en_US_POSIX"))
+                .split(whereSeparator: { !$0.isLetter && !$0.isNumber })
+                .map(String.init)
+            let normalized = " " + words.joined(separator: " ") + " "
+            if normalized == " 不在 " { return .unavailable }
+
+            let absenceLabels = [
+                "out of office", "ooo", "o o o", "pto", "p t o", "paid time off",
+                "annual leave", "sick leave", "parental leave", "maternity leave",
+                "paternity leave", "on leave", "on vacation"
+            ]
+            guard absenceLabels.contains(where: { normalized.contains(" " + $0 + " ") }) else {
+                return .event
+            }
+
+            let meetingWords: Set<String> = [
+                "handover", "handoff", "planning", "plan", "policy", "policies",
+                "request", "requests", "approval", "approvals", "discussion", "discuss",
+                "review", "meeting", "sync", "coverage", "schedule", "training",
+                "not", "cancelled", "canceled", "cancellation"
+            ]
+            let isReturn = ["back from", "return from", "returning from"]
+                .contains { normalized.contains(" " + $0 + " ") }
+            return words.contains(where: { meetingWords.contains($0) }) || isReturn
+                ? .event : .unavailable
+        }
+    }
 
     init(
         id: String,
@@ -17,7 +57,9 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
         title: String,
         startDate: Date,
         endDate: Date,
-        calendarName: String
+        calendarName: String,
+        kind: Kind = .event,
+        isAllDay: Bool = false
     ) {
         self.id = id
         self.eventIdentifier = eventIdentifier
@@ -25,6 +67,29 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
         self.startDate = startDate
         self.endDate = endDate
         self.calendarName = calendarName
+        self.kind = kind
+        self.isAllDay = isAllDay
+    }
+
+    init?(event: EKEvent) {
+        let title = event.title ?? ""
+        let kind = Kind.classify(title: title, availability: event.availability)
+        guard event.status != .canceled,
+              !event.isAllDay || kind == .unavailable,
+              let start = event.startDate, let end = event.endDate,
+              start < end else { return nil }
+
+        let sourceID = event.eventIdentifier ?? event.calendarItemExternalIdentifier ?? "event"
+        self.init(
+            id: "\(event.calendar?.calendarIdentifier ?? "")-\(sourceID)-\(start.timeIntervalSinceReferenceDate)",
+            eventIdentifier: event.eventIdentifier,
+            title: title,
+            startDate: start,
+            endDate: end,
+            calendarName: event.calendar?.title ?? "",
+            kind: kind,
+            isAllDay: event.isAllDay
+        )
     }
 
     func contains(_ date: Date) -> Bool {
@@ -65,6 +130,7 @@ final class CalendarEventService {
     private(set) var isRequestingAccess = false
     private(set) var lastError: String?
 
+    @ObservationIgnored private let eventFetcher: (Date, Date) -> [EKEvent]
     @ObservationIgnored private let eventStore: EKEventStore
     @ObservationIgnored private let notificationCenter: NotificationCenter
     @ObservationIgnored private let accessStateOverride: CalendarAccessState?
@@ -74,9 +140,14 @@ final class CalendarEventService {
     init(
         eventStore: EKEventStore = EKEventStore(),
         notificationCenter: NotificationCenter = .default,
-        accessStateOverride: CalendarAccessState? = nil
+        accessStateOverride: CalendarAccessState? = nil,
+        eventFetcher: ((Date, Date) -> [EKEvent])? = nil
     ) {
         self.eventStore = eventStore
+        self.eventFetcher = eventFetcher ?? { start, end in
+            let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: nil)
+            return eventStore.events(matching: predicate)
+        }
         self.notificationCenter = notificationCenter
         self.accessStateOverride = accessStateOverride
         accessState = accessStateOverride ?? Self.currentAccessState
@@ -136,26 +207,8 @@ final class CalendarEventService {
             return
         }
 
-        let predicate = eventStore.predicateForEvents(
-            withStart: start,
-            end: end,
-            calendars: nil
-        )
-
-        events = eventStore.events(matching: predicate)
-            .filter { !$0.isAllDay && $0.status != .canceled }
-            .map {
-                let title = $0.title ?? ""
-                let sourceID = $0.eventIdentifier ?? $0.calendarItemExternalIdentifier
-                return CalendarTimelineEvent(
-                    id: "\(sourceID ?? "event")-\($0.startDate.timeIntervalSinceReferenceDate)",
-                    eventIdentifier: $0.eventIdentifier,
-                    title: title,
-                    startDate: $0.startDate,
-                    endDate: $0.endDate,
-                    calendarName: $0.calendar.title
-                )
-            }
+        events = eventFetcher(start, end)
+            .compactMap { CalendarTimelineEvent(event: $0) }
             .sorted {
                 if $0.startDate == $1.startDate { return $0.endDate < $1.endDate }
                 return $0.startDate < $1.startDate

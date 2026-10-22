@@ -15,6 +15,7 @@ struct TimeScrubberView: View {
     private var comparedClocks: [WorldClock] { clocks ?? store.clocks }
 
     @State private var isDragging = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var baseMinuteOfDay: Double {
         let c = Calendar.current.dateComponents([.hour, .minute], from: baseDate)
@@ -49,7 +50,7 @@ struct TimeScrubberView: View {
     }
 
     private var activeEvents: [CalendarTimelineEvent] {
-        guard isPreviewing,
+        guard isPreviewing || isDragging,
               settings.showCalendarEvents,
               calendarService.accessState.canReadEvents else { return [] }
         return calendarService.events(at: previewDate)
@@ -107,7 +108,7 @@ struct TimeScrubberView: View {
 
                     Spacer(minLength: DS.Spacing.sm)
 
-                    if !visibleEvents.isEmpty {
+                    if visibleEvents.contains(where: { $0.kind == .event }) {
                         Circle()
                             .fill(.blue)
                             .frame(width: 6, height: 6)
@@ -117,18 +118,38 @@ struct TimeScrubberView: View {
                     }
                 }
 
-                if let event = activeEvents.first {
-                    ActiveCalendarEventRow(
-                        event: event,
-                        additionalEventCount: activeEvents.count - 1,
-                        locale: settings.locale,
-                        is24Hour: settings.is24Hour,
-                        onOpen: { calendarService.openInCalendar(event) }
-                    )
-                    .transition(.opacity.combined(with: .move(edge: .top)))
+                if visibleEvents.contains(where: { $0.kind == .unavailable }) {
+                    Label("Unavailable", systemImage: "person.crop.circle.badge.minus")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.orange)
+                }
+
+                if !activeEvents.isEmpty {
+                    ScrollView(.vertical) {
+                        VStack(spacing: 4) {
+                            ForEach(activeEvents) { event in
+                                ActiveCalendarEventRow(
+                                    event: event,
+                                    locale: settings.locale,
+                                    is24Hour: settings.is24Hour,
+                                    onOpen: { calendarService.openInCalendar(event) }
+                                )
+                            }
+                        }
+                    }
+                    .frame(height: CGFloat(min(activeEvents.count, 3)) * 36
+                           + CGFloat(min(activeEvents.count, 3) - 1) * 4)
+                    .scrollBounceBehavior(.basedOnSize)
+                    .transition(.opacity)
+
+                    if activeEvents.count > 3 {
+                        Text("Scroll to see all \(activeEvents.count) items")
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
-            .animation(.easeOut(duration: 0.16), value: activeEvents.map(\.id))
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.16), value: activeEvents.map(\.id))
         }
         .padding(.horizontal, DS.Spacing.lg)
         .padding(.vertical, DS.Spacing.sm)
@@ -185,15 +206,15 @@ private struct ScrubberTrack: View {
                     .fill(Color.zoneAccent)
                     .frame(width: markerX, height: barHeight)
 
-                ForEach(events) { event in
+                ForEach(events.sorted { $0.kind == .unavailable && $1.kind == .event }) { event in
                     if let range = event.minuteRange(on: date) {
                         let startX = (range.lowerBound / totalMinutes) * width
                         let endX = (range.upperBound / totalMinutes) * width
                         RoundedRectangle(cornerRadius: barHeight / 2, style: .continuous)
-                            .fill(.blue)
+                            .fill(event.kind == .unavailable ? Color.orange.opacity(0.6) : Color.blue)
                             .frame(width: max(2, endX - startX), height: barHeight)
                             .offset(x: startX)
-                            .accessibilityLabel(Text("Calendar event"))
+                            .accessibilityLabel(Text(event.kind == .unavailable ? LocalizedStringKey("Unavailable") : LocalizedStringKey("Calendar event")))
                             .accessibilityValue(
                                 event.title.isEmpty
                                     ? Text("Untitled event")
@@ -232,7 +253,6 @@ private struct ScrubberTrack: View {
 
 private struct ActiveCalendarEventRow: View {
     let event: CalendarTimelineEvent
-    let additionalEventCount: Int
     let locale: Locale
     let is24Hour: Bool
     let onOpen: () -> Void
@@ -240,45 +260,62 @@ private struct ActiveCalendarEventRow: View {
     var body: some View {
         Button(action: onOpen) {
             HStack(spacing: DS.Spacing.xs) {
-                Image(systemName: "calendar")
+                Image(systemName: event.kind == .unavailable ? "person.crop.circle.badge.minus" : "calendar")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(itemColor)
 
-                Group {
-                    if event.title.isEmpty {
-                        Text("Untitled event")
-                    } else {
-                        Text(verbatim: event.title)
+                VStack(alignment: .leading, spacing: 1) {
+                    Group {
+                        if event.title.isEmpty {
+                            Text(event.kind == .unavailable ? LocalizedStringKey("Unavailable") : LocalizedStringKey("Untitled event"))
+                        } else {
+                            Text(verbatim: event.title)
+                        }
                     }
-                }
-                .font(.system(size: 10, weight: .medium))
-                .lineLimit(1)
+                    .font(.system(size: 10, weight: .medium))
+                    .lineLimit(1)
 
-                if additionalEventCount > 0 {
-                    Text("+\(additionalEventCount)")
-                        .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(.blue)
+                    HStack(spacing: 3) {
+                        if event.kind == .unavailable {
+                            Text("Unavailable")
+                                .foregroundStyle(itemColor)
+                        }
+                        if !event.calendarName.isEmpty {
+                            Text(verbatim: event.calendarName)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .font(.system(size: 9))
+                    .lineLimit(1)
                 }
 
                 Spacer(minLength: DS.Spacing.xs)
 
-                Text(timeRange)
-                    .font(.system(size: 9, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                Group {
+                    if event.isAllDay {
+                        Text("All day")
+                    } else {
+                        Text(timeRange)
+                    }
+                }
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundStyle(.secondary)
 
                 Image(systemName: "arrow.up.right")
                     .font(.system(size: 8, weight: .semibold))
                     .foregroundStyle(.tertiary)
             }
             .padding(.horizontal, DS.Spacing.sm)
-            .frame(height: 24)
+            .frame(height: 36)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .background(Color.blue.opacity(0.09), in: RoundedRectangle(cornerRadius: 7))
+        .background(itemColor.opacity(0.09), in: RoundedRectangle(cornerRadius: 7))
         .help("Open in Calendar")
         .accessibilityHint(Text("Open in Calendar"))
     }
+
+    private var itemColor: Color { event.kind == .unavailable ? .orange : .blue }
 
     private var timeRange: String {
         let formatter = DateFormatter()

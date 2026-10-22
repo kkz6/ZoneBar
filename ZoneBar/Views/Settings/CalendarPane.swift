@@ -31,7 +31,11 @@ struct CalendarPane: View {
             }
 
             SettingsNote(
-                text: "ZoneBar only reads event times and titles on this Mac. It never edits your calendar."
+                text: "ZoneBar reads calendar titles, times, and availability on this Mac. It never edits your calendar."
+            )
+
+            SettingsNote(
+                text: "Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate."
             )
 
             if let error = calendarService.lastError {
