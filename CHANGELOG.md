@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.4] - 2026-10-29
+
+### Fixed
+- Use readable system text colors for calendar display menus in light and dark mode
+
 ## [0.5.3] - 2026-10-29
 
 ### Added

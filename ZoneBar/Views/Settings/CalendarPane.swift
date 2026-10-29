@@ -157,6 +157,8 @@ private struct CalendarSelectionRow: View {
             }
             .labelsHidden()
             .pickerStyle(.menu)
+            .tint(.primary)
+            .foregroundStyle(.primary)
             .controlSize(.small)
             .frame(width: 100)
             .disabled(!isEnabled)
