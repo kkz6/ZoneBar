@@ -121,3 +121,10 @@
 "All day" = "All day";
 "Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate." = "Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate.";
 "Scroll to see all %lld items" = "Scroll to see all %lld items";
+"Calendars" = "Calendars";
+"Calendar items" = "Calendar items";
+"Both" = "Both";
+"Events" = "Events";
+"Items shown from %@" = "Items shown from %@";
+"No calendars found. Add an account in Calendar on this Mac." = "No calendars found. Add an account in Calendar on this Mac.";
+"Choose which calendars and items appear on the timeline. Uncheck every calendar to hide all items." = "Choose which calendars and items appear on the timeline. Uncheck every calendar to hide all items.";

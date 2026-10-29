@@ -10,6 +10,7 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
     let startDate: Date
     let endDate: Date
     let calendarName: String
+    let calendarIdentifier: String
     let kind: Kind
     let isAllDay: Bool
 
@@ -58,6 +59,7 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
         startDate: Date,
         endDate: Date,
         calendarName: String,
+        calendarIdentifier: String = "",
         kind: Kind = .event,
         isAllDay: Bool = false
     ) {
@@ -67,6 +69,7 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
         self.startDate = startDate
         self.endDate = endDate
         self.calendarName = calendarName
+        self.calendarIdentifier = calendarIdentifier
         self.kind = kind
         self.isAllDay = isAllDay
     }
@@ -87,6 +90,7 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
             startDate: start,
             endDate: end,
             calendarName: event.calendar?.title ?? "",
+            calendarIdentifier: event.calendar?.calendarIdentifier ?? "",
             kind: kind,
             isAllDay: event.isAllDay
         )
@@ -112,6 +116,20 @@ struct CalendarTimelineEvent: Identifiable, Equatable {
     }
 }
 
+enum CalendarDisplayMode: String, CaseIterable {
+    case both
+    case events
+    case unavailable
+
+    func includes(_ kind: CalendarTimelineEvent.Kind) -> Bool {
+        switch self {
+        case .both: true
+        case .events: kind == .event
+        case .unavailable: kind == .unavailable
+        }
+    }
+}
+
 enum CalendarAccessState: Equatable {
     case notDetermined
     case connected
@@ -127,10 +145,15 @@ enum CalendarAccessState: Equatable {
 final class CalendarEventService {
     private(set) var accessState: CalendarAccessState
     private(set) var events: [CalendarTimelineEvent] = []
+    private(set) var availableCalendars: [EKCalendar] = []
+    private(set) var excludedCalendarIDs: Set<String>
+    private(set) var calendarDisplayModes: [String: CalendarDisplayMode]
     private(set) var isRequestingAccess = false
     private(set) var lastError: String?
 
-    @ObservationIgnored private let eventFetcher: (Date, Date) -> [EKEvent]
+    @ObservationIgnored private let eventFetcher: ((Date, Date) -> [EKEvent])?
+    @ObservationIgnored private let calendarFetcher: () -> [EKCalendar]
+    @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let eventStore: EKEventStore
     @ObservationIgnored private let notificationCenter: NotificationCenter
     @ObservationIgnored private let accessStateOverride: CalendarAccessState?
@@ -141,13 +164,21 @@ final class CalendarEventService {
         eventStore: EKEventStore = EKEventStore(),
         notificationCenter: NotificationCenter = .default,
         accessStateOverride: CalendarAccessState? = nil,
-        eventFetcher: ((Date, Date) -> [EKEvent])? = nil
+        eventFetcher: ((Date, Date) -> [EKEvent])? = nil,
+        calendarFetcher: (() -> [EKCalendar])? = nil,
+        defaults: UserDefaults = .standard
     ) {
         self.eventStore = eventStore
-        self.eventFetcher = eventFetcher ?? { start, end in
-            let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: nil)
-            return eventStore.events(matching: predicate)
-        }
+        self.eventFetcher = eventFetcher
+        self.calendarFetcher = calendarFetcher ?? { eventStore.calendars(for: .event) }
+        self.defaults = defaults
+        excludedCalendarIDs = Set(defaults.stringArray(forKey: "excludedCalendarIDs") ?? [])
+        calendarDisplayModes = (defaults.dictionary(forKey: "calendarDisplayModes") ?? [:])
+            .reduce(into: [:]) { result, item in
+                if let value = item.value as? String, let mode = CalendarDisplayMode(rawValue: value) {
+                    result[item.key] = mode
+                }
+            }
         self.notificationCenter = notificationCenter
         self.accessStateOverride = accessStateOverride
         accessState = accessStateOverride ?? Self.currentAccessState
@@ -180,9 +211,7 @@ final class CalendarEventService {
         do {
             let granted = try await eventStore.requestFullAccessToEvents()
             accessState = resolvedAccessState
-            if granted, let loadedDay {
-                refresh(for: loadedDay)
-            }
+            if granted { refresh(for: loadedDay ?? Date()) }
             return granted
         } catch {
             accessState = resolvedAccessState
@@ -191,9 +220,46 @@ final class CalendarEventService {
         }
     }
 
+    func isCalendarEnabled(_ identifier: String) -> Bool {
+        !excludedCalendarIDs.contains(identifier)
+    }
+
+    func displayMode(for identifier: String) -> CalendarDisplayMode {
+        calendarDisplayModes[identifier] ?? .both
+    }
+
+    func setCalendarEnabled(_ identifier: String, enabled: Bool) {
+        if enabled { excludedCalendarIDs.remove(identifier) }
+        else { excludedCalendarIDs.insert(identifier) }
+        defaults.set(excludedCalendarIDs.sorted(), forKey: "excludedCalendarIDs")
+        refresh(for: loadedDay ?? Date())
+    }
+
+    func setDisplayMode(_ mode: CalendarDisplayMode, for identifier: String) {
+        calendarDisplayModes[identifier] = mode
+        defaults.set(calendarDisplayModes.mapValues(\.rawValue), forKey: "calendarDisplayModes")
+        refresh(for: loadedDay ?? Date())
+    }
+
+    func refreshCalendars() {
+        accessState = resolvedAccessState
+        guard accessState.canReadEvents else {
+            availableCalendars = []
+            events = []
+            return
+        }
+        availableCalendars = calendarFetcher().sorted {
+            let accountOrder = ($0.source?.title ?? "").localizedStandardCompare($1.source?.title ?? "")
+            if accountOrder != .orderedSame { return accountOrder == .orderedAscending }
+            let titleOrder = $0.title.localizedStandardCompare($1.title)
+            if titleOrder != .orderedSame { return titleOrder == .orderedAscending }
+            return $0.calendarIdentifier < $1.calendarIdentifier
+        }
+    }
+
     func refresh(for date: Date) {
         loadedDay = Calendar.current.startOfDay(for: date)
-        accessState = resolvedAccessState
+        refreshCalendars()
 
         guard accessState.canReadEvents else {
             events = []
@@ -207,8 +273,24 @@ final class CalendarEventService {
             return
         }
 
-        events = eventFetcher(start, end)
+        let fetchedEvents: [EKEvent]
+        if let eventFetcher {
+            fetchedEvents = eventFetcher(start, end)
+        } else {
+            let selected = availableCalendars.filter { isCalendarEnabled($0.calendarIdentifier) }
+            // An empty selection must show nothing; EventKit's nil calendars
+            // argument would instead fetch every calendar.
+            guard !selected.isEmpty else {
+                events = []
+                return
+            }
+            let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: selected)
+            fetchedEvents = eventStore.events(matching: predicate)
+        }
+
+        events = fetchedEvents
             .compactMap { CalendarTimelineEvent(event: $0) }
+            .filter { isCalendarEnabled($0.calendarIdentifier) && displayMode(for: $0.calendarIdentifier).includes($0.kind) }
             .sorted {
                 if $0.startDate == $1.startDate { return $0.endDate < $1.endDate }
                 return $0.startDate < $1.startDate
@@ -268,8 +350,8 @@ final class CalendarEventService {
         accessState = resolvedAccessState
         if let loadedDay {
             refresh(for: loadedDay)
-        } else if !accessState.canReadEvents {
-            events = []
+        } else {
+            refreshCalendars()
         }
     }
 

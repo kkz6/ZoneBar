@@ -189,7 +189,8 @@ struct CalendarTimelineEventTests {
                 makeEvent("Planning", offset: 0, duration: 1_800),
                 makeEvent("Customer call", offset: 120, duration: 3_600),
                 makeEvent("Later", offset: 7_200, duration: 600)
-            ] }
+            ] },
+            calendarFetcher: { [] }
         )
         service.refresh(for: start)
         let active = service.events(at: start.addingTimeInterval(300))

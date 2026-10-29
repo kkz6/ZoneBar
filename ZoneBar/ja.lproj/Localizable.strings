@@ -121,3 +121,10 @@
 "All day" = "終日";
 "Unavailable blocks appear separately. Titles containing ‘Out of office’, ‘OOO’, ‘PTO’, or ‘Annual leave’ are recognized automatically. Title matching may not always be accurate." = "不在の時間帯は通常のイベントと区別して表示されます。「Out of office」「OOO」「PTO」「Annual leave」などを含むタイトルを自動で判定します。タイトルによる判定は正確でない場合があります。";
 "Scroll to see all %lld items" = "スクロールして全%lld件を表示";
+"Calendars" = "カレンダー一覧";
+"Calendar items" = "表示する項目";
+"Both" = "両方";
+"Events" = "イベント";
+"Items shown from %@" = "%@の表示項目";
+"No calendars found. Add an account in Calendar on this Mac." = "カレンダーが見つかりません。このMacのカレンダーアプリでアカウントを追加してください。";
+"Choose which calendars and items appear on the timeline. Uncheck every calendar to hide all items." = "タイムラインに表示するカレンダーと項目を選択します。すべてのチェックを外すと、項目は表示されません。";
